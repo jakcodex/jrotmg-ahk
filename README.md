@@ -42,7 +42,10 @@ Extract files to a folder and run setup.ahk. Installation wizard will help you c
      Toggle Nexus Screenshot utility on/off
 
 ##### Ctrl+Alt+C
-     Enable character positioning mode (see below)
+     Enable character screenshot filter mode (see below)
+     
+##### Shift+Alt+C
+     Enable custom region screenshot filter mode (see below)
 
 ## Nexus Screenshotting
 At its very basic and default configuration, when you hit the Nexus hotkey a screenshot will be taken at the same time.
