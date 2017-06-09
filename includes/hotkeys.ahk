@@ -353,6 +353,15 @@ $^!e::
 	}
 	Return
 
+$+!c::
+    if ( ScreenshotHideCustom == true ) {
+        MsgBox, First click the upper left boundary of the box you wish to create
+        customFilterTrackingMode := true
+    } else {
+        MsgBox, You can only calibrate the custom filter position when ScreenshotHideCustom is enabled
+    }
+    Return
+
 $^!c::
     if ( ScreenshotHideCharacter == true ) {
         MsgBox, Click the center of your character to calibrate the screenshot filter
@@ -363,7 +372,9 @@ $^!c::
     Return
 
 ~LButton up::
+    ;;  process mouse tracking for character tracking mode
     if ( characterTrackingMode == true ) {
+
         ;;  window info
         WinGetPos, X, Y, Width, Height, A
         WinGetTitle, WindowTitle, A
@@ -381,9 +392,44 @@ $^!c::
         ScreenshotRectangles["character"][GameWindow]["windowed"] := {"x": x-Round(w/2), "y": y-Round(h/2), "width": w, "height": h}
         ScreenshotRectangles["character"][GameWindow]["fullscreen"] := {"x": x-Round(w/2), "y": y-Round(h/2), "width": w, "height": h}
 
-        SaveConfigPiece("ScreenshotRectangles-character", ScreenshotRectangles["character"])
+        SaveConfigPiece("ScreenshotRectangles-character", ScreenshotRectangles["character"], "ScreenshotHideCharacter")
 
         ;;  disable tracking mode
         characterTrackingMode := false
+
+    ;;  process mouse tracking for customer filter tracking
+    } else if ( customFilterTrackingMode == true ) {
+
+        ;;  window info
+        WinGetPos, X, Y, Width, Height, A
+        WinGetTitle, WindowTitle, A
+        ScreenMode := isWindowFullScreen(WinExist(WindowTitle))
+
+        ;;  steam or flash
+        GameWindow := ( RegExMatch(WindowTitle, "^Adobe Flash Player") ) ? "flash" : "steam"
+
+        ;;  get mouse position
+        MouseGetPos, x, y
+        customFilter["pos"][customFilter["index"]] := {"x": x, "y": y}
+
+        if ( customFilter["index"] == 0 ) {
+
+            customFilter["index"] := 1
+            MsgBox, Now click the lower right corner of the box you wish to create
+
+        } else if ( customFilter["index"] == 1 ) {
+
+            ;;  update the appropriate rectangle
+            w := customFilter["pos"][1]["x"]-customFilter["pos"][0]["x"]
+            h := customFilter["pos"][1]["y"]-customFilter["pos"][0]["y"]
+            ScreenshotRectangles["custom"][GameWindow][( ScreenMode == 1 ) ? "fullscreen" : "windowed"] := {"x": customFilter["pos"][0]["x"], "y": customFilter["pos"][0]["y"], "width": w, "height": h}
+            SaveConfigPiece("ScreenshotRectangles-custom", ScreenshotRectangles["custom"])
+
+            MsgBox,  Your custom filter has been created and saved!
+            customFilterTrackingMode := false
+            customFilter["index"] := 0
+
+        }
+
     }
     Return

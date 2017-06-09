@@ -12,4 +12,6 @@ lastRKeyPress := A_Now
 NexusKeyPresses = 0
 panicKeyPresses = 0
 characterTrackingMode := false
+customFilterTrackingMode := false
+customFilter := {"pos": [], "index": 0}
 #Include includes/rectangles.ahk

@@ -46,6 +46,7 @@ if ( !FileExist(ConfigFolder) ) {
 if ( !FileExist(ConfigPiecesFolder) ) {
 
 	FileCreateDir, %ConfigPiecesFolder%
+	FileCopy, % A_ScriptDir . "\extra\config-pieces-readme.txt", % ConfigPiecesFolder . "\README.txt"
 
 }
 

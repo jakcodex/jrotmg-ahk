@@ -13,10 +13,16 @@ InArray(needle, haystack) {
 
 }
 
-SaveConfigPiece(piece, data) {
+SaveConfigPiece(piece, data, configEnableKey=false) {
 
     global ConfigPiecesFolder, JSON
-    jdata := JSON.Dump(data)
+
+    object := {"data": data}
+    if ( configEnableKey != false ) {
+        object["configKey"] := configEnableKey
+    }
+
+    jdata := JSON.Dump(object)
     file := FileOpen(ConfigPiecesFolder . "\" . piece . ".json", "w")
     file.Write(jdata)
     file.Close()
@@ -39,19 +45,25 @@ LoadConfigPieces(piece=false) {
             ;;  open and read the file
             file := FileOpen(A_LoopFileFullPath, "r")
             data := file.Read()
+            PieceKey := StrSplit(matches[1], "-")
+            PieceData := JSON.Load(data)
+            configKey := PieceData["configKey"]
 
-            PieceData := StrSplit(matches[1], "-")
+            ;;  load the piece if no configKey provided, or if configKey == true
+            if ( PieceData["configKey"] == false || %configKey% == true ) {
 
-            ;;  there is a bit of manual work here to process keys
-            if ( PieceData[1] == "ScreenshotRectangles" ) {
+                ;;  there is a bit of manual work here to process keys
+                if ( PieceKey[1] == "ScreenshotRectangles" ) {
 
-                if ( StrLen(data) > 0 ) {
-                    ScreenshotRectangles[PieceData[2]] := JSON.Load(data)
+                    if ( StrLen(data) > 0 canLoad == true) {
+                        ScreenshotRectangles[PieceData[2]] := PieceData["data"]
+                    }
+
+                } else if ( PieceKey[1] == "IgnoresDB" ) {
+
+                    IgnoreList := ( PieceData["data"] ) ? PieceData["data"] : []
+
                 }
-
-            } else if ( PieceData[1] == "IgnoresDB" ) {
-
-                IgnoreList := ( StrLen(data) > 0 ) ? JSON.Load(data) : JSON.Load("[]")
 
             }
 

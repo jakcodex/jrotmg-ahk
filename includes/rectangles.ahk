@@ -185,6 +185,23 @@ if ( ScreenshotHideCharacter == true ) {
 
 }
 
+if ( ScreenshotHideCustom == true ) {
+
+    ;;  by default this filter draws a 0x0 tile
+    ;;  each usage scenario must be configured thru the hotkey shift+alt+c individually
+
+    ScreenshotRectangles["custom"] := {"steam": {}, "flash": {}}
+
+    ;;  steam
+    ScreenshotRectangles["custom"]["steam"]["windowed"] := {"x": 0, "y": 0, "width": 0, "height": 0}
+    ScreenshotRectangles["custom"]["steam"]["fullscreen"] := {"x": 0, "y": 0, "width": 0, "height": 0}
+
+    ;;  flash
+    ScreenshotRectangles["custom"]["flash"]["windowed"] := {"x": 0, "y": 0, "width": 0, "height": 0}
+    ScreenshotRectangles["custom"]["flash"]["fullscreen"] := {"x": 0, "y": 0, "width": 0, "height": 0}
+
+}
+
 if ( ThisFeatureIs == "NotSupportedYet" && ScreenshotHideMajority == true ) {
 
     ScreenshotRectangles["majority"] := {"steam": {}, "flash": {}}

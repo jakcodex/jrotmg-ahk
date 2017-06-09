@@ -1,0 +1,1 @@
+Changes made to files in this folder are not guaranteed to be permanent if the program is running. They are only read at startup and then maintained in memory. Direct changes made to these files while the program is running will be overwritten if the program saves the in-memory data to disk.

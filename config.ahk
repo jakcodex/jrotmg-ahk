@@ -65,7 +65,10 @@ ScreenshotHideChat := false
 ;;  ScreenshotHideMajority := false
 
 ;;;;  enable or disable the filter to hide the character
-ScreenshotHideCharacter := false
+ScreenshotHideCharacter := true
+
+;;;;  enable or disable the filter to display your custom blackout filter
+ScreenshotHideCustom := true
 
 ;;;;  manually adjust positioning if it's slightly off
 ;;  accepts object like: {"x": 0, "y": 0, "width": 0, "height": 0}
