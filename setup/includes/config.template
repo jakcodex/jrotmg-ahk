@@ -1,0 +1,57 @@
+;;;;  game hotkeys
+UserHotkeys_Nexus =
+UserHotkeys_Printscreen =
+
+;;;;  enable or disable the nexus screenshot utility
+;;  accepts boolean: true, false
+ScreenshotEnabled :=
+
+;;;;  time in seconds the screenshot system should wait to save the image (minimizes nexus delay)
+;;  accepts integers: 0, 1, 2, 3, 4, etc
+;;  only used when ScreenshotImageMode = direct
+ScreenshotSleepTimeout =
+
+;;;;  time in seconds after opening chat that nexus screenshots will not be taken
+;;  accepts integers: 0, 1, 2, 3, 4, etc
+ScreenshotTypeTimeout =
+
+;;;;  which method should the screenshot be taken with
+;;  accepts string: direct, steam
+ScreenshotImageMode =
+
+;;;;  which key mode to trigger screenshots (single or double)
+;;  accepts string: single, double
+ScreenshotKeyMode =
+
+;;;;  enable or disable the screenshot wait timer (prevents screenshots while typing)
+;;  accepts boolean: true, false
+ScreenshotWaitTimer :=
+
+;;;;  enable or disable the filter to hide gold
+ScreenshotHideGold :=
+
+;;;;  enable or disable the nexus panic button (closes the game if triggered)
+;;  accepts boolean: true, false
+NexusPanicEnabled :=
+
+;;;;  number of times nexus button must be hit to trigger NexusPanic mode
+;;  accepts integers: 0, 1, 2, 3, 4, etc
+NexusPanicCount =
+
+;;;;  number of seconds after nexus keypresses to reset counters to 0
+;;  accepts integers: 0, 1, 2, 3, 4, etc
+NexusKeyResetTime =
+
+;;;;  name of the process responsible for rotmg
+;;  Steam - Realm of the Mad God.exe
+;;  Flash Projector (example) - flashplayer_22.exe
+ROTMGProcessName =
+
+;;;;  name of the rotmg window
+;;  Steam - Realm of the Mad God
+;;  Flash Projector (example) - Adobe Flash Player 22
+ROTMGWindowName =
+
+;;;;  path to store program data
+;;;;  defaults to "C:\Users\<YourUsername>\AppData\Roaming\jrotmg-ahk"
+StoragePath =

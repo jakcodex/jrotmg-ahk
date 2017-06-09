@@ -1,0 +1,10 @@
+++ setup.ahk
+1. Installations using setup.ahk store the app source in StoragePath/src
+2. config.ahk is rewritten to redirect the include to StoragePath/src
+
+++ main program
+1. Config should be relocated to the app storage folder
+2. Program source should be copied to the app storage folder
+   a. The idea here being to make updating easier
+3. Add timelapse screenshotting
+4. Low HP detection (low HP screenshots on an interval + zelda 3hp beep)
