@@ -70,14 +70,18 @@ Filters are supported which blackout certain areas of screenshots. The following
 10. User list
 11. Chat
 12. Character
+13. Custom
 
 The provided filters are configured using approximations of where the blackout tiles need to be positioned. If they do
-not line up for you, then you can adjust the positions by editing the includes/rectangles.ahk file. Good luck if you
-attempt this.
+not line up for you, then you can adjust the positions by editing the includes/rectangles.ahk file. Minor adjustments 
+are possible thru the configuration key ScreenshotFilterAdjustments. Good luck if you attempt this. 
 
 The character filter requires that you run hotkey Ctrl+Alt+C and click on your character. This needs to be repeated if
 you switch between fullscreen and windowed mode, or between Steam and Flash Projector, or if you change between player
 centered and off-center.
+
+The custom filter requires that you run hotkey Shift+Alt+C and select the upper left and lower right boundaries of your
+custom filter region. Same configuration rules apply as the character filter.
 
 ## Configuration
 All settings, timeouts, and values are configurable from the config.ahk file. Example default configuration:

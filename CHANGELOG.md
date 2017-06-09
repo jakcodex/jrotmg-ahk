@@ -1,3 +1,11 @@
+## 0.0.15
++ Added screenshot filter 'custom' which allows the user to hide an additional region of their choice
++ Added configuration key 'ScreenshotHideCustom' which controls if your custom region is hidden in screenshots
++ Hotkey 'Shift+Alt+C': Select custom region for ScreenshotHideCustom configuration
++ Converted config pieces to contain metadata in addition to the variable data
++ Config pieces will enable/disable themselves automatically based on the runtime config
++ README.txt placed into config pieces folder to warn user against direct changes
+
 ## 0.0.14
 + Added configuration key 'ScreenshotEnabled' which enables or disables the nexus screenshots
 + Added configuration key 'ScreenshotHideGoldAndFame' which controls if the gold and fame are hidden in screenshots
