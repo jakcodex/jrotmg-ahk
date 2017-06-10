@@ -1,5 +1,6 @@
 #Include setup/config.ahk
 #Include setup/includes/shutdown.ahk
+#Include common/gui/tools.ahk
 #Include setup/includes/interfaces/NewInstallation.ahk
 #Include setup/includes/interfaces/UpgradeConfiguration.ahk
 #Include setup/includes/interfaces/UpgradeInstallation.ahk

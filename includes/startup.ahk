@@ -2,6 +2,8 @@
 ;;  startup tasks
 ;;
 
+#Include common/gui/tools.ahk
+
 #SingleInstance, Force
 SetBatchLines, -1
 
@@ -52,6 +54,9 @@ if ( !FileExist(ConfigPiecesFolder) ) {
 
 ;;;;  load all config files in the pieces folder
 LoadConfigPieces()
+
+;;;;  some things to cleanup
+ScreenshotRecordingObject["enabled"] := false
 
 ;;
 ;;  GDI+ things

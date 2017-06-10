@@ -7,7 +7,7 @@
 + Converted config pieces to contain metadata in addition to the variable data
 + Config pieces will enable/disable themselves automatically based on the runtime config
 + README.txt placed into config pieces folder to warn user against direct changes
-+ New Feature: Screenshot Timelapse Mode - automatically record progress thru pictures easily (single profile for now)
++ New Feature: Screenshot Timelapse Mode - automatically record progress thru pictures easily
 + Nexus and Manual screenshots will be stored with timelapse photos when feature is enabled
 
 ## 0.0.14

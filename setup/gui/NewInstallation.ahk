@@ -5,13 +5,13 @@ DrawNewInstallationGUI() {
     CreateGUI("NewInstallationGUI", "New Installation Wizard")
 
     GUISetFont("", "Calibri")
-    GUISetFont(config["StyleH1"])
+    GUISetFont(GUIConfig["StyleH1"])
     GUIAddText("New Installation Wizard")
 
-    GUISetFont(config["StyleH2"])
+    GUISetFont(GUIConfig["StyleH2"])
     GUIAddTabs("General|Hotkeys|Nexus Screenshots|Panic Options", "w500 h300")
 
-    GUISetFont(config["StyleText"])
+    GUISetFont(GUIConfig["StyleText"])
 
     ;;;; general config settings on tab 1
     Gui, Tab, 1

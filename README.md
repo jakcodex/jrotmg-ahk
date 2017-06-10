@@ -113,8 +113,8 @@ store it to a subfolder of the screenshots folder.
 
 Record your NPE/PPE progress or keep a record of everything going on in game without having to record video.
 
-Presently named configurations are not stored. Upcoming features include profile selection, maximum image count and age,
-and more.
+Presently supports adding, deleting, enabling, and disabling named configurations. Upcoming features include maximum 
+image count and age, and more.
 
 ##  Nexus Panic Mode
 With Nexus Panic Mode enabled any time you spam your Nexus key more than a configured amount of times the panic mode

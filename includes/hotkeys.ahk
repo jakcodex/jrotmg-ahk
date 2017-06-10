@@ -459,36 +459,35 @@ $^!c::
         } else {
 
             ;;;;  get the name of this recording
-            GameWindow := GetGameWindow()
-            InputBox, RecordingName, Name this Recording, Provide a name for this timelapse recording`nOnly accepts a-zA-Z0-9-_ and space, , auto, 140, , , , , % ScreenshotRecordingObject["name"]
-            if ( ErrorLevel == 0 && RegExMatch(RecordingName, "^[a-zA-Z0-9-_ ]+$") ) {
+            ActiveGameWindow := GetGameWindow()
 
-                ;;;;  get the interval of this recording
-                InputBox, RecordingInterval, How often should screenshots be taken, What is the delay between screenshots in seconds?, , , , , , , , 5
-                if ( ErrorLevel == 0 && RegExMatch(RecordingInterval, "^[1-9]\d*?$")  ) {
+            ;;;;  generate the gui
+            Default_Name =
+            Default_Interval =
+            CreateGUI("Timelapse")
+            GUISetFont("", "Calibri")
+            GUISetFont(GUIConfig["StyleH1"])
+            GUIAddText("Timelapse Screenshot Configuration")
 
-                    MsgBox, , Time Lapse Enabled, % "Screenshot Timelapse is enabled`n`nName: " . RecordingName . "`nLoop Interval: " . RecordingInterval . " seconds"
-                    ScreenshotRecordingObject["enabled"] := true
-                    ScreenshotRecordingObject["name"] := RecordingName
-                    ScreenshotRecordingObject["interval"] := Round(RecordingInterval*1000)
-                    ScreenshotRecordingObject["GameWindow"] := GameWindow
-                    SetTimer, ScreenshotTimelapseTimer, % ScreenshotRecordingObject["interval"]
+            GUISetFont(GUIConfig["StyleH2"])
 
-                } else {
+            if ( StrLen(ScreenshotRecordingObject["name"]) > 0 ) {
 
-                    if ( ErrorLevel  != 1 ) {
-                        MsgBox, , Input Error, % "Error: You provided an invalid response`n`n`" . RecordingInterval . "`n`nAccepted values are 1, 2, 3, 4, ..."
-                    }
-
-                }
-
-            } else {
-
-                if ( ErrorLevel != 1 ) {
-                    MsgBox, , Input Error, % "Error: You provided an invalid response`n`n`" . RecordingName . "`n`nAccepted values are a-zA-Z0-9-_ and space"
-                }
+                GUIAddLink("gTimelapseResume", "Resume Timelapse Profile - <a id=""NewTimelapse"">" . ScreenshotRecordingObject["name"] . "</a>")
 
             }
+
+            GUISetFont(GUIConfig["StyleH3"])
+            GUIAddLink("gTimelapseCreateNew", "<a id=""NewTimelapse"">Create New Timelapse Configuration</a>")
+
+            if ( ObjectCount(ScreenshotRecordingObject["profiles"]) > 0 ) {
+
+                GUIAddLink("gTimelapseChooseProfile", "<a id=""ResumeTimelapse"">Choose Existing Timelapse Configuration</a>")
+                GUIAddLink("gTimelapseChooseDeleteProfile", "<a id=""DeleteTimelapse"">Delete an Existing Timelapse Configuration</a>")
+
+            }
+
+            ShowGUI("Timelapse")
 
         }
 
