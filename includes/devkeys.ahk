@@ -21,6 +21,6 @@ $^!v::
     MsgBox %isFullScreen%
     Return
 
-^!i::
+^>+i::
     MsgBox % JSON.Dump(IgnoreList)
     Return

@@ -11,10 +11,11 @@ Extract files to a folder and edit config.ahk if any changes are necessary then 
 Extract files to a folder and run setup.ahk. Installation wizard will help you configure, upgrade, and backup your app.
 
 ## Features
-1. Ignores Database for quickly ignoring spammers and later review
+1. Auto-ignore system for easy spam management
 2. Panic button to force close the game in the event of lag, clicking outside the game, etc
-3. Nexus Screenshotting
-4. Nexus panic button
+3. Nexus Screenshot Mode
+4. Screenshot Timelapse Mode
+4. Nexus Panic Mode
 
 ## Hotkeys
 
@@ -23,6 +24,9 @@ Extract files to a folder and run setup.ahk. Installation wizard will help you c
 
 ##### Ctrl+Shift+Z
      Unignores most recent entry in the ignores database
+     
+##### Ctrl+RShift+I
+     Display Ignores List
 
 ##### Ctrl+Escape
      Force closes the game process on your computer. This is the proverbial "Oh shit" button.
@@ -46,8 +50,25 @@ Extract files to a folder and run setup.ahk. Installation wizard will help you c
      
 ##### Shift+Alt+C
      Enable custom region screenshot filter mode (see below)
+     
+##### Ctrl+LShift+S
+     Toggle Screenshot Timelapse mode
 
-## Nexus Screenshotting
+##  Ignores Database
+Spam in this game is beyond annoying. Ignoring spammers is actually really helpful on a per-server basis in dealing with
+the problem. The autoignore hotkey will make your gaming experience much nicer when the spambots show up. Or anybody 
+else annoying you.
+
+##  Panic Button
+The panic button is extremely useful and will absolutely save your life.
+
+We've all experienced situations where we lose control of the game. Between Internet and server lag, popups, client 
+errors/freezing, and other random mistakes, there are plenty of things trying to kill you in this game that just 
+shouldn't belong.
+
+The panic button works even when Alt+F4 fails you. It will force close the game process using Windows taskkill program.
+
+## Nexus Screenshot Mode
 At its very basic and default configuration, when you hit the Nexus hotkey a screenshot will be taken at the same time.
 
 It supports taking a printscreen of your game window or using Steam's F12 screenshot hotkey. Be aware that using Steam's
@@ -85,6 +106,19 @@ centered and off-center.
 
 The custom filter requires that you run hotkey Shift+Alt+C and select the upper left and lower right boundaries of your
 custom filter region. Same configuration rules apply as the character filter.
+
+##  Screenshot Timelapse Mode
+Record a timelapse of your Realm progress with named groups. When enabled, it will take a screenshot every x seconds and
+store it to a subfolder of the screenshots folder.
+
+Record your NPE/PPE progress or keep a record of everything going on in game without having to record video.
+
+Presently named configurations are not stored. Upcoming features include profile selection, maximum image count and age,
+and more.
+
+##  Nexus Panic Mode
+With Nexus Panic Mode enabled any time you spam your Nexus key more than a configured amount of times the panic mode
+will activate and force close your game.
 
 ## Configuration
 All settings, timeouts, and values are configurable from the config.ahk file. Example default configuration:
@@ -159,6 +193,9 @@ ScreenshotHideChat := false
 ;;;;  enable or disable the filter to hide the character
 ScreenshotHideCharacter := false
 
+;;;;  enable or disable the filter to display your custom blackout filter
+ScreenshotHideCustom := false
+
 ;;;;  manually adjust positioning if it's slightly off
 ;;  accepts object like: {"x": 0, "y": 0, "width": 0, "height": 0}
 ScreenshotFilterAdjustments := {"x": 0, "y": 0, "width": 0, "height": 0}
@@ -178,18 +215,6 @@ NexusPanicCount = 5
 ;;;;  number of seconds after nexus keypresses to reset counters to 0
 ;;  accepts integers: 0, 1, 2, 3, 4, etc
 NexusKeyResetTime = 1
-
-;;;;  name of the process responsible for rotmg
-;;  Steam - Realm of the Mad God.exe
-;;  Flash Projector (example) - flashplayer_22.exe
-;ROTMGProcessName = Realm of the Mad God.exe
-ROTMGProcessName = flashplayer_22_sa.exe
-
-;;;;  name of the rotmg window
-;;  Steam - Realm of the Mad God
-;;  Flash Projector (example) - Adobe Flash Player 22
-;ROTMGWindowName = Realm of the Mad God
-ROTMGWindowName = Adobe Flash Player 22
 
 ;;;;  path to store program data
 ;;;;  defaults to "C:\Users\<YourUsername>\AppData\Roaming\jrotmg-ahk"

@@ -54,7 +54,7 @@ $^+v::
 
 			;;;;update ignorelist
 			IgnoreList.Insert(ignoreUser.1)
-			SaveConfigPiece("IgnoresDB", IgnoreList)
+			SaveConfigPiece("IgnoresDB", IgnoreList, false, "IgnoreList")
 
 		} else {
 
@@ -93,7 +93,7 @@ $^+z::
 			SendInput ^v
 			SendInput {Enter}
 			IgnoreList.remove(IgnoreList.MaxIndex())
-			SaveConfigPiece("IgnoresDB", IgnoreList)
+			SaveConfigPiece("IgnoresDB", IgnoreList, false, "IgnoreList")
 
 		} else {
 
@@ -230,7 +230,8 @@ SaveScreen:
     }
 
     ;;;;  save file to disk and finish clean up
-	Gdip_SaveBitmapToFile(PBitmapResized, ScreenshotFolder "\" A_YYYY "-" A_MM "-" A_DD "-" A_Hour "-" A_Min "-" A_Sec ".jpg")
+    DestinationFolder := ( TimelapseFolder == false ) ? ScreenshotFolder : TimelapseFolder
+	Gdip_SaveBitmapToFile(PBitmapResized, DestinationFolder "\" A_YYYY "-" A_MM "-" A_DD "-" A_Hour "-" A_Min "-" A_Sec ".jpg")
 	Gdip_DeleteGraphics(G), Gdip_DisposeImage(pBitmapResized)
 	Gdip_DisposeImage(pBitmap)
 
@@ -354,80 +355,140 @@ $^!e::
 	Return
 
 $+!c::
-    if ( ScreenshotHideCustom == true ) {
-        MsgBox, First click the upper left boundary of the box you wish to create
-        customFilterTrackingMode := true
-    } else {
-        MsgBox, You can only calibrate the custom filter position when ScreenshotHideCustom is enabled
+    if ( CheckRun() == true ) {
+
+        if ( ScreenshotHideCustom == true ) {
+            MsgBox, First click the upper left boundary of the box you wish to create
+            customFilterTrackingMode := true
+        } else {
+            MsgBox, You can only calibrate the custom filter position when ScreenshotHideCustom is enabled
+        }
+
     }
     Return
 
 $^!c::
-    if ( ScreenshotHideCharacter == true ) {
-        MsgBox, Click the center of your character to calibrate the screenshot filter
-        characterTrackingMode := true
-    } else {
-        MsgBox, You can only calibrate the character filter position when ScreenshotHideCharacter is enabled
+    if ( CheckRun() == true ) {
+
+        if ( ScreenshotHideCharacter == true ) {
+            MsgBox, Click the center of your character to calibrate the screenshot filter
+            characterTrackingMode := true
+        } else {
+            MsgBox, You can only calibrate the character filter position when ScreenshotHideCharacter is enabled
+        }
+
     }
     Return
 
 ~LButton up::
-    ;;  process mouse tracking for character tracking mode
-    if ( characterTrackingMode == true ) {
+    if ( CheckRun() == true ) {
 
-        ;;  window info
-        WinGetPos, X, Y, Width, Height, A
-        WinGetTitle, WindowTitle, A
-        ScreenMode := isWindowFullScreen(WinExist(WindowTitle))
+        ;;  process mouse tracking for character tracking mode
+        if ( characterTrackingMode == true ) {
 
-        ;;  steam or flash
-        GameWindow := ( RegExMatch(WindowTitle, "^Adobe Flash Player") ) ? "flash" : "steam"
+            ;;  window info
+            WinGetPos, X, Y, Width, Height, A
+            WinGetTitle, WindowTitle, A
+            ScreenMode := isWindowFullScreen(WinExist(WindowTitle))
 
-        ;;  get mouse position
-        MouseGetPos, x, y
+            ;;  steam or flash
+            GameWindow := ( RegExMatch(WindowTitle, "^Adobe Flash Player") ) ? "flash" : "steam"
 
-        ;;  update the appropriate rectangle
-        w := ScreenshotCharacterFilterPositioning[( ScreenMode == 1 ) ? "fullscreen" : "windowed"]["width"]
-        h := ScreenshotCharacterFilterPositioning[( ScreenMode == 1 ) ? "fullscreen" : "windowed"]["height"]
-        ScreenshotRectangles["character"][GameWindow]["windowed"] := {"x": x-Round(w/2), "y": y-Round(h/2), "width": w, "height": h}
-        ScreenshotRectangles["character"][GameWindow]["fullscreen"] := {"x": x-Round(w/2), "y": y-Round(h/2), "width": w, "height": h}
-
-        SaveConfigPiece("ScreenshotRectangles-character", ScreenshotRectangles["character"], "ScreenshotHideCharacter")
-
-        ;;  disable tracking mode
-        characterTrackingMode := false
-
-    ;;  process mouse tracking for customer filter tracking
-    } else if ( customFilterTrackingMode == true ) {
-
-        ;;  window info
-        WinGetPos, X, Y, Width, Height, A
-        WinGetTitle, WindowTitle, A
-        ScreenMode := isWindowFullScreen(WinExist(WindowTitle))
-
-        ;;  steam or flash
-        GameWindow := ( RegExMatch(WindowTitle, "^Adobe Flash Player") ) ? "flash" : "steam"
-
-        ;;  get mouse position
-        MouseGetPos, x, y
-        customFilter["pos"][customFilter["index"]] := {"x": x, "y": y}
-
-        if ( customFilter["index"] == 0 ) {
-
-            customFilter["index"] := 1
-            MsgBox, Now click the lower right corner of the box you wish to create
-
-        } else if ( customFilter["index"] == 1 ) {
+            ;;  get mouse position
+            MouseGetPos, x, y
 
             ;;  update the appropriate rectangle
-            w := customFilter["pos"][1]["x"]-customFilter["pos"][0]["x"]
-            h := customFilter["pos"][1]["y"]-customFilter["pos"][0]["y"]
-            ScreenshotRectangles["custom"][GameWindow][( ScreenMode == 1 ) ? "fullscreen" : "windowed"] := {"x": customFilter["pos"][0]["x"], "y": customFilter["pos"][0]["y"], "width": w, "height": h}
-            SaveConfigPiece("ScreenshotRectangles-custom", ScreenshotRectangles["custom"])
+            w := ScreenshotCharacterFilterPositioning[( ScreenMode == 1 ) ? "fullscreen" : "windowed"]["width"]
+            h := ScreenshotCharacterFilterPositioning[( ScreenMode == 1 ) ? "fullscreen" : "windowed"]["height"]
+            ScreenshotRectangles["character"][GameWindow]["windowed"] := {"x": x-Round(w/2), "y": y-Round(h/2), "width": w, "height": h}
+            ScreenshotRectangles["character"][GameWindow]["fullscreen"] := {"x": x-Round(w/2), "y": y-Round(h/2), "width": w, "height": h}
 
-            MsgBox,  Your custom filter has been created and saved!
-            customFilterTrackingMode := false
-            customFilter["index"] := 0
+            SaveConfigPiece("ScreenshotRectangles-character", ScreenshotRectangles["character"], "ScreenshotHideCharacter")
+
+            ;;  disable tracking mode
+            characterTrackingMode := false
+
+        ;;  process mouse tracking for customer filter tracking
+        } else if ( customFilterTrackingMode == true ) {
+
+            ;;  window info
+            WinGetPos, X, Y, Width, Height, A
+            WinGetTitle, WindowTitle, A
+            ScreenMode := isWindowFullScreen(WinExist(WindowTitle))
+
+            ;;  steam or flash
+            GameWindow := ( RegExMatch(WindowTitle, "^Adobe Flash Player") ) ? "flash" : "steam"
+
+            ;;  get mouse position
+            MouseGetPos, x, y
+            customFilter["pos"][customFilter["index"]] := {"x": x, "y": y}
+
+            if ( customFilter["index"] == 0 ) {
+
+                customFilter["index"] := 1
+                MsgBox, Now click the lower right corner of the box you wish to create
+
+            } else if ( customFilter["index"] == 1 ) {
+
+                ;;  update the appropriate rectangle
+                w := customFilter["pos"][1]["x"]-customFilter["pos"][0]["x"]
+                h := customFilter["pos"][1]["y"]-customFilter["pos"][0]["y"]
+                ScreenshotRectangles["custom"][GameWindow][( ScreenMode == 1 ) ? "fullscreen" : "windowed"] := {"x": customFilter["pos"][0]["x"], "y": customFilter["pos"][0]["y"], "width": w, "height": h}
+                SaveConfigPiece("ScreenshotRectangles-custom", ScreenshotRectangles["custom"])
+
+                MsgBox,  Your custom filter has been created and saved!
+                customFilterTrackingMode := false
+                customFilter["index"] := 0
+
+            }
+
+        }
+
+    }
+    Return
+
+;;;;  screenshot timelapse toggle
+~^<+s::
+    if ( CheckRun() == true ) {
+
+        if ( ScreenshotRecordingObject["enabled"] == true ) {
+
+            ScreenshotRecordingObject["enabled"] := false
+            MsgBox, , Time Lapse Disabled, Screenshot Timelapse has been disabled
+
+        } else {
+
+            ;;;;  get the name of this recording
+            GameWindow := GetGameWindow()
+            InputBox, RecordingName, Name this Recording, Provide a name for this timelapse recording`nOnly accepts a-zA-Z0-9-_ and space, , auto, 140, , , , , % ScreenshotRecordingObject["name"]
+            if ( ErrorLevel == 0 && RegExMatch(RecordingName, "^[a-zA-Z0-9-_ ]+$") ) {
+
+                ;;;;  get the interval of this recording
+                InputBox, RecordingInterval, How often should screenshots be taken, What is the delay between screenshots in seconds?, , , , , , , , 5
+                if ( ErrorLevel == 0 && RegExMatch(RecordingInterval, "^[1-9]\d*?$")  ) {
+
+                    MsgBox, , Time Lapse Enabled, % "Screenshot Timelapse is enabled`n`nName: " . RecordingName . "`nLoop Interval: " . RecordingInterval . " seconds"
+                    ScreenshotRecordingObject["enabled"] := true
+                    ScreenshotRecordingObject["name"] := RecordingName
+                    ScreenshotRecordingObject["interval"] := Round(RecordingInterval*1000)
+                    ScreenshotRecordingObject["GameWindow"] := GameWindow
+                    SetTimer, ScreenshotTimelapseTimer, % ScreenshotRecordingObject["interval"]
+
+                } else {
+
+                    if ( ErrorLevel  != 1 ) {
+                        MsgBox, , Input Error, % "Error: You provided an invalid response`n`n`" . RecordingInterval . "`n`nAccepted values are 1, 2, 3, 4, ..."
+                    }
+
+                }
+
+            } else {
+
+                if ( ErrorLevel != 1 ) {
+                    MsgBox, , Input Error, % "Error: You provided an invalid response`n`n`" . RecordingName . "`n`nAccepted values are a-zA-Z0-9-_ and space"
+                }
+
+            }
 
         }
 

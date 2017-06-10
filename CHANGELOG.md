@@ -2,9 +2,13 @@
 + Added screenshot filter 'custom' which allows the user to hide an additional region of their choice
 + Added configuration key 'ScreenshotHideCustom' which controls if your custom region is hidden in screenshots
 + Hotkey 'Shift+Alt+C': Select custom region for ScreenshotHideCustom configuration
++ Hotkey 'Ctrl+LShift+S': Toggle Screenshot Timelapse mode
++ Renamed Hotkey 'Ctrl+Shift+I' to 'Ctrl+RShift+I' for displaying Ignores List
 + Converted config pieces to contain metadata in addition to the variable data
 + Config pieces will enable/disable themselves automatically based on the runtime config
 + README.txt placed into config pieces folder to warn user against direct changes
++ New Feature: Screenshot Timelapse Mode - automatically record progress thru pictures easily (single profile for now)
++ Nexus and Manual screenshots will be stored with timelapse photos when feature is enabled
 
 ## 0.0.14
 + Added configuration key 'ScreenshotEnabled' which enables or disables the nexus screenshots

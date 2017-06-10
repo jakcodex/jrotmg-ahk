@@ -65,10 +65,10 @@ ScreenshotHideChat := false
 ;;  ScreenshotHideMajority := false
 
 ;;;;  enable or disable the filter to hide the character
-ScreenshotHideCharacter := true
+ScreenshotHideCharacter := false
 
 ;;;;  enable or disable the filter to display your custom blackout filter
-ScreenshotHideCustom := true
+ScreenshotHideCustom := false
 
 ;;;;  manually adjust positioning if it's slightly off
 ;;  accepts object like: {"x": 0, "y": 0, "width": 0, "height": 0}
@@ -89,18 +89,6 @@ NexusPanicCount = 5
 ;;;;  number of seconds after nexus keypresses to reset counters to 0
 ;;  accepts integers: 0, 1, 2, 3, 4, etc
 NexusKeyResetTime = 1
-
-;;;;  name of the process responsible for rotmg
-;;  Steam - Realm of the Mad God.exe
-;;  Flash Projector (example) - flashplayer_22.exe
-;ROTMGProcessName = Realm of the Mad God.exe
-ROTMGProcessName = flashplayer_22_sa.exe
-
-;;;;  name of the rotmg window
-;;  Steam - Realm of the Mad God
-;;  Flash Projector (example) - Adobe Flash Player 22
-;ROTMGWindowName = Realm of the Mad God
-ROTMGWindowName = Adobe Flash Player 22
 
 ;;;;  path to store program data
 ;;;;  defaults to "C:\Users\<YourUsername>\AppData\Roaming\jrotmg-ahk"
