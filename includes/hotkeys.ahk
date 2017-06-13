@@ -139,17 +139,17 @@ $^+z::
     Return
 
 ;;;;  open the screenshot folder in explorer
-^!s::
-	if ( CheckRun() == true ) {
-
-		Run % ScreenshotFolder
-
-	} else {
-
-		Send, ^!s
-
-	}
-	Return
+;;^!s::
+;;	if ( CheckRun() == true ) {
+;;
+;;		Run % ScreenshotFolder
+;;
+;;	} else {
+;;
+;;		Send, ^!s
+;;
+;;	}
+;;	Return
 
 SaveScreen:
 
@@ -448,12 +448,13 @@ $^!c::
     Return
 
 ;;;;  screenshot timelapse toggle
-~^<+s::
+^<+s::
     if ( CheckRun() == true ) {
 
         if ( ScreenshotRecordingObject["enabled"] == true ) {
 
             ScreenshotRecordingObject["enabled"] := false
+            TimelapseFolder := false
             MsgBox, , Time Lapse Disabled, Screenshot Timelapse has been disabled
 
         } else {
@@ -464,7 +465,7 @@ $^!c::
             ;;;;  generate the gui
             Default_Name =
             Default_Interval =
-            CreateGUI("Timelapse")
+            CreateGUI("Timelapse", "Timelapse Mode Configuration")
             GUISetFont("", "Calibri")
             GUISetFont(GUIConfig["StyleH1"])
             GUIAddText("Timelapse Screenshot Configuration")

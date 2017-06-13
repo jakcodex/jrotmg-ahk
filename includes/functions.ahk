@@ -305,7 +305,7 @@ TimelapseChooseProfile(a, b, c, d) {
         GUILoaded := false
     }
 
-    CreateGUI("TimelapseProfile")
+    CreateGUI("TimelapseProfile", "Timelapse Profile Selection")
     GUISetFont("", "Calibri")
     GUISetFont(GUIConfig["StyleH1"])
     GUIAddText("Timelapse Screenshot Profile Selection")
@@ -357,7 +357,7 @@ TimelapseChooseDeleteProfile(a, b, c, d) {
         GUILoaded := false
     }
 
-    CreateGUI("TimelapseDelete")
+    CreateGUI("TimelapseDelete", "Timelapse Delete Profile")
     GUISetFont("", "Calibri")
     GUISetFont(GUIConfig["StyleH1"])
     GUIAddText("Timelapse Screenshot Profile Deletion")

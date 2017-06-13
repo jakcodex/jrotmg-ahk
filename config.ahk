@@ -9,11 +9,11 @@ ScreenshotEnabled := true
 ;;;;  time in seconds the screenshot system should wait to save the image (minimizes nexus delay)
 ;;  accepts integers: 0, 1, 2, 3, 4, etc
 ;;  only used when ScreenshotImageMode = direct
-ScreenshotSleepTimeout = 2
+ScreenshotSleepTimeout = 1
 
 ;;;;  time in seconds after opening chat that nexus screenshots will not be taken
 ;;  accepts integers: 0, 1, 2, 3, 4, etc
-ScreenshotTypeTimeout = 15
+ScreenshotTypeTimeout = 10
 
 ;;;;  which method should the screenshot be taken with
 ;;  accepts string: direct, steam
@@ -28,7 +28,7 @@ ScreenshotKeyMode = single
 ScreenshotWaitTimer := true
 
 ;;;;  enable or disable the filter to hide gold
-ScreenshotHideGoldAndFame := false
+ScreenshotHideGoldAndFame := true
 
 ;;;;  enable or disable the filter to hide your guild
 ScreenshotHideGuild := false

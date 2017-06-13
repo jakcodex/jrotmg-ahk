@@ -9,12 +9,11 @@ CreateGUI(GUIName, title=false) {
     }
 
     GUILoaded := GUIName
-    title := ( title != false ) ? " - " . title : ""
 
-    Gui, % GUIName . ": New", , % GUIConfig["ProgramName"] . title
-
+    Gui, % GUIName . ": New", , % title
+    Gui, % GUIName . ": +AlwaysOnTop"
     Gui, % GUIName . ": " . GUIConfig["WindowSize"]
-    Gui, % GUIName . ": Color", 87b5ff
+    Gui, % GUIName . ": Color", % GUIConfig["BackgroundColor"]
 
 }
 
