@@ -2,7 +2,7 @@
 ;;  startup tasks
 ;;
 
-#Include common/gui/tools.ahk
+#Include src/common/gui/tools.ahk
 
 #SingleInstance, Force
 SetBatchLines, -1

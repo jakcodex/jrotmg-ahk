@@ -1,4 +1,5 @@
-# ROTMG Mini AHK Script
+# JROTMG AHK Utility
+### Version [0.0.15-alpha](CHANGELOG.md)
 
 ## Usage
 
@@ -52,7 +53,7 @@ Extract files to a folder and run setup.ahk. Installation wizard will help you c
      Enable custom region screenshot filter mode (see below)
      
 ##### Ctrl+LShift+S
-     Toggle Screenshot Timelapse mode
+     Open Timelapse menu or disable active timelapse mode
 
 ##  Ignores Database
 Spam in this game is beyond annoying. Ignoring spammers is actually really helpful on a per-server basis in dealing with
@@ -114,11 +115,23 @@ store it to a subfolder of the screenshots folder.
 Record your NPE/PPE progress or keep a record of everything going on in game without having to record video.
 
 Presently supports adding, deleting, enabling, and disabling named configurations. Upcoming features include maximum 
-image count and age, and more.
+image count and age, and more. To change a configuration, delete and recreate it. No images will be deleted.
 
 ##  Nexus Panic Mode
 With Nexus Panic Mode enabled any time you spam your Nexus key more than a configured amount of times the panic mode
 will activate and force close your game.
+
+## Disclaimer
+This is beta software and you use it at your own risk. No warranty or guarantee is offered. 
+
+Be familiar with the panic button and consider binding it to a mouse button. You can run the file 
+extra/panic-button-mouse-tools.ahk to generate a program that can be ran by many mouse clients such as Razer. The 
+ultimate panic button.
+
+Master branch releases may be considered generally stable but may contain unknown bugs. This is the recommended branch.
+
+Version and test branches may be marked alpha or release candidate. Alpha commits will contain untested and potentially
+incomplete code. RC commits will contain code considered to be as stable as master branch but not yet ready for merger.
 
 ## Configuration
 All settings, timeouts, and values are configurable from the config.ahk file. Example default configuration:

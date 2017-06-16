@@ -1,4 +1,4 @@
-## 0.0.15
+## 0.0.15-alpha
 + Added screenshot filter 'custom' which allows the user to hide an additional region of their choice
 + Added configuration key 'ScreenshotHideCustom' which controls if your custom region is hidden in screenshots
 + Hotkey 'Shift+Alt+C': Select custom region for ScreenshotHideCustom configuration

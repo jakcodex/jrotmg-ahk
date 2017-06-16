@@ -1,4 +1,4 @@
-#Include setup/gui/NewInstallation.ahk
+#Include src/management-utility/gui/NewInstallation.ahk
 
 ;;;; interface variables
 ChosenHotkey_Nexus =

@@ -1,19 +1,19 @@
 ;;;;JROTMG Mini AHK Script
 ;;;;Jakisaurus
-;;;;version=0.0.15-beta
+;;;;version=0.0.15-alpha
 ;;;;Quick Start launcher
 ;;  User this launcher if you are not using the setup utility
 ;;  Appropriate for default program usage and users managing their installations
 
 #Include, config.ahk
-#Include, includes/staticvars.ahk
-#Include, includes/bindings.ahk
-#Include, includes/json.ahk
-#Include, includes/gdi.ahk
-#Include, includes/functions.ahk
-#Include, includes/startup.ahk
-#Include, includes/hotkeys.ahk
-#Include, includes/devkeys.ahk
+#Include, src/jrotmg-ahk/staticvars.ahk
+#Include, src/jrotmg-ahk/bindings.ahk
+#Include, src/jrotmg-ahk/json.ahk
+#Include, src/jrotmg-ahk/gdi.ahk
+#Include, src/jrotmg-ahk/functions.ahk
+#Include, src/jrotmg-ahk/startup.ahk
+#Include, src/jrotmg-ahk/hotkeys.ahk
+#Include, src/jrotmg-ahk/devkeys.ahk
 	
 ;;;;
 ;; additional credits

@@ -19,7 +19,7 @@ ActiveGameWindow := false
 if ( !GameProcessName ) {
     GameProcessName := false
 }
-#Include includes/rectangles.ahk
+#Include src/jrotmg-ahk/rectangles.ahk
 
 ;;;;  GUI things
 GUIConfig := {}
