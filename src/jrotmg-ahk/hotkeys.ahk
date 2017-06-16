@@ -325,8 +325,9 @@ NexusScreenshot:
     Return
 
 ;;;;   display time since last enter keypress
-$^!e::
-	if ( CheckRun() == true ) {
+~^!e::
+    if ( IsEnabledNot == true ) {
+	;;if ( CheckRun() == true ) {
 
         if ( ScreenshotEnabled == true ) {
 
@@ -346,10 +347,6 @@ $^!e::
             MsgBox, Nexus Screenshotting is disabled. Press Ctrl+Alt+N to enable it.
 
         }
-
-	} else {
-
-		Send, ^!e
 
 	}
 	Return

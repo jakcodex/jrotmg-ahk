@@ -1,7 +1,4 @@
-;;;;  default variables
-GUILoaded := false
-
-CreateGUI(GUIName, title=false) {
+CreateGUI(GUIName, title=false, options=false) {
 
     global GUILoaded, GUIConfig
     if ( GUILoaded != false ) {
@@ -15,6 +12,10 @@ CreateGUI(GUIName, title=false) {
     Gui, % GUIName . ": " . GUIConfig["WindowSize"]
     Gui, % GUIName . ": Color", % GUIConfig["BackgroundColor"]
 
+    if ( options != false ) {
+        Gui, % GuiName . ": " . options
+    }
+
 }
 
 ShowGUI(GUIName, w=false, h=false) {
@@ -22,6 +23,14 @@ ShowGUI(GUIName, w=false, h=false) {
     global GUILoaded, GUIConfig
     if ( h != false && w != false ) {
         AddOnOptions := "W" . w . " H" . h
+    } else if ( h != false ) {
+        if ( w == "auto" ) {
+            AddOnOptions := "AutoSize"
+        } else {
+            AddOnOptions := "W" . w
+        }
+    } else if ( w != false ) {
+        AddOnOptions := "H" . h
     } else {
         AddOnOptions =
     }

@@ -9,7 +9,7 @@
 + README.txt placed into config pieces folder to warn user against direct changes
 + New Feature: Screenshot Timelapse Mode - automatically record progress thru pictures easily
 + Nexus and Manual screenshots will be stored with timelapse photos when feature is enabled
-+ Suspended Hotkey 'Ctrl+LShift+S' as it has been triggering at random causing spooky situations
++ Suspended Hotkey 'Ctrl+LShift+S' and 'Ctrl+Alt+E' due to triggering at random causing spooky situations
 
 ## 0.0.14
 + Added configuration key 'ScreenshotEnabled' which enables or disables the nexus screenshots

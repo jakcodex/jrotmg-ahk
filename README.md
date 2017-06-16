@@ -1,7 +1,8 @@
 # JROTMG AHK Utility
-### Version [0.0.15-alpha](CHANGELOG.md)
 
 ## Usage
+
+Version [0.0.15-alpha](CHANGELOG.md)
 
 Required AutoHotKey from https://autohotkey.com/download/
 
@@ -98,8 +99,8 @@ Filters are supported which blackout certain areas of screenshots. The following
 13. Custom
 
 The provided filters are configured using approximations of where the blackout tiles need to be positioned. If they do
-not line up for you, then you can adjust the positions by editing the includes/rectangles.ahk file. Minor adjustments 
-are possible thru the configuration key ScreenshotFilterAdjustments. Good luck if you attempt this. 
+not line up for you, then you can adjust the positions by editing the [src/jrotmg-ahk/rectangles.ahk][src-rectangles] file. Minor 
+adjustments are possible thru the configuration key ScreenshotFilterAdjustments. Good luck if you attempt this. 
 
 The character filter requires that you run hotkey Ctrl+Alt+C and click on your character. This needs to be repeated if
 you switch between fullscreen and windowed mode, or between Steam and Flash Projector, or if you change between player
@@ -125,7 +126,7 @@ will activate and force close your game.
 This is beta software and you use it at your own risk. No warranty or guarantee is offered. 
 
 Be familiar with the panic button and consider binding it to a mouse button. You can run the file 
-extra/panic-button-mouse-tools.ahk to generate a program that can be ran by many mouse clients such as Razer. The 
+[extra/panic-button-mouse-tools.ahk][extra-panic-button-mouse] to generate a program that can be ran by many mouse clients such as Razer. The 
 ultimate panic button.
 
 Master branch releases may be considered generally stable but may contain unknown bugs. This is the recommended branch.
@@ -233,3 +234,6 @@ NexusKeyResetTime = 1
 ;;;;  defaults to "C:\Users\<YourUsername>\AppData\Roaming\jrotmg-ahk"
 StoragePath = %APPDATA%\jrotmg-ahk
 ```
+
+[src-rectangles]: src/jrotmg-ahk/rectangles.ahk "Rectangles Positioning File"
+[extra-panic-button-mouse]: extra/panic-button-mouse-tools.ahk "Mouse Panic Button Setup Helper"
