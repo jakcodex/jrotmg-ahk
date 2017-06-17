@@ -1,9 +1,10 @@
 ;;;;  GUI things
 GUIConfig := {}
 GUILoaded := false
+GUICallback := false
 
 ;;  window style formatting
-GUIConfig["WindowSize"] := "+Resize "
+GUIConfig["WindowSize"] := " "
 GUIConfig["WindowDefaultWidth"] := "auto"
 GUIConfig["WindowDefaultHeight"] := "auto"
 GUIConfig["BackgroundColor"] := "0f1828"

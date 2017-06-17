@@ -2,7 +2,7 @@
 
 ## Usage
 
-Version [0.0.15-alpha](CHANGELOG.md)
+Version [0.0.15-rc1](CHANGELOG.md)
 
 Required AutoHotKey from https://autohotkey.com/download/
 
@@ -122,12 +122,13 @@ image count and age, and more. To change a configuration, delete and recreate it
 With Nexus Panic Mode enabled any time you spam your Nexus key more than a configured amount of times the panic mode
 will activate and force close your game.
 
-## Disclaimer
-This is beta software and you use it at your own risk. No warranty or guarantee is offered. 
-
 Be familiar with the panic button and consider binding it to a mouse button. You can run the file 
 [extra/panic-button-mouse-tools.ahk][extra-panic-button-mouse] to generate a program that can be ran by many mouse clients such as Razer. The 
-ultimate panic button.
+ultimate panic button. The generated file is not an AutoHotKey script and is separate from this application. For more
+details on this, you can find instructions for it on [Realmeye Forums][realmeye-forums-panic-button].
+
+## Disclaimer
+This is beta software and you use it at your own risk. No warranty or guarantee is offered. 
 
 Master branch releases may be considered generally stable but may contain unknown bugs. This is the recommended branch.
 
@@ -237,3 +238,4 @@ StoragePath = %APPDATA%\jrotmg-ahk
 
 [src-rectangles]: src/jrotmg-ahk/rectangles.ahk "Rectangles Positioning File"
 [extra-panic-button-mouse]: extra/panic-button-mouse-tools.ahk "Mouse Panic Button Setup Helper"
+[realmeye-forums-panic-button]: https://www.realmeye.com/forum/t/the-oh-shiet-button-for-freezes-and-when-you-click-off-the-page/4673 "The Oh Shiet Button for Freezes and When You Click Off The Page"

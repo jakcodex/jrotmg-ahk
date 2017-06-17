@@ -8,7 +8,7 @@ CreateGUI(GUIName, title=false, options=false) {
     GUILoaded := GUIName
 
     Gui, % GUIName . ": New", , % title
-    Gui, % GUIName . ": +AlwaysOnTop"
+    ;Gui, % GUIName . ": +AlwaysOnTop"
     Gui, % GUIName . ": " . GUIConfig["WindowSize"]
     Gui, % GUIName . ": Color", % GUIConfig["BackgroundColor"]
 
@@ -109,7 +109,7 @@ GUIAddDropdownBox(list, options, GUIName=false) {
 
     global GUILoaded
     if ( GUIName == false ) GUIName := GUILoaded
-    Gui, Add, DropDownList, % options, % list
+    Gui, % GUIName . ": Add", DropDownList, % options, % list
     Return
 
 }
@@ -118,7 +118,7 @@ GUIAddSlider(default, options="", GUIName=false) {
 
     global GUILoaded
     if ( GUIName == false ) GUIName := GUILoaded
-    Gui, Add, Slider, % options, % default
+    Gui, % GUIName . ": Add", Slider, % options, % default
     Return
 
 }
@@ -127,7 +127,35 @@ GUIAddEdit(options, default="", GUIName=false) {
 
     global GUILoaded
     if ( GUIName == false ) GUIName := GUILoaded
-    Gui, Add, Edit, % options, % default
+    Gui, % GUIName . ": Add", Edit, % options, % default
+    Return
+
+}
+
+GUIAddSubmit(GUIName=false, NoHide=false) {
+
+    global GUILoaded
+    if ( GUIName == false ) GUIName := GUILoaded
+    NoHide := ( NoHide == false ) ? "" : "NoHide"
+    Gui, % GUIName . ": Submit", % NoHide
+
+}
+
+GUIAddButton(text, options="", GUIName=false) {
+
+    global GUILoaded
+    if ( GUIName == false ) GUIName := GUILoaded
+    Gui, % GUIName . ": Add", Button, % options, % text
+
+}
+
+GUISubmit(a=false, b=false) {
+
+    global GUICallback
+    Gui, Submit
+    if ( GUICallback != false ) {
+        DllCall(GUICallback)
+    }
     Return
 
 }
