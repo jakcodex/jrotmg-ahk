@@ -1,3 +1,6 @@
+## 0.0.16-alpha
++ A new baby
+
 ## 0.0.15
 + Added screenshot filter 'custom' which allows the user to hide an additional region of their choice
 + Added configuration key 'ScreenshotHideCustom' which controls if your custom region is hidden in screenshots
