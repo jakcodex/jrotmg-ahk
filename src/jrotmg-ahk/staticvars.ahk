@@ -21,3 +21,9 @@ if ( !GameProcessName ) {
 }
 #Include src/jrotmg-ahk/rectangles.ahk
 #Include, src/common/gui/guistaticvars.ahk
+
+;;Gdip_FillRectangle
+;;Gdip_DrawImage
+;;Gdip_GetPixel
+;;Gdip_CreateBitmapFromFile
+;;Gdip_TextToGraphics

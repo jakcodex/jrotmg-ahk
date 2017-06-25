@@ -1,6 +1,6 @@
 ;;;;JROTMG Mini AHK Script
 ;;;;Jakisaurus
-;;;;version=0.0.15-rc1
+;;;;version=0.0.15
 ;;;;Quick Start launcher
 ;;  User this launcher if you are not using the setup utility
 ;;  Appropriate for default program usage and users managing their installations

@@ -2,7 +2,7 @@
 
 ## Usage
 
-Version [0.0.15-rc1](CHANGELOG.md)
+Version [0.0.15](CHANGELOG.md)
 
 Required AutoHotKey from https://autohotkey.com/download/
 
@@ -150,15 +150,19 @@ ScreenshotEnabled := true
 ;;;;  time in seconds the screenshot system should wait to save the image (minimizes nexus delay)
 ;;  accepts integers: 0, 1, 2, 3, 4, etc
 ;;  only used when ScreenshotImageMode = direct
-ScreenshotSleepTimeout = 2
+ScreenshotSleepTimeout = 1
 
 ;;;;  time in seconds after opening chat that nexus screenshots will not be taken
 ;;  accepts integers: 0, 1, 2, 3, 4, etc
-ScreenshotTypeTimeout = 15
+ScreenshotTypeTimeout = 10
 
 ;;;;  which method should the screenshot be taken with
 ;;  accepts string: direct, steam
 ScreenshotImageMode = direct
+
+;;;;  quality of the screenshot image
+;;  accepts integers: 0 - 100
+ScreenshotImageQuality = 100
 
 ;;;;  which key mode to trigger screenshots (single or double)
 ;;  accepts string: single, double
@@ -169,7 +173,7 @@ ScreenshotKeyMode = single
 ScreenshotWaitTimer := true
 
 ;;;;  enable or disable the filter to hide gold
-ScreenshotHideGoldAndFame := false
+ScreenshotHideGoldAndFame := true
 
 ;;;;  enable or disable the filter to hide your guild
 ScreenshotHideGuild := false

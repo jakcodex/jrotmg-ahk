@@ -1,6 +1,7 @@
-## 0.0.15-rc1
+## 0.0.15
 + Added screenshot filter 'custom' which allows the user to hide an additional region of their choice
 + Added configuration key 'ScreenshotHideCustom' which controls if your custom region is hidden in screenshots
++ Added configuration key 'ScreenshotImageQuality' which controls the image quality of screenshots
 + Hotkey 'Shift+Alt+C': Select custom region for ScreenshotHideCustom configuration
 + Hotkey 'Ctrl+LShift+S': Toggle Screenshot Timelapse mode
 + Renamed Hotkey 'Ctrl+Shift+I' to 'Ctrl+RShift+I' for displaying Ignores List
@@ -10,7 +11,8 @@
 + New Feature: Screenshot Timelapse Mode - automatically record progress thru pictures easily
 + Nexus and Manual screenshots will be stored with timelapse photos when feature is enabled
 + Suspended Hotkey 'Ctrl+LShift+S' and 'Ctrl+Alt+E' due to triggering at random causing spooky situations
-+ Added a mouse button panic script generator for the ultimate oh shit protection
++ Added a mouse button panic script generator for the ultimate panic mode protection
++ Screenshots are now beautiful and run a bit faster with maximum quality set as default
 
 ## 0.0.14
 + Added configuration key 'ScreenshotEnabled' which enables or disables the nexus screenshots

@@ -5,7 +5,6 @@
 ;;  vars
 User_ROTMGProcessNameSteam := false
 User_ROTMGProcessNameFlash := false
-GSubSubmit = SetupUtility.submit
 
 ;;  we'll be needing these
 #Include ../src/common/gui/tools.ahk
@@ -13,16 +12,19 @@ GSubSubmit = SetupUtility.submit
 #Include ../src/common/lib/json.ahk
 #Include ../src/common/tools/config-loader.ahk
 #Include ../src/common/tools/fs.ahk
+#Include ../src/common/tools/ExitTimer.ahk
 
-;;  sure - why not use a class
 class SetupUtility {
 
     static programName := "Mouse Panic Button Setup Utility"
     static gsubSubmit := SetupUtility.submit
+    static TimerDelay := 5000
 
     main() {
 
         global GUIConfig, User_ROTMGProcessNameSteam, User_ROTMGProcessNameFlash, GUICallback
+
+        SetTimer % ExitTimer, % this.TimerDelay
 
         CreateGUI("SetupUtilityMain", "Mouse Setup Utility")
         GUISetFont(GUIConfig["StyleH1"])
@@ -32,10 +34,10 @@ class SetupUtility {
         GUIAddText("Welcome to the external panic button setup utility. `n`nEven if you don't use the AHK script, a mouse panic button is essential to survival in a world of lag and errors.", "+Wrap w600")
 
         GUISetFont(GUIConfig["StyleH2"])
-        GUIAddText("Step One - Obtain ROTMG Process Name")
+        GUIAddText("Step One - Obtain Game Process Name")
 
         GUISetFont(GUIConfig["StyleText"])
-        GUIAddText("You may configure this for Steam, Flash, or both. `n`nOpen your ROTMG game and hit Ctrl+Alt+P. Record the value here.")
+        GUIAddText("You may configure this for Steam, Flash, or both. `n`nOpen your game client and hit Ctrl+Alt+P. Record the value here.")
         GUISetFont("cBlack")
         GUIAddEdit("vUser_ROTMGProcessNameSteam w300", "Steam")
         GUIAddEdit("vUser_ROTMGProcessNameFlash w300", "Flash Projector")
@@ -51,7 +53,9 @@ class SetupUtility {
 
     submit(a=false, b=false, c=false, d=false) {
 
-        global GUIConfig, User_ROTMGProcessNameSteam, User_ROTMGProcessNameFlash, JSON
+        global GUIConfig, User_ROTMGProcessNameSteam, User_ROTMGProcessNameFlash, JSON, InteractTimer
+
+        InteractTimer := A_Now
 
         ;;  prepare to write the file
         path = %APPDATA%\jrotmg-ahk
@@ -128,7 +132,3 @@ SetupUtility.main()
     WinGet, GameProcessName, ProcessName, A
     InputBox, vGameProcessName, Window Process Name, , , , 100, , , , , % GameProcessName
     Return
-
-GuiClose:
-GuiEscape:
-ExitApp

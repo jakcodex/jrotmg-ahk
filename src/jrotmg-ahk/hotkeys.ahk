@@ -164,7 +164,7 @@ SaveScreen:
     ;;  create the base image in memory
 	pBitmap := Gdip_BitmapFromScreen(X "|" Y "|" Width "|" Height)
 	Width := Gdip_GetImageWidth(pBitmap), Height := Gdip_GetImageHeight(pBitmap)
-	PBitmapResized := Gdip_CreateBitmap(Round(Width), Round(Height)), G := Gdip_GraphicsFromImage(pBitmapResized)
+	G := Gdip_GraphicsFromImage(pBitmap)
 	Gdip_DrawImage(G, pBitmap, 0, 0, Round(Width), Round(Height), 0, 0, Width, Height)
 
 	;;  sleep for specified time before beginning image processing and disk activity
@@ -229,14 +229,12 @@ SaveScreen:
         Gdip_DeleteBrush(element)
     }
 
-    ;;;;  save file to disk and finish clean up
+    ;;;;  save file to disk
     DestinationFolder := ( TimelapseFolder == false ) ? ScreenshotFolder : TimelapseFolder
-	Gdip_SaveBitmapToFile(PBitmapResized, DestinationFolder "\" A_YYYY "-" A_MM "-" A_DD "-" A_Hour "-" A_Min "-" A_Sec ".jpg")
-	Gdip_DeleteGraphics(G), Gdip_DisposeImage(pBitmapResized)
-	Gdip_DisposeImage(pBitmap)
+	Gdip_SaveBitmapToFile(pBitmap, DestinationFolder "\" A_YYYY "-" A_MM "-" A_DD "-" A_Hour "-" A_Min "-" A_Sec ".jpg", ScreenshotImageQuality)
 
-
-
+	;;  cleanup
+	Gdip_DeleteGraphics(G), Gdip_DisposeImage(pBitmap)
 	Return
 
 Exit:

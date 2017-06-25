@@ -19,6 +19,10 @@ ScreenshotTypeTimeout = 10
 ;;  accepts string: direct, steam
 ScreenshotImageMode = direct
 
+;;;;  quality of the screenshot image
+;;  accepts integers: 0 - 100
+ScreenshotImageQuality = 100
+
 ;;;;  which key mode to trigger screenshots (single or double)
 ;;  accepts string: single, double
 ScreenshotKeyMode = single
