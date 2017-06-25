@@ -13,7 +13,7 @@ ScreenshotSleepTimeout = 1
 
 ;;;;  time in seconds after opening chat that nexus screenshots will not be taken
 ;;  accepts integers: 0, 1, 2, 3, 4, etc
-ScreenshotTypeTimeout = 10
+ScreenshotTypeTimeout = 2
 
 ;;;;  which method should the screenshot be taken with
 ;;  accepts string: direct, steam
@@ -81,6 +81,13 @@ ScreenshotFilterAdjustments := {"x": 0, "y": 0, "width": 0, "height": 0}
 ;;;;  control the size of the character blackout filter
 ;;  accepts object like: {"windowed": {"width": 0, "height": 0}, "fullscreen": {"width": 0, "height": 0}}
 ScreenshotCharacterFilterPositioning := {"windowed": {"width": 80, "height": 80}, "fullscreen": {"width": 130, "height": 130}}
+
+;;;;  control the opacity and color of the watermark
+;;  accepts a string with the following format: XXYYYYYY
+;;  XX is the opacity (00 is 0%; FF is 100%)
+;;  YYYYYY is the hexidecimal color code you desire
+;;  to disable the watermark, set opacity to 00
+WatermarkTextColor = BBFFFFFF
 
 ;;;;  enable or disable the nexus panic button (closes the game if triggered)
 ;;  accepts boolean: true, false

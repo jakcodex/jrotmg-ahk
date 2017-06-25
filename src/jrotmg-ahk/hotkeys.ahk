@@ -224,6 +224,10 @@ SaveScreen:
 
     }
 
+    ;;;;  draw watermark
+    WatermarkObject := ( ScreenMode == 1 ) ? WatermarkPos[GameWindow]["fullscreen"] : WatermarkPos[GameWindow]["windowed"]
+    Gdip_TextToGraphics(G, "JROTMG-AHK/Screenshot", "X" . Round(WatermarkObject["x"]*Width) . " Y" . Round(WatermarkObject["y"]*Height) . " C" . WatermarkTextColor)
+
     ;;;;  clean up brushes
     for index, element in filterBrush {
         Gdip_DeleteBrush(element)

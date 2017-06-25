@@ -109,6 +109,8 @@ centered and off-center.
 The custom filter requires that you run hotkey Shift+Alt+C and select the upper left and lower right boundaries of your
 custom filter region. Same configuration rules apply as the character filter.
 
+The watermark may be disabled by changing the configuration key 'WatermarkTextColor' to begin with 00 (e.g. 00FFFFFF).
+
 ##  Screenshot Timelapse Mode
 Record a timelapse of your Realm progress with named groups. When enabled, it will take a screenshot every x seconds and
 store it to a subfolder of the screenshots folder.

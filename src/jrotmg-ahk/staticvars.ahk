@@ -19,6 +19,11 @@ ActiveGameWindow := false
 if ( !GameProcessName ) {
     GameProcessName := false
 }
+WatermarkPos := {"steam": {}, "flash": {}}
+WatermarkPos["steam"]["fullscreen"] := {"x": 0.916, "y": 0.006}
+WatermarkPos["steam"]["windowed"] := {"x": 0.800, "y": 0.050}
+WatermarkPos["flash"]["fullscreen"] := {"x": 0.916, "y": 0.006}
+WatermarkPos["flash"]["windowed"] := {"x": 0.800, "y": 0.079}
 #Include src/jrotmg-ahk/rectangles.ahk
 #Include, src/common/gui/guistaticvars.ahk
 
