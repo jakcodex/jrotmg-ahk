@@ -1,6 +1,7 @@
 ## 0.0.16-alpha
 + Added configuration key "WatermarkTextColor" which controls the color of the watermark text
 + Screenshots now have a watermark placed in the upper right corner of the minimap
++ PixelState coming together
 
 ## 0.0.15
 + Added screenshot filter 'custom' which allows the user to hide an additional region of their choice

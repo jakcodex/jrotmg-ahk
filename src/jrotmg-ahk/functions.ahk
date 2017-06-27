@@ -23,6 +23,74 @@ ObjectCount(object) {
 
 }
 
+isWindowFullScreen(WinID) {
+    ;checks if the specified window is full screen
+    ;use WinExist of another means to get the Unique ID (HWND) of the desired window
+
+    if ( !WinID )
+        return
+
+    WinGet, style, Style, ahk_id %WinID%
+    ; 0x800000 is WS_BORDER.
+    ; 0x20000000 is WS_MINIMIZE.
+    ; no border and not minimized
+    retVal := (style & 0x20800000) ? 0 : 1
+    Return, retVal
+}
+
+ForwardKey(key) {
+
+	Suspend on
+	Send, %key%
+	Suspend off
+
+}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;  jrotmg basic app functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;  check if the currently active window is a valid GameWindow
+CheckRun() {
+
+	global GameProcessName, ROTMGWindowName
+	WinGetTitle, WindowTitle, A
+	FoundPos := RegExMatch(WindowTitle, "(Realm of the Mad God|Adobe Flash Player)")
+	if ( FoundPos > 0 ) {
+
+        WinGet, GameProcessName, ProcessName, A
+        ROTMGWindowName := WindowTitle
+        return true
+
+    } else {
+
+        return false
+
+    }
+
+}
+
+;;  return the GameWindow type
+GetGameWindow() {
+
+    WinGetTitle, WindowTitle, A
+    if ( RegExMatch(WindowTitle, "^Adobe Flash Player") ) {
+
+        Return "flash"
+
+    } else if ( RegExMatch(WindowTitle, "^Realm of the Mad God") ) {
+
+        Return "steam"
+
+    } else {
+
+        Return false
+
+    }
+
+}
+
+;;  save configuration variable to disk in json format
 SaveConfigPiece(piece, data, configEnableKey=false, programKey=false) {
 
     global ConfigPiecesFolder, JSON
@@ -53,6 +121,7 @@ SaveConfigPiece(piece, data, configEnableKey=false, programKey=false) {
 
 }
 
+;;  load configuration variable from json on disk
 LoadConfigPieces(piece=false) {
 
     global ConfigPiecesFolder, JSON, ScreenshotRectangles, IgnoreList
@@ -102,33 +171,7 @@ LoadConfigPieces(piece=false) {
 
 }
 
-CheckRun() {
-
-	global GameProcessName, ROTMGWindowName
-	WinGetTitle, WindowTitle, A
-	FoundPos := RegExMatch(WindowTitle, "(Realm of the Mad God|Adobe Flash Player)")
-	if ( FoundPos > 0 ) {
-
-        WinGet, GameProcessName, ProcessName, A
-        ROTMGWindowName := WindowTitle
-        return true
-
-    } else {
-
-        return false
-
-    }
-
-}
-
-ForwardKey(key) {
-
-	Suspend on
-	Send, %key%
-	Suspend off
-
-}
-
+;;  trigger a screenshot
 TakeScreenshot() {
 
     global ScreenshotImageMode
@@ -146,6 +189,7 @@ TakeScreenshot() {
 
 }
 
+;;  calculation the actual positions based on input
 ScreenShotGeneratePositions(Width, Height, Dimensions, Adjustments) {
 
     result := {}
@@ -157,6 +201,7 @@ ScreenShotGeneratePositions(Width, Height, Dimensions, Adjustments) {
 
 }
 
+;;  force close the game process with a Windows command
 PanicCloseGame() {
 
     global GameProcessName
@@ -165,40 +210,11 @@ PanicCloseGame() {
 
 }
 
-isWindowFullScreen(WinID) {
-    ;checks if the specified window is full screen
-    ;use WinExist of another means to get the Unique ID (HWND) of the desired window
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;  timelapse functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    if ( !WinID )
-        return
-
-    WinGet, style, Style, ahk_id %WinID%
-    ; 0x800000 is WS_BORDER.
-    ; 0x20000000 is WS_MINIMIZE.
-    ; no border and not minimized
-    retVal := (style & 0x20800000) ? 0 : 1
-    Return, retVal
-}
-
-GetGameWindow() {
-
-    WinGetTitle, WindowTitle, A
-    if ( RegExMatch(WindowTitle, "^Adobe Flash Player") ) {
-
-        Return "flash"
-
-    } else if ( RegExMatch(WindowTitle, "^Realm of the Mad God") ) {
-
-        Return "steam"
-
-    } else {
-
-        Return false
-
-    }
-
-}
-
+;;  perform the timelapse action
 ScreenshotTimelapseTimer() {
 
     global ScreenshotRecordingObject, ScreenshotImageMode, ScreenshotFolder, TimelapseFolder
@@ -227,6 +243,7 @@ ScreenshotTimelapseTimer() {
 
 }
 
+;;  display gui to create new timelapse profile
 TimelapseCreateNew(a, b, c, d) {
 
     global GUILoaded, ScreenshotRecordingObject, ActiveGameWindow
@@ -274,6 +291,7 @@ TimelapseCreateNew(a, b, c, d) {
 
 }
 
+;;  resume a stopped timelapse
 TimelapseResume(a, b, c, d) {
 
     global GUILoaded, ScreenshotRecordingObject
@@ -297,6 +315,7 @@ TimelapseResume(a, b, c, d) {
 
 }
 
+;;  display a gui to choose which timelapse profile to use
 TimelapseChooseProfile(a, b, c, d) {
 
     global GUILoaded, GUIConfig, ScreenshotRecordingObject
@@ -324,6 +343,7 @@ TimelapseChooseProfile(a, b, c, d) {
 
 }
 
+;;  enable a timelapse profile
 TimelapseEnableProfile(a, b, c, d) {
 
     global GUILoaded, ScreenshotRecordingObject
@@ -349,6 +369,7 @@ TimelapseEnableProfile(a, b, c, d) {
 
 }
 
+;;  display a gui to let the user delete a timelapse profile
 TimelapseChooseDeleteProfile(a, b, c, d) {
 
     global GUILoaded, GUIConfig, ScreenshotRecordingObject
@@ -377,6 +398,7 @@ TimelapseChooseDeleteProfile(a, b, c, d) {
 
 }
 
+;;  delete the specified profile from configuration
 TimelapseDeleteProfile(a, b, c, d) {
 
     global GUILoaded, GUIConfig, ScreenshotRecordingObject
@@ -385,7 +407,7 @@ TimelapseDeleteProfile(a, b, c, d) {
         GUILoaded := false
     }
 
-   ScreenshotRecordingObject["profiles"].delete(d)
+    ScreenshotRecordingObject["profiles"].delete(d)
     SaveConfigPiece("TimelapseConfig", ScreenshotRecordingObject, false, "ScreenshotRecordingObject")
 
     MsgBox, , Timelapse Profile Deleted, % "Deleted timelapse profile - " . d

@@ -21,6 +21,7 @@ $^!v::
     MsgBox %isFullScreen%
     Return
 
-^>+i::
-    MsgBox % JSON.Dump(IgnoreList)
+^!i::
+    PixelState.main()
+    MsgBox % JSON.Dump(PixelState.GetPixelByName("hp_100p"))
     Return

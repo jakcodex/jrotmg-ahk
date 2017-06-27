@@ -6,6 +6,5 @@
 1. Config should be relocated to the app storage folder
 2. Program source should be copied to the app storage folder
    a. The idea here being to make updating easier
-3. Add timelapse screenshotting
 4. Low HP detection (low HP screenshots on an interval + zelda 3hp beep)
 5. Screenshot filter regions fully customizable with easy region setup

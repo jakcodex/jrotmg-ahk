@@ -3,6 +3,7 @@
 ;;
 
 #Include src/common/gui/tools.ahk
+#Include src/jrotmg-ahk/pixelstate.ahk
 
 #SingleInstance, Force
 SetBatchLines, -1

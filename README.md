@@ -10,7 +10,8 @@ Required AutoHotKey from https://autohotkey.com/download/
 Extract files to a folder and edit config.ahk if any changes are necessary then run jrotmg-quickstart.ahk.
 
 ##### Managed Mode
-Extract files to a folder and run setup.ahk. Installation wizard will help you configure, upgrade, and backup your app.
+(Coming in a future release) Extract files to a folder and run setup.ahk. Installation wizard will help you configure, 
+upgrade, and backup your app.
 
 ## Features
 1. Auto-ignore system for easy spam management
