@@ -22,6 +22,6 @@ $^!v::
     Return
 
 ^!i::
-    PixelState.main()
+    ;;
     MsgBox % JSON.Dump(PixelState.GetPixelByName("hp_100p"))
     Return

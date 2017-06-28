@@ -5,12 +5,13 @@
 class PixelState {
 
     static PixelMap := {}
+    static SaveImageFolder =
 
-    main() {
+    init() {
 
         ;;  upper right edge of the hp bar
         this.PixelMap["hp_100p"] := {"steam": {}, "flash": {}}
-        this.PixelMap["hp_100p"]["steam"] := {"windowed": {}, "fullscreen": {"x": 0.983, "y": 0.423}}
+        this.PixelMap["hp_100p"]["steam"] := {"windowed": {}, "fullscreen": {"x": 0.981, "y": 0.425}}
 
     }
 
@@ -28,8 +29,14 @@ class PixelState {
         ;;  grab the pixel
         pBitmap := this.GetBitmap()
         pixel := Gdip_GetPixel(pBitmap, x, y)
-        Gdip_DisposeImage(pBitmap)
         Gdip_FromARGB(pixel, A, R, G, B)
+
+        ;;  debugging
+        this.SetPixel(pBitmap, 255, 255, 255, 255, x, y)
+
+        ;;  cleanup and return
+        this.SaveImage(pBitmap)
+        Gdip_DisposeImage(pBitmap)
         Return {"A": A, "R": R, "B": B, "G": G}
 
     }
@@ -44,27 +51,55 @@ class PixelState {
 
     }
 
+    ;;  determine x,y coordinates via a named entry in the PixelMap and forward to GetPixelByPos
     GetPixelByName(PixelName) {
 
         global JSON
         WinGetTitle, WindowTitle, A
-        ScreenMode := this.GetScreenMode(WindowTitle)
-        GameWindow := this.GetGameWindow(WindowTitle)
+        ScreenMode := this.tools.GetScreenMode(WindowTitle)
+        GameWindow := this.tools.GetGameWindow(WindowTitle)
         PixelData := this.PixelMap[PixelName][GameWindow][ScreenMode]
         Return this.GetPixelByPos(PixelData["x"], PixelData["y"])
 
     }
 
-    GetScreenMode(WindowTitle) {
+    SetPixel(ByRef pBitmap, a, r, g, b, x, y) {
 
-        Return ( isWindowFullScreen(WinExist(WindowTitle)) == 1 ) ? "fullscreen" : "windowed"
+        argb := Gdip_ToARGB(a, r, g, b)
+        Gdip_SetPixel(pBitmap, x, y, argb)
 
     }
 
-    GetGameWindow(WindowTitle) {
+    SaveImage(ByRef pBitmap) {
 
-        Return ( RegExMatch(WindowTitle, "^Adobe Flash Player") ) ? "flash" : "steam"
+        global StoragePath
+        this.SaveImageFolder := StoragePath . "/pixelstatetmp"
+
+        NewFolder := this.SaveImageFolder
+        if ( !FileExist(NewFolder) ) {
+            FileCreateDir, %NewFolder%
+        }
+
+        Gdip_SaveBitmapToFile(pBitmap, NewFolder . "\" . A_YYYY . "-" . A_MM . "-" . A_DD "-" . A_Hour . "-" . A_Min . "-" . A_Sec . ".jpg", 100)
+
+    }
+
+    class tools {
+
+        GetScreenMode(WindowTitle) {
+
+            Return ( isWindowFullScreen(WinExist(WindowTitle)) == 1 ) ? "fullscreen" : "windowed"
+
+        }
+
+        GetGameWindow(WindowTitle) {
+
+            Return ( RegExMatch(WindowTitle, "^Adobe Flash Player") ) ? "flash" : "steam"
+
+        }
 
     }
 
 }
+
+PixelState.init()
