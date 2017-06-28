@@ -19,6 +19,7 @@ upgrade, and backup your app.
 3. Nexus Screenshot Mode
 4. Screenshot Timelapse Mode
 4. Nexus Panic Mode
+5. PixelState
 
 ## Hotkeys
 
@@ -129,6 +130,23 @@ Be familiar with the panic button and consider binding it to a mouse button. You
 [extra/panic-button-mouse-tools.ahk][extra-panic-button-mouse] to generate a program that can be ran by many mouse clients such as Razer. The 
 ultimate panic button. The generated file is not an AutoHotKey script and is separate from this application. For more
 details on this, you can find instructions for it on [Realmeye Forums][realmeye-forums-panic-button].
+
+##  PixelState
+A tool for integrating with the game window to provide interactive features.
+
+#####  Screen Calibration
+PixelState and screenshot filters both utilize positional location data to configure themselves. Manually coming up with
+this data is tedious. Activating screen calibration will provide you with the following data when you click your mouse
+in game: 
+
+1. Mouse absolute and relative positioning data
+2. Pixel color and ARGB values
+
+Use the x,y values to configure PixelState and/or the Screenshot filters rectangles configuration. Usage of xRel,yRel is
+recommended as I'm not sure I've set xAbs,yAbs to be recognized yet everywhere.
+
+#####  Planned Upcoming Features
+1. Low HP Beep
 
 ## Disclaimer
 This is beta software and you use it at your own risk. No warranty or guarantee is offered. 

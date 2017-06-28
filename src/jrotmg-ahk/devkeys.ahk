@@ -20,8 +20,3 @@ $^!v::
     isFullScreen := isWindowFullScreen(WinExist(ROTMGWindowName))
     MsgBox %isFullScreen%
     Return
-
-^!i::
-    ;;
-    MsgBox % JSON.Dump(PixelState.GetPixelByName("hp_100p"))
-    Return
