@@ -2,9 +2,6 @@
 ;;  startup tasks
 ;;
 
-#Include src/common/gui/tools.ahk
-#Include src/jrotmg-ahk/pixelstate.ahk
-
 #SingleInstance, Force
 SetBatchLines, -1
 
@@ -69,6 +66,3 @@ If !pToken := Gdip_Startup()
 	ExitApp
 }
 OnExit, Exit
-
-Hotkey, ^!PrintScreen, SaveScreen, On
-Return

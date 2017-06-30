@@ -2,6 +2,10 @@
 ;;  pathways and objects
 ;;
 
+#Include src/common/lib/json.ahk
+#Include src/jrotmg-ahk/etc/rectangles.ahk
+#Include src/common/gui/guistaticvars.ahk
+
 ConfigFolder := StoragePath . "\config"
 ConfigPiecesFolder := ConfigFolder . "\pieces"
 ScreenshotFolder := StoragePath . "\screenshots"
@@ -24,8 +28,15 @@ WatermarkPos["steam"]["fullscreen"] := {"x": 0.916, "y": 0.006}
 WatermarkPos["steam"]["windowed"] := {"x": 0.800, "y": 0.050}
 WatermarkPos["flash"]["fullscreen"] := {"x": 0.916, "y": 0.006}
 WatermarkPos["flash"]["windowed"] := {"x": 0.800, "y": 0.079}
-#Include src/jrotmg-ahk/rectangles.ahk
-#Include, src/common/gui/guistaticvars.ahk
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;  PixelState Map
+;;;;;;;;;;;;;;;;;;;;;;;;;
+PixelMap := {}
+
+;;  upper right edge of the hp bar
+PixelMap["hp_100p"] := {"steam": {}, "flash": {}}
+PixelMap["hp_100p"]["steam"] := {"windowed": {}, "fullscreen": {"x": 0.981, "y": 0.426}}
 
 ;;Gdip_FillRectangle
 ;;Gdip_DrawImage

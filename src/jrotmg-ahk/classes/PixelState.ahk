@@ -4,27 +4,9 @@
 
 class PixelState {
 
-    static PixelMap := {}
-    static SaveImageFolder =
-    static Debug := false
-
-    init(options=false) {
-
-        if ( options != false ) {
-
-            for index, element in options {
-
-                this[index] := element
-
-            }
-
-        }
-
-        ;;  upper right edge of the hp bar
-        this.PixelMap["hp_100p"] := {"steam": {}, "flash": {}}
-        this.PixelMap["hp_100p"]["steam"] := {"windowed": {}, "fullscreen": {"x": 0.984, "y": 0.425}}
-
-    }
+    static Debug := true
+    static LogFolder := "logs\PixelState"
+    static LogFile := "pixelstate-main.log"
 
     ;;  return a bitmap of the active window
     GetBitmap() {
@@ -55,24 +37,24 @@ class PixelState {
     }
 
     ;;  determine x,y coordinates via relative positioning and forward to GetPixel
-    GetPixelByPos(xPercent, yPercent) {
+    GetPixelByPos(xPercent, yPercent, screenshot=false) {
 
         WinGetPos, X, Y, Width, Height, A
         xPixel := Round(Width*xPercent)
         yPixel := Round(Height*yPercent)
-        Return this.GetPixel(xPixel, yPixel)
+        Return this.GetPixel(xPixel, yPixel, screenshot)
 
     }
 
     ;;  determine x,y coordinates via a named entry in the PixelMap and forward to GetPixelByPos
-    GetPixelByName(PixelName) {
+    GetPixelByName(PixelName, screenshot=false) {
 
-        global JSON
+        global JSON, PixelMap
         WinGetTitle, WindowTitle, A
         ScreenMode := this.tools.GetScreenMode(WindowTitle)
         GameWindow := this.tools.GetGameWindow(WindowTitle)
-        PixelData := this.PixelMap[PixelName][GameWindow][ScreenMode]
-        Return ( PixelData["x"] > 1 ) ? this.GetPixel(PixelData["x"], PixelData["y"]) : this.GetPixelByPos(PixelData["x"], PixelData["y"])
+        PixelData := PixelMap[PixelName][GameWindow][ScreenMode]
+        Return ( PixelData["x"] > 1 ) ? this.GetPixel(PixelData["x"], PixelData["y"], screenshot) : this.GetPixelByPos(PixelData["x"], PixelData["y"], screenshot)
 
     }
 
@@ -88,14 +70,30 @@ class PixelState {
     SaveImage(ByRef pBitmap) {
 
         global StoragePath
-        this.SaveImageFolder := StoragePath . "/pixelstatetmp"
-
-        NewFolder := this.SaveImageFolder
+        NewFolder := StoragePath . "\pixelstatetmp"
         if ( !FileExist(NewFolder) ) {
             FileCreateDir, %NewFolder%
         }
 
         Gdip_SaveBitmapToFile(pBitmap, NewFolder . "\" . A_YYYY . "-" . A_MM . "-" . A_DD "-" . A_Hour . "-" . A_Min . "-" . A_Sec . ".jpg", 100)
+
+    }
+
+    Logging(location, message, level="debug") {
+
+        global StoragePath
+        LogFolder := StoragePath . "\" . this.LogFolder
+        LogFile := LogFolder . "\" . this.LogFile
+        if ( RegExMatch(LogFile, "^.*?\.log$") ) {
+
+            NewFolder := LogFolder
+            if ( !FileExist(NewFolder) ) {
+                FileCreateDir, %NewFolder%
+            }
+
+            FileAppend, % "[" A_YYYY "-" A_MM "-" A_DD " " A_Hour ":" A_Min ":" A_Sec "] [" location "] [" level "] " message "`n", % LogFile
+
+        }
 
     }
 
@@ -105,8 +103,8 @@ class PixelState {
     class hotkeys {
 
         static ScreenCalibrationStatus := false
-        
-        ;;  
+
+        ;;  toggle calibration on/off
         ScreenCalibrationRequest() {
 
             this.ScreenCalibrationStatus := ( this.ScreenCalibrationStatus == true ) ? false : true
@@ -150,7 +148,16 @@ class PixelState {
                 WinGetPos, WinX, WinY, Width, Height, A
                 MouseGetPos, x, y
                 pixel := PixelState.GetPixel(x, y)
-                MsgBox % JSON.Dump({"pos": {"xAbs": x, "yAbs": y, "xRel": Round(x/Width, 3), "yRel": Round(y/Height, 3)}}) . "`n" . JSON.Dump({"pixel": pixel}) . "`n" . JSON.Dump({"argb": Gdip_ToARGB(pixel["A"], pixel["R"], pixel["G"], pixel["B"])})
+                PixelObject := {"pos": {"xAbs": x, "yAbs": y, "xRel": Round(x/Width, 3), "yRel": Round(y/Height, 3)}, "pixel": pixel, "argb": Gdip_ToARGB(pixel["A"], pixel["R"], pixel["G"], pixel["B"])}
+                message1 := "Absolute x,y: " . PixelObject["pos"]["xAbs"] . "," . PixelObject["pos"]["yAbs"]
+                message2 := "Relative x,y: " . PixelObject["pos"]["xRel"] . "," . PixelObject["pos"]["yRel"]
+                message3 := "Pixel ARGB Values: " . PixelObject["pixel"]["A"] . " " . PixelObject["pixel"]["R"] . " " . PixelObject["pixel"]["G"] . " " . PixelObject["pixel"]["B"]
+                message4 := "Pixel ARGB Number: " . PixelObject["argb"] . "`n"
+                PixelState.Logging("PixelState/ScreenCalibration", message1)
+                PixelState.Logging("PixelState/ScreenCalibration", message2)
+                PixelState.Logging("PixelState/ScreenCalibration", message3)
+                PixelState.Logging("PixelState/ScreenCalibration", message4)
+                MsgBox % message1 . "`n" . message2 . "`n" . message3 . "`n" . message4
 
             }
 
@@ -159,16 +166,3 @@ class PixelState {
     }
 
 }
-
-;;  class initialization
-PixelState.init({"Debug": true})
-
-;;  PixelState labels
-<^Numpad7::
-    ;;MsgBox % JSON.Dump(PixelState.GetPixelByName("hp_100p"))
-    PixelState.hotkeys.ScreenCalibrationRequest()
-    Return
-
-ScreenCalibrationRequest:
-    PixelState.tools.GetScreenPosDataByClick()
-    Return

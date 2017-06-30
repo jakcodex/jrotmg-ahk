@@ -1,9 +1,12 @@
 ## 0.0.16-alpha
 + Added configuration key "WatermarkTextColor" which controls the color of the watermark text
++ Added configuration key "Debug" which toggles Debug logging
 + Hotkey 'LCtrl+Numpad7': Activate PixelState Screen Calibration
 + Screenshots now have a watermark placed in the upper right corner of the minimap
 + PixelState: Get pixel data by absolute, relative, and named positioning configurations
 + PixelState: Screen calibration system identifies pixel and positional data for mouse clicks when activated
++ Debug logging added
++ More reorganization
 
 ## 0.0.15
 + Added screenshot filter 'custom' which allows the user to hide an additional region of their choice

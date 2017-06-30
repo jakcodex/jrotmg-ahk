@@ -104,3 +104,6 @@ NexusKeyResetTime = 1
 ;;;;  path to store program data
 ;;;;  defaults to "C:\Users\<YourUsername>\AppData\Roaming\jrotmg-ahk"
 StoragePath = %APPDATA%\jrotmg-ahk
+
+;;;;  debugging mode enabled or not
+Debug := false

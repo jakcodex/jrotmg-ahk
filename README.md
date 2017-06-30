@@ -140,10 +140,10 @@ this data is tedious. Activating screen calibration will provide you with the fo
 in game: 
 
 1. Mouse absolute and relative positioning data
-2. Pixel color and ARGB values
+2. Pixel ARGB number and values
 
-Use the x,y values to configure PixelState and/or the Screenshot filters rectangles configuration. Usage of xRel,yRel is
-recommended as I'm not sure I've set xAbs,yAbs to be recognized yet everywhere.
+Use the x,y values to configure PixelState and/or the Screenshot filters rectangles configuration. Usage of Relative x,y 
+is recommended as I'm not sure I've set Absolute x,y to be recognized yet everywhere.
 
 #####  Planned Upcoming Features
 1. Low HP Beep
@@ -261,6 +261,6 @@ NexusKeyResetTime = 1
 StoragePath = %APPDATA%\jrotmg-ahk
 ```
 
-[src-rectangles]: src/jrotmg-ahk/rectangles.ahk "Rectangles Positioning File"
+[src-rectangles]: src/jrotmg-ahk/etc/rectangles.ahk "Rectangles Positioning File"
 [extra-panic-button-mouse]: extra/panic-button-mouse-tools.ahk "Mouse Panic Button Setup Helper"
 [realmeye-forums-panic-button]: https://www.realmeye.com/forum/t/the-oh-shiet-button-for-freezes-and-when-you-click-off-the-page/4673 "The Oh Shiet Button for Freezes and When You Click Off The Page"
