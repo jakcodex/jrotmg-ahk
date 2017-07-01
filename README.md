@@ -57,6 +57,9 @@ upgrade, and backup your app.
      
 ##### Ctrl+LShift+S
      Open Timelapse menu or disable active timelapse mode
+     
+##### LCtrl+Numpad7
+     Toggle Screen Calibration utility on/off
 
 ##  Ignores Database
 Spam in this game is beyond annoying. Ignoring spammers is actually really helpful on a per-server basis in dealing with
