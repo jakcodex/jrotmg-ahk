@@ -17,10 +17,12 @@ class PixelState {
     }
 
     ;;  get the pixel argb value at the specified x,y coordinates
-    GetPixel(x, y, screenshot=false) {
+    GetPixel(x, y, ByRef pBitmap=false, screenshot=false) {
 
         ;;  grab the pixel
-        pBitmap := this.GetBitmap()
+        if ( pBitmap == false ) {
+            pBitmap := this.GetBitmap()
+        }
         pixel := Gdip_GetPixel(pBitmap, x, y)
         Gdip_FromARGB(pixel, A, R, G, B)
 
@@ -28,33 +30,142 @@ class PixelState {
         this.SetPixel(pBitmap, 255, 255, 255, 255, x, y)
 
         ;;  cleanup and return
-        if ( this.Debug == true || screenshot == true) {
-            this.SaveImage(pBitmap)
+        if ( pBitmap == false ) {
+
+            if ( this.Debug == true || screenshot == true) {
+                this.SaveImage(pBitmap)
+            }
+            Gdip_DisposeImage(pBitmap)
+
         }
-        Gdip_DisposeImage(pBitmap)
-        Return {"A": A, "R": R, "B": B, "G": G}
+        Return {"A": A, "R": R, "B": B, "G": G, "number": pixel}
 
     }
 
     ;;  determine x,y coordinates via relative positioning and forward to GetPixel
-    GetPixelByPos(xPercent, yPercent, screenshot=false) {
+    GetPixelByPos(xPercent, yPercent, ByRef pBitmap=false, screenshot=false) {
 
         WinGetPos, X, Y, Width, Height, A
         xPixel := Round(Width*xPercent)
         yPixel := Round(Height*yPercent)
-        Return this.GetPixel(xPixel, yPixel, screenshot)
+        Return this.GetPixel(xPixel, yPixel, pBitmap, screenshot)
 
     }
 
     ;;  determine x,y coordinates via a named entry in the PixelMap and forward to GetPixelByPos
-    GetPixelByName(PixelName, screenshot=false) {
+    GetPixelByName(PixelName, ByRef pBitmap=false, screenshot=false) {
 
         global JSON, PixelMap
-        WinGetTitle, WindowTitle, A
-        ScreenMode := this.tools.GetScreenMode(WindowTitle)
-        GameWindow := this.tools.GetGameWindow(WindowTitle)
-        PixelData := PixelMap[PixelName][GameWindow][ScreenMode]
-        Return ( PixelData["x"] > 1 ) ? this.GetPixel(PixelData["x"], PixelData["y"], screenshot) : this.GetPixelByPos(PixelData["x"], PixelData["y"], screenshot)
+
+        if ( PixelMap[PixelName] ) {
+
+            WinGetTitle, WindowTitle, A
+            ScreenMode := this.tools.GetScreenMode(WindowTitle)
+            GameWindow := this.tools.GetGameWindow(WindowTitle)
+            PixelData := PixelMap[PixelName][GameWindow][ScreenMode]
+            Return ( PixelData["x"] > 1 ) ? this.GetPixel(PixelData["x"], PixelData["y"], pBitmap, screenshot) : this.GetPixelByPos(PixelData["x"], PixelData["y"], pBitmap, screenshot)
+
+        } else {
+            return false
+        }
+
+    }
+
+    ;;  determine if a pixel is "on" or not
+    GetPixelState(PixelName, ByRef pBitmap=false, screenshot=false) {
+
+        global PixelMap
+        if ( PixelMap[PixelName] ) {
+
+            PixelData := this.GetPixelByName(PixelName, pBitmap)
+            ARGBDiff := Round(PixelData["number"]-PixelMap[PixelName].meta.argb)
+            if ARGBDiff < 0
+                ARGBDiff := Round(ARGBDiff/-1)
+
+            RDiff := Round(PixelData["R"]-PixelMap[PixelName].meta.rgb[1])
+            if RDiff < 0
+                RDiff := Round(RDiff/-1)
+
+            GDiff := Round(PixelData["G"]-PixelMap[PixelName].meta.rgb[2])
+            if GDiff < 0
+                GDiff := Round(GDiff/-1)
+
+            BDiff := Round(PixelData["B"]-PixelMap[PixelName].meta.rgb[3])
+            if BDiff < 0
+                BDiff := Round(BDiff/-1)
+
+            ;;  exact argb number match, argb number tolerance threshold, or rgb thresholds qualify
+            if ( PixelData["number"] == PixelMap[PixelName].meta.argb || ARGBDiff <= PixelMap.settings.ARGBTolerance || (RDiff <= PixelMap.settings.RGBTolerance && GDiff <= PixelMap.settings.RGBTolerance && BDiff <= PixelMap.settings.RGBTolerance) ) {
+
+                return true
+
+            } else {
+
+                return false
+
+            }
+
+        } else {
+            return false
+        }
+
+    }
+
+    ;;  return the overall state of a group of pixels
+    GetPixelGroupState(PixelGroupNames, ByRef pBitmap=false, screenshot=false) {
+
+        global PixelGroups
+
+        ;;  we should support multiple groups being specified, so let's convert it if it's a string
+        if ( PixelGroupNames.MinIndex() == "" ) {
+            PixelGroupNames := [PixelGroupNames]
+        }
+
+        ;;  loop thru our groups list
+        for index, PixelGroup in PixelGroupNames {
+
+            ;;  if the named group doesn't exist then abandon all hope
+            if ( PixelGroups[PixelGroup] ) {
+
+                if ( pBitmap == false ) {
+                    pBitmap := this.GetBitmap()
+                }
+
+                ;;  loop thru the group's members and check their values
+                for PixelName, ExpectedValue in PixelGroups[PixelGroup] {
+
+                    ;;  if the PixelName matches the name of a group, then process the group instead
+                    if ( PixelGroups[PixelName] ) {
+
+                        ;;  same comments as in the else
+                        if ( this.GetPixelGroupState(PixelName, pBitmap) != ExpectedValue ) {
+                            return false
+                        }
+
+                    } else {
+
+                        ;;  instant failure if any value doesn't match
+                        ;;  in the near future let's support a failure option instead of just returning false every time
+                        if ( this.GetPixelState(PixelName, pBitmap) != ExpectedValue ) {
+                            return false
+                        }
+
+                    }
+
+                }
+
+                if ( pBitmap == false ) {
+                    Gdip_DisposeImage(pBitmap)
+                }
+
+                ;;  it must have passed
+                return true
+
+            } else {
+                return false
+            }
+
+        }
 
     }
 
@@ -94,6 +205,12 @@ class PixelState {
             FileAppend, % "[" A_YYYY "-" A_MM "-" A_DD " " A_Hour ":" A_Min ":" A_Sec "] [" location "] [" level "] " message "`n", % LogFile
 
         }
+
+    }
+
+    GetState(name) {
+
+        global PixelStateProfile
 
     }
 

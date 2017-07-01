@@ -5,6 +5,7 @@
 + Screenshots now have a watermark placed in the upper right corner of the minimap
 + PixelState: Get pixel data by absolute, relative, and named positioning configurations
 + PixelState: Screen calibration system identifies pixel and positional data for mouse clicks when activated
++ PixelState: PixelGroups created and initial groups defined
 + Debug logging added
 + More reorganization
 

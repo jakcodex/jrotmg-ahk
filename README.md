@@ -101,7 +101,7 @@ Filters are supported which blackout certain areas of screenshots. The following
 13. Custom
 
 The provided filters are configured using approximations of where the blackout tiles need to be positioned. If they do
-not line up for you, then you can adjust the positions by editing the [src/jrotmg-ahk/rectangles.ahk][src-rectangles] file. Minor 
+not line up for you, then you can adjust the positions by editing the [src/jrotmg-ahk/etc/rectangles.ahk][src-rectangles] file. Minor 
 adjustments are possible thru the configuration key ScreenshotFilterAdjustments. Good luck if you attempt this. 
 
 The character filter requires that you run hotkey Ctrl+Alt+C and click on your character. This needs to be repeated if
@@ -134,7 +134,7 @@ details on this, you can find instructions for it on [Realmeye Forums][realmeye-
 ##  PixelState
 A tool for integrating with the game window to provide interactive features.
 
-#####  Screen Calibration
+####  Screen Calibration
 PixelState and screenshot filters both utilize positional location data to configure themselves. Manually coming up with
 this data is tedious. Activating screen calibration will provide you with the following data when you click your mouse
 in game: 
@@ -145,8 +145,18 @@ in game:
 Use the x,y values to configure PixelState and/or the Screenshot filters rectangles configuration. Usage of Relative x,y 
 is recommended as I'm not sure I've set Absolute x,y to be recognized yet everywhere.
 
+####  PixelMap and PixelGroups
+PixelState's primary job is to provide pixel data which can be used to validate the game's state. 
+
+Pixels are named in the PixelMap configuration while groups and their expected states are stored in the PixelGroups 
+configuration. This can be located in the file [src/jrotmg-ahk/pixelstate-config.ahk][pixelstate-config]. 
+
+While it shouldn't be necessary, in the event you need to adjust the pixel positions then use Screen Calibration and 
+update the appropriate values. Eventually this will be automated a bit more (re: much easier).
+
 #####  Planned Upcoming Features
 1. Low HP Beep
+2. 0% HP "Finish Him!"
 
 ## Disclaimer
 This is beta software and you use it at your own risk. No warranty or guarantee is offered. 
@@ -261,6 +271,7 @@ NexusKeyResetTime = 1
 StoragePath = %APPDATA%\jrotmg-ahk
 ```
 
+[pixelstate-config]: src/jrotmg-ahk/pixelstate-config.ahk "PixelState Configuration"
 [src-rectangles]: src/jrotmg-ahk/etc/rectangles.ahk "Rectangles Positioning File"
 [extra-panic-button-mouse]: extra/panic-button-mouse-tools.ahk "Mouse Panic Button Setup Helper"
 [realmeye-forums-panic-button]: https://www.realmeye.com/forum/t/the-oh-shiet-button-for-freezes-and-when-you-click-off-the-page/4673 "The Oh Shiet Button for Freezes and When You Click Off The Page"

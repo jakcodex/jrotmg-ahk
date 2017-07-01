@@ -1,4 +1,5 @@
 #Include config.ahk
+#Include src/jrotmg-ahk/pixelstate-config.ahk
 #Include src/jrotmg-ahk/etc/staticvars.ahk
 #Include src/jrotmg-ahk/etc/bindings.ahk
 #Include src/jrotmg-ahk/functions.ahk

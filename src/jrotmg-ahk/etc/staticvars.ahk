@@ -29,15 +29,6 @@ WatermarkPos["steam"]["windowed"] := {"x": 0.800, "y": 0.050}
 WatermarkPos["flash"]["fullscreen"] := {"x": 0.916, "y": 0.006}
 WatermarkPos["flash"]["windowed"] := {"x": 0.800, "y": 0.079}
 
-;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;  PixelState Map
-;;;;;;;;;;;;;;;;;;;;;;;;;
-PixelMap := {}
-
-;;  upper right edge of the hp bar
-PixelMap["hp_100p"] := {"steam": {}, "flash": {}}
-PixelMap["hp_100p"]["steam"] := {"windowed": {}, "fullscreen": {"x": 0.981, "y": 0.426}}
-
 ;;Gdip_FillRectangle
 ;;Gdip_DrawImage
 ;;Gdip_GetPixel
