@@ -6,20 +6,11 @@ PixelMap.settings.ARGBTolerance := 135000
 PixelMap.settings.RGBTolerance := 10
 
 ;;  hp bar positions
-PixelMap["hp_100p"] := {"meta": {"argb": 4292883508, "rgb": [224, 52, 52]}}
-PixelMap["hp_100p"]["steam"] := {"windowed": {}, "fullscreen": {"x": 0.983, "y": 0.426}}
-
-PixelMap["hp_75p"] := {"meta": {"argb": 4292883508, "rgb": [224, 52, 52]}}
-PixelMap["hp_75p"]["steam"] := {"windowed": {}, "fullscreen": {"x": 0.929, "y": 0.426}}
-
-PixelMap["hp_50p"] := {"meta": {"argb": 4292883508, "rgb": [224, 52, 52]}}
-PixelMap["hp_50p"]["steam"] := {"windowed": {}, "fullscreen": {"x": 0.873, "y": 0.426}}
-
-PixelMap["hp_25p"] := {"meta": {"argb": 4292883508, "rgb": [224, 52, 52]}}
-PixelMap["hp_25p"]["steam"] := {"windowed": {}, "fullscreen": {"x": 0.819, "y": 0.426}}
-
-PixelMap["hp_0p"] := {"meta": {"argb": 4292883508, "rgb": [224, 52, 52]}}
-PixelMap["hp_0p"]["steam"] := {"windowed": {}, "fullscreen": {"x": 0.767, "y": 0.426}}
+PixelState.PixelMapConfig(PixelMap, "hp_100p", "steam", "fullscreen", 0.983, 0.426, 4292883508)
+PixelState.PixelMapConfig(PixelMap, "hp_75p", "steam", "fullscreen", 0.929, 0.426, 4292883508)
+PixelState.PixelMapConfig(PixelMap, "hp_50p", "steam", "fullscreen", 0.873, 0.426, 4292883508)
+PixelState.PixelMapConfig(PixelMap, "hp_25p", "steam", "fullscreen", 0.819, 0.426, 4292883508)
+PixelState.PixelMapConfig(PixelMap, "hp_0p", "steam", "fullscreen", 0.767, 0.426, 4292883508)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;  PixelState Groups
@@ -51,9 +42,3 @@ PixelGroups.InNexus := {"MinimapZoom": true, "AccountGold": true, "AccountFame":
 PixelGroups.InARealm := {"MinimapZoom": true, "AccountGold": true, "AccountFame": true, "UINexusButton": true}
 PixelGroups.GreenScreen := {"HomeVolume": true, "LoadingBar": true, "AccountFame": false, "AccountGold": false}
 PixelGroups.CharScreen := {"HomeVolume": true, "AccountStar": true, "AccountFame": true, "AccountGold": true}
-
-;;
-;;  So here's the problem, and I'm thinking this mostly because it is 3:29am on a Saturday morning
-;;  All of those pixel points, all of them, have four positions (steam, flash, windowed, fullscreen) which I have to map
-;;  This is why I made Ctrl+Numpad7
-;;

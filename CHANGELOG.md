@@ -1,15 +1,16 @@
-## 0.0.16-alpha
+## 0.0.16-rc - PixelState
 + Added configuration key "WatermarkTextColor" which controls the color of the watermark text
 + Added configuration key "Debug" which toggles Debug logging
 + Hotkey 'LCtrl+Numpad7': Activate PixelState Screen Calibration
 + Screenshots now have a watermark placed in the upper right corner of the minimap
-+ PixelState: Get pixel data by absolute, relative, and named positioning configurations
-+ PixelState: Screen calibration system identifies pixel and positional data for mouse clicks when activated
-+ PixelState: PixelGroups created and initial groups defined
-+ Debug logging added
-+ More reorganization
++ PixelState: Get pixel data by absolute, relative, and named configurations
++ PixelMap stores named pixels and has a handy config builder
++ PixelGroups store groups of named pixels
++ Screen calibration system identifies pixel and positional data for mouse clicks when activated
++ Logging system added for debugging 
++ Plenty of housekeeping
 
-## 0.0.15
+## 0.0.15 - Timelapse Mode
 + Added screenshot filter 'custom' which allows the user to hide an additional region of their choice
 + Added configuration key 'ScreenshotHideCustom' which controls if your custom region is hidden in screenshots
 + Added configuration key 'ScreenshotImageQuality' which controls the image quality of screenshots
@@ -25,7 +26,7 @@
 + Added a mouse button panic script generator for the ultimate panic mode protection
 + Screenshots are now beautiful and run a bit faster with maximum quality set as default
 
-## 0.0.14
+## 0.0.14 - Suspicious Cropping Mode
 + Added configuration key 'ScreenshotEnabled' which enables or disables the nexus screenshots
 + Added configuration key 'ScreenshotHideGoldAndFame' which controls if the gold and fame are hidden in screenshots
 + Added configuration key 'ScreenshotHideGuild' which controls if guild is hidden in screenshots

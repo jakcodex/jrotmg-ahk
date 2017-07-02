@@ -2,7 +2,7 @@
 
 ## Usage
 
-Version [0.0.16-alpha](CHANGELOG.md)
+Version [0.0.16-rc](CHANGELOG.md) - PixelState
 
 Required AutoHotKey from https://autohotkey.com/download/
 
@@ -152,7 +152,7 @@ is recommended as I'm not sure I've set Absolute x,y to be recognized yet everyw
 PixelState's primary job is to provide pixel data which can be used to validate the game's state. 
 
 Pixels are named in the PixelMap configuration while groups and their expected states are stored in the PixelGroups 
-configuration. This can be located in the file [src/jrotmg-ahk/pixelstate-config.ahk][pixelstate-config]. 
+configuration. This can be located in the file [src/jrotmg-ahk/etc/pixelstate-config.ahk][pixelstate-config]. 
 
 While it shouldn't be necessary, in the event you need to adjust the pixel positions then use Screen Calibration and 
 update the appropriate values. Eventually this will be automated a bit more (re: much easier).
@@ -274,7 +274,7 @@ NexusKeyResetTime = 1
 StoragePath = %APPDATA%\jrotmg-ahk
 ```
 
-[pixelstate-config]: src/jrotmg-ahk/pixelstate-config.ahk "PixelState Configuration"
+[pixelstate-config]: src/jrotmg-ahk/etc/pixelstate-config.ahk "PixelState Configuration"
 [src-rectangles]: src/jrotmg-ahk/etc/rectangles.ahk "Rectangles Positioning File"
 [extra-panic-button-mouse]: extra/panic-button-mouse-tools.ahk "Mouse Panic Button Setup Helper"
 [realmeye-forums-panic-button]: https://www.realmeye.com/forum/t/the-oh-shiet-button-for-freezes-and-when-you-click-off-the-page/4673 "The Oh Shiet Button for Freezes and When You Click Off The Page"

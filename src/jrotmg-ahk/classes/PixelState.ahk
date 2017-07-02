@@ -16,29 +16,43 @@ class PixelState {
 
     }
 
+    ;;  complete image debug processing and dispose the screenshot
+    DestroyBitmap(ByRef pBitmap, screenshot=false) {
+
+        Gdip_DisposeImage(pBitmap)
+
+    }
+
     ;;  get the pixel argb value at the specified x,y coordinates
     GetPixel(x, y, ByRef pBitmap=false, screenshot=false) {
 
         ;;  grab the pixel
-        if ( pBitmap == false ) {
+        BitmapProvided := pBitmap
+        if pBitmap == false
             pBitmap := this.GetBitmap()
-        }
-        pixel := Gdip_GetPixel(pBitmap, x, y)
-        Gdip_FromARGB(pixel, A, R, G, B)
+
+        ;;  get the argb data
+        argb := Gdip_GetPixel(pBitmap, x, y)
+        Gdip_FromARGB(argb, A, R, G, B)
 
         ;;  debugging
-        this.SetPixel(pBitmap, 255, 255, 255, 255, x, y)
+        if this.Debug == true
+            this.SetPixel(pBitmap, 255, 255, 255, 255, x, y)
 
-        ;;  cleanup and return
-        if ( pBitmap == false ) {
+        ;;  potential cleanup
+        if ( BitmapProvided == false ) {
 
-            if ( this.Debug == true || screenshot == true) {
+            if this.Debug == true
                 this.SaveImage(pBitmap)
-            }
+
+            if screenshot == true
+                this.SaveImage(pBitmap)
+
             Gdip_DisposeImage(pBitmap)
 
         }
-        Return {"A": A, "R": R, "B": B, "G": G, "number": pixel}
+
+        Return {"A": A, "R": R, "B": B, "G": G, "number": argb}
 
     }
 
@@ -63,10 +77,21 @@ class PixelState {
             ScreenMode := this.tools.GetScreenMode(WindowTitle)
             GameWindow := this.tools.GetGameWindow(WindowTitle)
             PixelData := PixelMap[PixelName][GameWindow][ScreenMode]
-            Return ( PixelData["x"] > 1 ) ? this.GetPixel(PixelData["x"], PixelData["y"], pBitmap, screenshot) : this.GetPixelByPos(PixelData["x"], PixelData["y"], pBitmap, screenshot)
+
+            ;;  absolute positions are an integer
+            if PixelData["x"] is integer
+                if PixelData["y"] is integer
+                    return this.GetPixel(PixelData["x"], PixelData["y"], pBitmap, screenshot)
+            ;;  relative positions are a digit
+            else if PixelData["x"] is digit
+                if PixelData["y"] is digit
+                    return this.GetPixelByPos(PixelData["x"], PixelData["y"], pBitmap, screenshot)
+
+            ;;  getting this far means there was an error
+            return ""
 
         } else {
-            return false
+            return ""
         }
 
     }
@@ -77,25 +102,28 @@ class PixelState {
         global PixelMap
         if ( PixelMap[PixelName] ) {
 
+            MapData := PixelMap[PixelName]
             PixelData := this.GetPixelByName(PixelName, pBitmap)
-            ARGBDiff := Round(PixelData["number"]-PixelMap[PixelName].meta.argb)
+            ARGBDiff := Round(PixelData["number"]-MapData.settings.argb)
+            RGB := this.RGBFromARGB(MapData.settings.argb)
             if ARGBDiff < 0
                 ARGBDiff := Round(ARGBDiff/-1)
 
-            RDiff := Round(PixelData["R"]-PixelMap[PixelName].meta.rgb[1])
+            RDiff := Round(PixelData["R"]-RGB["R"])
             if RDiff < 0
                 RDiff := Round(RDiff/-1)
 
-            GDiff := Round(PixelData["G"]-PixelMap[PixelName].meta.rgb[2])
+            GDiff := Round(PixelData["G"]-RGB["G"])
             if GDiff < 0
                 GDiff := Round(GDiff/-1)
 
-            BDiff := Round(PixelData["B"]-PixelMap[PixelName].meta.rgb[3])
+            BDiff := Round(PixelData["B"]-RGB["B"])
             if BDiff < 0
                 BDiff := Round(BDiff/-1)
 
             ;;  exact argb number match, argb number tolerance threshold, or rgb thresholds qualify
-            if ( PixelData["number"] == PixelMap[PixelName].meta.argb || ARGBDiff <= PixelMap.settings.ARGBTolerance || (RDiff <= PixelMap.settings.RGBTolerance && GDiff <= PixelMap.settings.RGBTolerance && BDiff <= PixelMap.settings.RGBTolerance) ) {
+            RGBTolerance := MapData.settings.RGBTolerance
+            if ( PixelData["number"] == MapData.settings.argb || ARGBDiff <= MapData.settings.ARGBTolerance || (RDiff <= RGBTolerance && GDiff <= RGBTolerance && BDiff <= RGBTolerance) ) {
 
                 return true
 
@@ -106,7 +134,7 @@ class PixelState {
             }
 
         } else {
-            return false
+            return ""
         }
 
     }
@@ -115,6 +143,8 @@ class PixelState {
     GetPixelGroupState(PixelGroupNames, ByRef pBitmap=false, screenshot=false) {
 
         global PixelGroups
+
+        BitmapProvided := pBitmap
 
         ;;  we should support multiple groups being specified, so let's convert it if it's a string
         if ( PixelGroupNames.MinIndex() == "" ) {
@@ -139,6 +169,10 @@ class PixelState {
 
                         ;;  same comments as in the else
                         if ( this.GetPixelGroupState(PixelName, pBitmap) != ExpectedValue ) {
+
+                            if BitmapProvided == false
+                                this.DestroyBitmap(pBitmap, screenshot)
+
                             return false
                         }
 
@@ -147,6 +181,10 @@ class PixelState {
                         ;;  instant failure if any value doesn't match
                         ;;  in the near future let's support a failure option instead of just returning false every time
                         if ( this.GetPixelState(PixelName, pBitmap) != ExpectedValue ) {
+
+                            if BitmapProvided == false
+                                this.DestroyBitmap(pBitmap, screenshot)
+
                             return false
                         }
 
@@ -154,18 +192,30 @@ class PixelState {
 
                 }
 
-                if ( pBitmap == false ) {
-                    Gdip_DisposeImage(pBitmap)
-                }
-
-                ;;  it must have passed
-                return true
-
             } else {
-                return false
+
+                if BitmapProvided == false
+                    this.DestroyBitmap(pBitmap, screenshot)
+
+                return ""
+
             }
 
         }
+
+        if pBitmap != false
+            this.DestroyBitmap(pBitmap, screenshot)
+
+        ;;  it must have passed
+        return true
+
+    }
+
+    ;;  return rgb values from argb number
+    RGBFromARGB(argb) {
+
+        Gdip_FromARGB(argb, A, R, G, B)
+        return {"A": A, "R": R, "G": G, "B": B}
 
     }
 
@@ -208,9 +258,36 @@ class PixelState {
 
     }
 
-    GetState(name) {
+    ;;  add data to the pixel map
+    PixelMapConfig(ByRef PixelMap, PixelName, GameWindow, ScreenMode, x, y, argb=false) {
 
-        global PixelStateProfile
+        ;;  sanity checks
+        if x is not number
+            return false
+
+        if y is not number
+            return false
+
+        if argb != false
+            if argb is not number
+                return false
+
+        if GameWindow == "settings"
+            return false
+
+        ;;  build the default object
+        if !PixelMap[PixelName]
+            PixelMap[PixelName] := {"settings": {"ARGBTolerance": PixelMap.settings.ARGBTolerance, "RGBTolerance": PixelMap.settings.RGBTolerance}}
+
+        if !PixelMap[PixelName][GameWindow]
+            PixelMap[PixelName][GameWindow] := {}
+
+        ;;  set the argb if provided
+        if argb != false
+            PixelMap[PixelName].settings.argb := argb
+
+        ;;  set the positional data
+        PixelMap[PixelName][GameWindow][ScreenMode] := {"x": x, "y": y}
 
     }
 
