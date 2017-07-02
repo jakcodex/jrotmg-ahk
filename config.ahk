@@ -13,7 +13,7 @@ ScreenshotSleepTimeout = 1
 
 ;;;;  time in seconds after opening chat that nexus screenshots will not be taken
 ;;  accepts integers: 0, 1, 2, 3, 4, etc
-ScreenshotTypeTimeout = 2
+ScreenshotTypeTimeout = 10
 
 ;;;;  which method should the screenshot be taken with
 ;;  accepts string: direct, steam

@@ -26,9 +26,11 @@ class PixelState {
     ;;  get the pixel argb value at the specified x,y coordinates
     GetPixel(x, y, ByRef pBitmap=false, screenshot=false) {
 
+        global JSON
+
         ;;  grab the pixel
         BitmapProvided := pBitmap
-        if pBitmap == false
+        if ( pBitmap == false )
             pBitmap := this.GetBitmap()
 
         ;;  get the argb data
@@ -36,19 +38,19 @@ class PixelState {
         Gdip_FromARGB(argb, A, R, G, B)
 
         ;;  debugging
-        if this.Debug == true
+        if ( this.Debug == true )
             this.SetPixel(pBitmap, 255, 255, 255, 255, x, y)
 
         ;;  potential cleanup
         if ( BitmapProvided == false ) {
 
-            if this.Debug == true
+            if ( this.Debug == true )
                 this.SaveImage(pBitmap)
-
-            if screenshot == true
+            else if ( screenshot == true )
                 this.SaveImage(pBitmap)
 
             Gdip_DisposeImage(pBitmap)
+            pBitmap := false
 
         }
 
@@ -69,7 +71,7 @@ class PixelState {
     ;;  determine x,y coordinates via a named entry in the PixelMap and forward to GetPixelByPos
     GetPixelByName(PixelName, ByRef pBitmap=false, screenshot=false) {
 
-        global JSON, PixelMap
+        global PixelMap
 
         if ( PixelMap[PixelName] ) {
 
@@ -78,14 +80,14 @@ class PixelState {
             GameWindow := this.tools.GetGameWindow(WindowTitle)
             PixelData := PixelMap[PixelName][GameWindow][ScreenMode]
 
-            ;;  absolute positions are an integer
-            if PixelData["x"] is integer
-                if PixelData["y"] is integer
-                    return this.GetPixel(PixelData["x"], PixelData["y"], pBitmap, screenshot)
-            ;;  relative positions are a digit
-            else if PixelData["x"] is digit
-                if PixelData["y"] is digit
+            ;;  relative positions are a float
+            if ( RegExMatch(PixelData["x"], "^0\.\d{3}$") )
+                if ( RegExMatch(PixelData["y"], "^0\.\d{3}$") )
                     return this.GetPixelByPos(PixelData["x"], PixelData["y"], pBitmap, screenshot)
+            ;;  absolute positions are an integer
+            else if ( RegExMatch(PixelData["x"], "^\d*$") )
+                 if ( RegExMatch(PixelData["y"], "^\d*$") )
+                     return this.GetPixel(PixelData["x"], PixelData["y"], pBitmap, screenshot)
 
             ;;  getting this far means there was an error
             return ""
@@ -203,7 +205,7 @@ class PixelState {
 
         }
 
-        if pBitmap != false
+        if BitmapProvided == false
             this.DestroyBitmap(pBitmap, screenshot)
 
         ;;  it must have passed

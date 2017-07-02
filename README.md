@@ -145,8 +145,8 @@ in game:
 1. Mouse absolute and relative positioning data
 2. Pixel ARGB number and values
 
-Use the x,y values to configure PixelState and/or the Screenshot filters rectangles configuration. Usage of Relative x,y 
-is recommended as I'm not sure I've set Absolute x,y to be recognized yet everywhere.
+Use the x,y values to configure PixelState and/or the Screenshot filters rectangles configuration. Usage of Absolute x,y
+values haven't been tested yet.
 
 ####  PixelMap and PixelGroups
 PixelState's primary job is to provide pixel data which can be used to validate the game's state. 

@@ -36,6 +36,7 @@ PixelGroups.OptionsScreen := {"options_white1": true, "options_white2": true, "o
 PixelGroups.HomeVolume := {"home_volume1": true, "home_volume2": true, "home_volume3": true, "home_volume4": true, "home_volume5": true, "home_volume6": true}
 PixelGroups.LoadingScreen := {"loading_black1": true, "loading_black2": true, "loading_black3": true, "loading_black4": true, "loading_black7": true, "loading_black6": true, "loading_black7": true}p
 PixelGroups.LoadingBar := {"loadingbar_gray1": true, "loadingbar_gray2": true, "loadingbar_gray3": true, "loadingbar_gray4": true, "loadingbar_white1": true, "loadingbar_white2": true, "loadingbar_white3": true}
+PixelGroups.ChatBox := {"chatbot_line1": true, "chatbot_line2": true, "chatbot_line3": true, "chatbot_line4": true, "chatbot_line5": true, "chatbot_line6": true}
 
 ;;  composite groups (a group of groups)
 PixelGroups.InNexus := {"MinimapZoom": true, "AccountGold": true, "AccountFame": true, "AccountStar": true, "UIOptionsButton": true}
