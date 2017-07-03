@@ -106,4 +106,4 @@ NexusKeyResetTime = 1
 StoragePath = %APPDATA%\jrotmg-ahk
 
 ;;;;  debugging mode enabled or not
-Debug := false
+Debug := true

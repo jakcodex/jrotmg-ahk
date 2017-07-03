@@ -20,6 +20,7 @@ customFilter := {"pos": [], "index": 0}
 ScreenshotRecordingObject := {"enabled": false, "name": "", "GameWindow": false}
 TimelapseFolder := false
 ActiveGameWindow := false
+WindowTitle := false
 if ( !GameProcessName ) {
     GameProcessName := false
 }

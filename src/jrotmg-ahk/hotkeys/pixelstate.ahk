@@ -1,34 +1,57 @@
 ;;  PixelState labels
-<^Numpad4::
-    MsgBox % PixelState.GetPixelGroupState("HPBarFull")
+
+;;  prompt user for x,y and return pixel data
+<^Numpad5::
+    if ( Debug == true && CheckRun() == true ) {
+
+        pBitmap := PixelState.GetBitmap()
+        InputBox, x, Pixel X Position, , ,
+        InputBox, y, Pixel Y Position, , ,
+        PixelData := ""
+        if ( RegExMatch(x, "^0\.[0-9]{1,4}$") )
+            if ( RegExMatch(y, "^0\.[0-9]{1,4}$") )
+                PixelData := PixelState.GetPixelByPos(x, y, pBitmap)
+        ;;  absolute positions are an integer
+        else if ( RegExMatch(x, "^[0-9]*$") )
+             if ( RegExMatch(y, "^[0-9]*$") )
+                 PixelData := PixelState.GetPixel(x, y, pBitmap)
+        PixelState.DestroyBitmap(pBitmap)
+        MsgBox % JSON.Dump(PixelData)
+
+    }
     Return
 
-<^Numpad9::
-    pBitmap := PixelState.GetBitmap()
-    MsgBox % "100: " . PixelState.GetPixelState("hp_100p") . "`n75: " . PixelState.GetPixelState("hp_75p") . "`n50: " . PixelState.GetPixelState("hp_50p") . "`n25: " . PixelState.GetPixelState("hp_25p") . "`n0: " . PixelState.GetPixelState("hp_0p")
-    Gdip_DisposeImage(pBitmap)
+;;  prompt user for PixelName or PixelGroup and return pixel state data
+<^Numpad6::
+    if ( Debug == true && CheckRun() == true ) {
+
+        pBitmap := PixelState.GetBitmap()
+        InputBox, StateName, Pixel or Group Name
+        StateData := ( PixelGroups[StateName] ) ? PixelState.GetPixelGroupState(StateName, pBitmap) : PixelState.GetPixelState(StateName, pBitmap)
+        MsgBox % JSON.Dump(StateData)
+        PixelState.DestroyBitmap(pBitmap)
+
+    }
     Return
 
-<^Numpad8::
-    pBitmap := PixelState.GetBitmap()
-    p100 := PixelState.GetPixelByName("hp_100p", pBitmap)
-    p75 := PixelState.GetPixelByName("hp_75p", pBitmap)
-    p50 := PixelState.GetPixelByName("hp_50p", pBitmap)
-    p25 := PixelState.GetPixelByName("hp_25p", pBitmap)
-    p0 := PixelState.GetPixelByName("hp_0p", pBitmap)
-    PixelState.Logging("PixelState/hp_test", JSON.Dump(p100))
-    PixelState.Logging("PixelState/hp_test", JSON.Dump(p75))
-    PixelState.Logging("PixelState/hp_test", JSON.Dump(p50))
-    PixelState.Logging("PixelState/hp_test", JSON.Dump(p25))
-    PixelState.Logging("PixelState/hp_test", JSON.Dump(p0))
-    PixelState.SaveImage(pBitmap)
-    Gdip_DisposeImage(pBitmap)
-    Return
-
+;;  toggle screen calibration
 <^Numpad7::
-    PixelState.hotkeys.ScreenCalibrationRequest()
+    if ( CheckRun() == true )
+        PixelState.hotkeys.ScreenCalibrationRequest()
+    Return
+
+;;  report the hp_*p pixel states
+<^Numpad9::
+    if ( Debug == true && CheckRun() == true ) {
+
+        pBitmap := PixelState.GetBitmap()
+        MsgBox % "100: " . PixelState.GetPixelState("hp_100p", pBitmap) . "`n75: " . PixelState.GetPixelState("hp_75p", pBitmap) . "`n50: " . PixelState.GetPixelState("hp_50p", pBitmap) . "`n25: " . PixelState.GetPixelState("hp_25p", pBitmap) . "`n0: " . PixelState.GetPixelState("hp_0p", pBitmap)
+        PixelState.DestroyBitmap(pBitmap)
+
+    }
     Return
 
 ScreenCalibrationRequest:
-    PixelState.tools.GetScreenPosDataByClick()
+    if ( CheckRun() == true )
+        PixelState.tools.GetScreenPosDataByClick()
     Return

@@ -12,6 +12,15 @@ PixelState.PixelMapConfig(PixelMap, "hp_50p", "steam", "fullscreen", 0.873, 0.42
 PixelState.PixelMapConfig(PixelMap, "hp_25p", "steam", "fullscreen", 0.819, 0.426, 4292883508)
 PixelState.PixelMapConfig(PixelMap, "hp_0p", "steam", "fullscreen", 0.767, 0.426, 4292883508)
 
+;;  in-game static points
+PixelState.PixelMapConfig(PixelMap, "controlpoint75_1", "steam", "fullscreen", 0.7495, 0.100, 4278190081)
+PixelState.PixelMapConfig(PixelMap, "controlpoint75_2", "steam", "fullscreen", 0.7495, 0.250, 4278190081)
+PixelState.PixelMapConfig(PixelMap, "controlpoint75_3", "steam", "fullscreen", 0.7495, 0.400, 4278190081)
+PixelState.PixelMapConfig(PixelMap, "controlpoint75_4", "steam", "fullscreen", 0.7495, 0.550, 4278190081)
+PixelState.PixelMapConfig(PixelMap, "controlpoint75_5", "steam", "fullscreen", 0.7495, 0.700, 4278190081)
+PixelState.PixelMapConfig(PixelMap, "controlpoint75_6", "steam", "fullscreen", 0.7495, 0.850, 4278190081)
+PixelState.PixelMapConfig(PixelMap, "controlpoint75_7", "steam", "fullscreen", 0.7495, 0.950, 4278190081)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;  PixelState Groups
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -24,6 +33,9 @@ PixelGroups.HPBar75 := {"hp_100p": false, "hp_75p": true, "hp_50p": true, "hp_25
 PixelGroups.HPBar50 := {"hp_100p": false, "hp_75p": false, "hp_50p": true, "hp_25p": true, "hp_0p": true}
 PixelGroups.HPBar25 := {"hp_100p": false, "hp_75p": false, "hp_50p": false, "hp_25p": true, "hp_0p": true}
 PixelGroups.HPBar0 := {"hp_100p": false, "hp_75p": false, "hp_50p": false, "hp_25p": false, "hp_0p": true}
+
+;;  in-game control states
+PixelGroups.controlpoint75_full := {"controlpoint75_1": true, "controlpoint75_2": true, "controlpoint75_3": true, "controlpoint75_4": true, "controlpoint75_5": true, "controlpoint75_6": true, "controlpoint75_7": true}
 
 ;;  various realm ui states
 PixelGroups.AccountGold := {"account_gold1": true, "account_gold2": true}

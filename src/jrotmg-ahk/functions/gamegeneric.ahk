@@ -5,11 +5,12 @@
 ;;  check if the currently active window is a valid GameWindow
 CheckRun() {
 
-	global GameProcessName, ROTMGWindowName
-	WinGetTitle, WindowTitle, A
-	FoundPos := RegExMatch(WindowTitle, "(Realm of the Mad God|Adobe Flash Player)")
+	global GameProcessName, ROTMGWindowName, WindowTitle
+	WinGetTitle, CurrentWindowTitle, A
+	FoundPos := RegExMatch(CurrentWindowTitle, "(Realm of the Mad God|Adobe Flash Player)")
 	if ( FoundPos > 0 ) {
 
+        WindowTitle := CurrentWindowTitle
         WinGet, GameProcessName, ProcessName, A
         ROTMGWindowName := WindowTitle
         return true

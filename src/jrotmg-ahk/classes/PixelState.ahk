@@ -17,7 +17,10 @@ class PixelState {
     }
 
     ;;  complete image debug processing and dispose the screenshot
-    DestroyBitmap(ByRef pBitmap, screenshot=false) {
+    DestroyBitmap(ByRef pBitmap) {
+
+        if ( this.Debug == true )
+            this.SaveImage(pBitmap)
 
         Gdip_DisposeImage(pBitmap)
 
@@ -25,8 +28,6 @@ class PixelState {
 
     ;;  get the pixel argb value at the specified x,y coordinates
     GetPixel(x, y, ByRef pBitmap=false, screenshot=false) {
-
-        global JSON
 
         ;;  grab the pixel
         BitmapProvided := pBitmap
@@ -44,12 +45,10 @@ class PixelState {
         ;;  potential cleanup
         if ( BitmapProvided == false ) {
 
-            if ( this.Debug == true )
-                this.SaveImage(pBitmap)
-            else if ( screenshot == true )
+            if ( screenshot == true )
                 this.SaveImage(pBitmap)
 
-            Gdip_DisposeImage(pBitmap)
+            this.DestroyBitmap(pBitmap)
             pBitmap := false
 
         }
@@ -61,7 +60,17 @@ class PixelState {
     ;;  determine x,y coordinates via relative positioning and forward to GetPixel
     GetPixelByPos(xPercent, yPercent, ByRef pBitmap=false, screenshot=false) {
 
-        WinGetPos, X, Y, Width, Height, A
+        if ( pBitmap != false ) {
+
+            Width := Gdip_GetImageWidth(pBitmap)
+            Height := Gdip_GetImageHeight(pBitmap)
+
+        } else {
+
+            WinGetPos, X, Y, Width, Height, A
+
+        }
+
         xPixel := Round(Width*xPercent)
         yPixel := Round(Height*yPercent)
         Return this.GetPixel(xPixel, yPixel, pBitmap, screenshot)
@@ -71,22 +80,21 @@ class PixelState {
     ;;  determine x,y coordinates via a named entry in the PixelMap and forward to GetPixelByPos
     GetPixelByName(PixelName, ByRef pBitmap=false, screenshot=false) {
 
-        global PixelMap
+        global PixelMap, WindowTitle
 
         if ( PixelMap[PixelName] ) {
 
-            WinGetTitle, WindowTitle, A
             ScreenMode := this.tools.GetScreenMode(WindowTitle)
             GameWindow := this.tools.GetGameWindow(WindowTitle)
             PixelData := PixelMap[PixelName][GameWindow][ScreenMode]
 
             ;;  relative positions are a float
-            if ( RegExMatch(PixelData["x"], "^0\.\d{3}$") )
-                if ( RegExMatch(PixelData["y"], "^0\.\d{3}$") )
+            if ( RegExMatch(PixelData["x"], "^0\.[0-9]{1,4}$") )
+                if ( RegExMatch(PixelData["y"], "^0\.[0-9]{1,4}$") )
                     return this.GetPixelByPos(PixelData["x"], PixelData["y"], pBitmap, screenshot)
             ;;  absolute positions are an integer
-            else if ( RegExMatch(PixelData["x"], "^\d*$") )
-                 if ( RegExMatch(PixelData["y"], "^\d*$") )
+            else if ( RegExMatch(PixelData["x"], "^[0-9]*$") )
+                 if ( RegExMatch(PixelData["y"], "^[0-9]*$") )
                      return this.GetPixel(PixelData["x"], PixelData["y"], pBitmap, screenshot)
 
             ;;  getting this far means there was an error
