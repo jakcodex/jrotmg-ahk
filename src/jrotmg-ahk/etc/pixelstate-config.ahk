@@ -46,7 +46,7 @@ PixelGroups.UINexusButton := {"uinexusbutton_black1": true, "uinexusbutton_black
 PixelGroups.UIOptionsButton := {"uioptionsbutton_white1": true, "uioptionsbutton_white2": true, "uioptionsbutton_white3": true, "uioptionsbutton_gray1": true, "uioptionsbutton_gray2": true}
 PixelGroups.OptionsScreen := {"options_white1": true, "options_white2": true, "options_white3": true, "options_white4": true, "options_gray1": true, "options_gray2": true, "options_gray3": true}
 PixelGroups.HomeVolume := {"home_volume1": true, "home_volume2": true, "home_volume3": true, "home_volume4": true, "home_volume5": true, "home_volume6": true}
-PixelGroups.LoadingScreen := {"loading_black1": true, "loading_black2": true, "loading_black3": true, "loading_black4": true, "loading_black7": true, "loading_black6": true, "loading_black7": true}p
+PixelGroups.LoadingScreen := {"loading_black1": true, "loading_black2": true, "loading_black3": true, "loading_black4": true, "loading_black7": true, "loading_black6": true, "loading_black7": true}
 PixelGroups.LoadingBar := {"loadingbar_gray1": true, "loadingbar_gray2": true, "loadingbar_gray3": true, "loadingbar_gray4": true, "loadingbar_white1": true, "loadingbar_white2": true, "loadingbar_white3": true}
 PixelGroups.ChatBox := {"chatbot_line1": true, "chatbot_line2": true, "chatbot_line3": true, "chatbot_line4": true, "chatbot_line5": true, "chatbot_line6": true}
 
