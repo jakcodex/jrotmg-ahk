@@ -40,7 +40,7 @@ class PixelState {
 
         ;;  debugging
         if ( this.Debug == true )
-            this.SetPixel(pBitmap, 255, 255, 255, 255, x, y)
+            this.SetPixel(pBitmap, 255, 0, 0, 0, x, y)
 
         ;;  potential cleanup
         if ( BitmapProvided == false ) {
@@ -114,34 +114,42 @@ class PixelState {
 
             MapData := PixelMap[PixelName]
             PixelData := this.GetPixelByName(PixelName, pBitmap)
-            ARGBDiff := Round(PixelData["number"]-MapData.settings.argb)
-            RGB := this.RGBFromARGB(MapData.settings.argb)
-            if ARGBDiff < 0
-                ARGBDiff := Round(ARGBDiff/-1)
 
-            RDiff := Round(PixelData["R"]-RGB["R"])
-            if RDiff < 0
-                RDiff := Round(RDiff/-1)
+            ;;  a pixel could be multiple colors
+            for index, ARGBNumber in MapData.settings.argb {
 
-            GDiff := Round(PixelData["G"]-RGB["G"])
-            if GDiff < 0
-                GDiff := Round(GDiff/-1)
+                ARGBDiff := Round(PixelData["number"]-ARGBNumber)
+                RGB := this.RGBFromARGB(ARGBNumber)
+                if ARGBDiff < 0
+                    ARGBDiff := Round(ARGBDiff/-1)
 
-            BDiff := Round(PixelData["B"]-RGB["B"])
-            if BDiff < 0
-                BDiff := Round(BDiff/-1)
+                RDiff := Round(PixelData["R"]-RGB["R"])
+                if RDiff < 0
+                    RDiff := Round(RDiff/-1)
 
-            ;;  exact argb number match, argb number tolerance threshold, or rgb thresholds qualify
-            RGBTolerance := MapData.settings.RGBTolerance
-            if ( PixelData["number"] == MapData.settings.argb || ARGBDiff <= MapData.settings.ARGBTolerance || (RDiff <= RGBTolerance && GDiff <= RGBTolerance && BDiff <= RGBTolerance) ) {
+                GDiff := Round(PixelData["G"]-RGB["G"])
+                if GDiff < 0
+                    GDiff := Round(GDiff/-1)
 
-                return true
+                BDiff := Round(PixelData["B"]-RGB["B"])
+                if BDiff < 0
+                    BDiff := Round(BDiff/-1)
 
-            } else {
+                ;;  tolerance levels are set once or per index
+                RGBTolerance := ( MapData.settings.RGBTolerance[index] ) ? MapData.settings.RGBTolerance[index] : MapData.settings.RGBTolerance[1]
+                ARGBTolerance := ( MapData.settings.ARGBTolerance[index] ) ? MapData.settings.ARGBTolerance[index] : MapData.settings.ARGBTolerance[1]
 
-                return false
+                ;;  exact argb number match, argb number tolerance threshold, or rgb thresholds qualify
+                if ( PixelData["number"] == ARGBNumber || ARGBDiff <= ARGBTolerance || (RDiff <= RGBTolerance && GDiff <= RGBTolerance && BDiff <= RGBTolerance) ) {
+
+                    return true
+
+                }
 
             }
+
+            ;;  no matches
+            return false
 
         } else {
             return ""
@@ -269,7 +277,9 @@ class PixelState {
     }
 
     ;;  add data to the pixel map
-    PixelMapConfig(ByRef PixelMap, PixelName, GameWindow, ScreenMode, x, y, argb=false) {
+    PixelMapConfig(PixelName, GameWindowList, ScreenModeList, x, y, argb=false, RGBTolerance=false, ARGBTolerance=false) {
+
+        global PixelMap
 
         ;;  sanity checks
         if x is not number
@@ -280,24 +290,65 @@ class PixelState {
 
         if argb != false
             if argb is not number
+                if argb.MinIndex() == ""
+                    return false
+
+        if ARGBTolerance != false
+            if ARGBTolerance is not number
                 return false
 
-        if GameWindow == "settings"
+        if RGBTolerance != false
+            if RGBTolerance is not number
+                return false
+
+        if GameWindowList == "settings"
             return false
+
+        if GameWindowList.MinIndex() = ""
+            GameWindowList := [GameWindowList]
+
+        if ScreenModeList.MinIndex() = ""
+            ScreenModeList := [ScreenModeList]
 
         ;;  build the default object
         if !PixelMap[PixelName]
-            PixelMap[PixelName] := {"settings": {"ARGBTolerance": PixelMap.settings.ARGBTolerance, "RGBTolerance": PixelMap.settings.RGBTolerance}}
+            PixelMap[PixelName] := {"settings": {"ARGBTolerance": [PixelMap.settings.ARGBTolerance], "RGBTolerance": [PixelMap.settings.RGBTolerance]}}
 
-        if !PixelMap[PixelName][GameWindow]
-            PixelMap[PixelName][GameWindow] := {}
+        ;;  convert argb value to array if not already
+        if argb is number
+            argb := [argb]
 
-        ;;  set the argb if provided
         if argb != false
             PixelMap[PixelName].settings.argb := argb
 
+        ;;  convert argbtolerance value to array if not already
+        if ARGBTolerance is number
+            ARGBTolerance := [ARGBTolerance]
+
+        if ARGBTolerance != false
+            PixelMap[PixelName].settings.ARGBTolerance := ARGBTolerance
+
+        ;;  convert rgbtolerance value to array if not already
+        if RGBTolerance is number
+            RGBTolerance := [RGBTolerance]
+
+        if RGBTolerance != false
+            PixelMap[PixelName].settings.RGBTolerance := RGBTolerance
+
         ;;  set the positional data
-        PixelMap[PixelName][GameWindow][ScreenMode] := {"x": x, "y": y}
+        for index, GameWindow in GameWindowList {
+
+            if !PixelMap[PixelName][GameWindow]
+                PixelMap[PixelName][GameWindow] := {}
+
+            ;;  lazy man here, but index isn't used so whatever
+            for index, ScreenMode in ScreenModeList {
+
+                PixelMap[PixelName][GameWindow][ScreenMode] := {"x": x, "y": y}
+
+            }
+
+        }
 
     }
 
@@ -352,7 +403,7 @@ class PixelState {
                 WinGetPos, WinX, WinY, Width, Height, A
                 MouseGetPos, x, y
                 pixel := PixelState.GetPixel(x, y)
-                PixelObject := {"pos": {"xAbs": x, "yAbs": y, "xRel": Round(x/Width, 3), "yRel": Round(y/Height, 3)}, "pixel": pixel, "argb": Gdip_ToARGB(pixel["A"], pixel["R"], pixel["G"], pixel["B"])}
+                PixelObject := {"pos": {"xAbs": x, "yAbs": y, "xRel": Round(x/Width, 4), "yRel": Round(y/Height, 4)}, "pixel": pixel, "argb": Gdip_ToARGB(pixel["A"], pixel["R"], pixel["G"], pixel["B"])}
                 message1 := "Absolute x,y: " . PixelObject["pos"]["xAbs"] . "," . PixelObject["pos"]["yAbs"]
                 message2 := "Relative x,y: " . PixelObject["pos"]["xRel"] . "," . PixelObject["pos"]["yRel"]
                 message3 := "Pixel ARGB Values: " . PixelObject["pixel"]["A"] . " " . PixelObject["pixel"]["R"] . " " . PixelObject["pixel"]["G"] . " " . PixelObject["pixel"]["B"]

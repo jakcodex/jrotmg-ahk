@@ -40,6 +40,17 @@
         PixelState.hotkeys.ScreenCalibrationRequest()
     Return
 
+<^Numpad8::
+    if ( Debug == true && CheckRun() == true ) {
+
+        InputBox, r, R Value
+        InputBox, g, G Value
+        InputBox, b, B Value
+        MsgBox % Gdip_ToARGB(255, r, g, b)
+
+    }
+    Return
+
 ;;  report the hp_*p pixel states
 <^Numpad9::
     if ( Debug == true && CheckRun() == true ) {

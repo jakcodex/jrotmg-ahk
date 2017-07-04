@@ -2,9 +2,9 @@
 
 ## Usage
 
-Version [0.0.16-rc](CHANGELOG.md) - PixelState
+Version [0.0.16-rc](CHANGELOG.md)
 
-Required AutoHotKey from https://autohotkey.com/download/
+Requires AutoHotKey from https://autohotkey.com/download/
 
 ##### Manual Mode (default)
 Extract files to a folder and edit config.ahk if any changes are necessary then run jrotmg-quickstart.ahk.
