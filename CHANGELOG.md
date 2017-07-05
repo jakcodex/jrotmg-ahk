@@ -4,11 +4,10 @@
 + Added configuration key "WatermarkTextColor" which controls the color of the watermark text
 + Added configuration key "Debug" which toggles Debug logging
 + Hotkey 'LCtrl+Numpad7': Activate PixelState Screen Calibration
-+ Screenshots now have a watermark placed in the upper right corner of the minimap
-+ Screenshot typing detection now optionally uses PixelState to check for an open chat box
 + PixelState: Get pixel data by absolute, relative, and named configurations
-+ PixelMap stores named pixels and has a handy config builder
-+ PixelGroups store groups of named pixels
++ Screenshot functions integrated into PixelState
++ Screenshot typing detection now optionally uses PixelState to check for an open chat box
++ Screenshots now have a watermark placed in the upper right corner of the minimap
 + Screen calibration system identifies pixel and positional data for mouse clicks when activated
 + Logging system added for debugging 
 + Plenty of housekeeping
