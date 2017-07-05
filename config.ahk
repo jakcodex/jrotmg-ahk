@@ -31,6 +31,14 @@ ScreenshotKeyMode = single
 ;;  accepts boolean: true, false
 ScreenshotWaitTimer := true
 
+;;;;  enable or disable checking for chatbox pixels to prevent typing screenshots
+;;  accepts boolean: true, false
+ScreenshotWaitPixelCheck := true
+
+;;;;  how many seconds after a chatbox opens for it to invalidate screenshots
+;;  accepts integers: 0-10
+ScreenshotChatboxGrace = 2
+
 ;;;;  enable or disable the filter to hide gold
 ScreenshotHideGoldAndFame := true
 

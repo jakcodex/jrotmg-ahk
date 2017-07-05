@@ -2,7 +2,7 @@
 
 ## Usage
 
-Version [0.0.16-rc](CHANGELOG.md)
+Version [0.0.16-alpha](CHANGELOG.md)
 
 Requires AutoHotKey from https://autohotkey.com/download/
 
@@ -82,7 +82,11 @@ It supports taking a printscreen of your game window or using Steam's F12 screen
 screenshot system causes a brief delay when nexusing.
 
 The system attempts to not take screenshots while you are typing by detecting when you open the chat box. The wait timer
-will prevent screenshots for a set period of time after the chat box opens up.
+will prevent screenshots for a set period of time after the chat box opens up. 
+
+Optionally, and currently enabled by default, the system will also utilize PixelState to check if the chatbox is open 
+and prevent screenshots. The configuration key 'ScreenshotChatboxGrace' when set above 0 will allow screenshots to be 
+taken within that time period. This is useful to help capture Nexus attempts when you accidentally open the chatbox.
 
 An alternative option is to switch to double mode. This mode requires that the Nexus key be double tapped to take a
 screenshot.
@@ -160,6 +164,7 @@ update the appropriate values. Eventually this will be automated a bit more (re:
 #####  Planned Upcoming Features
 1. Low HP Beep
 2. 0% HP "Finish Him!"
+3. Detect drowning and play Sonic the Hedgehog drowning song near death
 
 ## Disclaimer
 This is beta software and you use it at your own risk. No warranty or guarantee is offered. 
@@ -205,6 +210,14 @@ ScreenshotKeyMode = single
 ;;;;  enable or disable the screenshot wait timer (prevents screenshots while typing)
 ;;  accepts boolean: true, false
 ScreenshotWaitTimer := true
+
+;;;;  enable or disable checking for chatbox pixels to prevent typing screenshots
+;;  accepts boolean: true, false
+ScreenshotWaitPixelCheck := true
+
+;;;;  how many seconds after a chatbox opens for it to invalidate screenshots
+;;  accepts integers: 0-10
+ScreenshotChatboxGrace = 2
 
 ;;;;  enable or disable the filter to hide gold
 ScreenshotHideGoldAndFame := true
@@ -257,6 +270,13 @@ ScreenshotFilterAdjustments := {"x": 0, "y": 0, "width": 0, "height": 0}
 ;;  accepts object like: {"windowed": {"width": 0, "height": 0}, "fullscreen": {"width": 0, "height": 0}}
 ScreenshotCharacterFilterPositioning := {"windowed": {"width": 80, "height": 80}, "fullscreen": {"width": 130, "height": 130}}
 
+;;;;  control the opacity and color of the watermark
+;;  accepts a string with the following format: XXYYYYYY
+;;  XX is the opacity (00 is 0%; FF is 100%)
+;;  YYYYYY is the hexidecimal color code you desire
+;;  to disable the watermark, set opacity to 00
+WatermarkTextColor = BBFFFFFF
+
 ;;;;  enable or disable the nexus panic button (closes the game if triggered)
 ;;  accepts boolean: true, false
 NexusPanicEnabled := false
@@ -272,6 +292,9 @@ NexusKeyResetTime = 1
 ;;;;  path to store program data
 ;;;;  defaults to "C:\Users\<YourUsername>\AppData\Roaming\jrotmg-ahk"
 StoragePath = %APPDATA%\jrotmg-ahk
+
+;;;;  debugging mode enabled or not
+Debug := true
 ```
 
 [pixelstate-config]: src/jrotmg-ahk/etc/pixelstate-config.ahk "PixelState Configuration"

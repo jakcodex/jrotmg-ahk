@@ -36,93 +36,7 @@
 ;;	Return
 
 SaveScreen:
-
-	;;  window info
-	WinGetPos, X, Y, Width, Height, A
-    WinGetTitle, WindowTitle, A
-    ScreenMode := isWindowFullScreen(WinExist(WindowTitle))
-
-    ;;  steam or flash
-    GameWindow := ( RegExMatch(WindowTitle, "^Adobe Flash Player") ) ? "flash" : "steam"
-
-    ;;  create the base image in memory
-	pBitmap := Gdip_BitmapFromScreen(X "|" Y "|" Width "|" Height)
-	Width := Gdip_GetImageWidth(pBitmap), Height := Gdip_GetImageHeight(pBitmap)
-	G := Gdip_GraphicsFromImage(pBitmap)
-	Gdip_DrawImage(G, pBitmap, 0, 0, Round(Width), Round(Height), 0, 0, Width, Height)
-
-	;;  sleep for specified time before beginning image processing and disk activity
-	Sleep ScreenshotSleepTimeout*1000
-
-    ;;;;  prepare screenshot filters
-
-    ;;  maybe the user knows better and provided their own
-    if ( !Adjustments && ScreenshotFilterAdjustments ) {
-        Adjustments := ScreenshotFilterAdjustments
-    }
-
-    ;;  the default action is to do no adjustments
-    if ( !Adjustments ) {
-        Adjustments := {"x": 0, "y": 0, "width": 0, "height": 0}
-    }
-
-    ;;  create the filter brush
-    filterBrush := {"default": Gdip_BrushCreateSolid(0xff000000)}
-
-    ;;  process all active filters
-    for index, element in ScreenshotRectangles {
-
-        ;;  check if there is a custom color provided
-        if ( element["color"] && !filterBrush[element["color"]] ) {
-
-            element["color"] := "0xff" . element["color"]
-            filterBrush[element["color"]] := Gdip_BrushCreateSolid(element["color"])
-
-        }
-
-        ;;  set our default color
-        if ( !element["color"] ) {
-            element["color"] := "default"
-        }
-
-        ;;  only process filters if they're configured for this game window
-        if ( element[GameWindow] ) {
-
-            Dimensions := ( ScreenMode == 1 ) ? element[GameWindow]["fullscreen"] : element[GameWindow]["windowed"]
-
-            ;;  only run positions thru the adjustment system if they're percentage-based
-            ;;  absolutes can be passed through as-is where x,y > 1,1
-            if ( Dimensions["x"] > 1 && Dimensions["y"] > 1 ) {
-
-                pos := {"x": Dimensions["x"], "y": Dimensions["y"], "w": Dimensions["width"], "h": Dimensions["height"]}
-
-            } else {
-
-                pos := ScreenShotGeneratePositions(Width, Height, Dimensions, Adjustments)
-
-            }
-
-            Gdip_FillRectangle(G, filterBrush[element["color"]], pos["x"], pos["y"], pos["w"], pos["h"])
-
-        }
-
-    }
-
-    ;;;;  draw watermark
-    WatermarkObject := ( ScreenMode == 1 ) ? WatermarkPos[GameWindow]["fullscreen"] : WatermarkPos[GameWindow]["windowed"]
-    Gdip_TextToGraphics(G, "JROTMG-AHK/Screenshot", "X" . Round(WatermarkObject["x"]*Width) . " Y" . Round(WatermarkObject["y"]*Height) . " C" . WatermarkTextColor)
-
-    ;;;;  clean up brushes
-    for index, element in filterBrush {
-        Gdip_DeleteBrush(element)
-    }
-
-    ;;;;  save file to disk
-    DestinationFolder := ( TimelapseFolder == false ) ? ScreenshotFolder : TimelapseFolder
-	Gdip_SaveBitmapToFile(pBitmap, DestinationFolder "\" A_YYYY "-" A_MM "-" A_DD "-" A_Hour "-" A_Min "-" A_Sec ".jpg", ScreenshotImageQuality)
-
-	;;  cleanup
-	Gdip_DeleteGraphics(G), Gdip_DisposeImage(pBitmap)
+    PixelState.tools.TakeScreenshot()
 	Return
 
 ;;;;  take a screenshot on nexus and panic if necessary
@@ -157,7 +71,7 @@ NexusScreenshot:
 
 	    if ( NexusPanicEnabled == true && (panicKeyPresses >= NexusPanicCount) ) {
 
-            TakeScreenshot()
+            PixelState.tools.TakeScreenshot()
             PanicCloseGame()
             NexusKeyPresses = 0
             panicKeyPresses = 0
@@ -172,16 +86,16 @@ NexusScreenshot:
 
 		difference := A_Now - lastEnterKeypress
 		if ( ScreenshotKeyMode == "single" && ScreenshotWaitTimer == true && difference > ScreenshotTypeTimeout ) {
-		    TakeScreenshot()
+		    PixelState.tools.TakeScreenshot("automatic_typing")
         }
 		if ( ScreenshotKeyMode == "single" && ScreenshotWaitTimer == false ) {
-		    TakeScreenshot()
+		    PixelState.tools.TakeScreenshot("automatic_typing")
         }
 		if ( ScreenshotKeyMode == "double" && ScreenshotWaitTimer == false && NexusKeyPresses == 2 ) {
-		    TakeScreenshot()
+		    PixelState.tools.TakeScreenshot("automatic_typing")
 		}
 		if ( ScreenshotKeyMode == "double" && ScreenshotWaitTimer == true && NexusKeyPresses == 2 && difference > ScreenshotTypeTimeout ) {
-		    TakeScreenshot()
+		    PixelState.tools.TakeScreenshot("automatic_typing")
 		}
 
 		if ( ScreenshotImageMode == "steam" ) {

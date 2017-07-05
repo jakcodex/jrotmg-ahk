@@ -17,23 +17,23 @@ PixelState.PixelMapConfig("hp_0p", ["flash", "steam"], "fullscreen", 0.766, 0.42
 ;;  static points that are typically present
 
 ;;  chat box top line
-PixelState.PixelMapConfig("chatbox_top1", ["flash", "steam"], "fullscreen", 0.000, 0.9667, 4294967295, false, 5)
-PixelState.PixelMapConfig("chatbox_top2", ["flash", "steam"], "fullscreen", 0.125, 0.9667, 4294967295, false, 5)
-PixelState.PixelMapConfig("chatbox_top3", ["flash", "steam"], "fullscreen", 0.250, 0.9667, 4294967295, false, 5)
-PixelState.PixelMapConfig("chatbox_top4", ["flash", "steam"], "fullscreen", 0.375, 0.9667, 4294967295, false, 5)
+PixelState.PixelMapConfig("chatbox_top1", ["flash", "steam"], "fullscreen", 0.000, 0.9667, 4294967295)
+PixelState.PixelMapConfig("chatbox_top2", ["flash", "steam"], "fullscreen", 0.125, 0.9667, 4294967295)
+PixelState.PixelMapConfig("chatbox_top3", ["flash", "steam"], "fullscreen", 0.250, 0.9667, 4294967295)
+PixelState.PixelMapConfig("chatbox_top4", ["flash", "steam"], "fullscreen", 0.375, 0.9667, 4294967295)
 
 ;;  chat box bottom line
-PixelState.PixelMapConfig("chatbox_bottom1", ["flash", "steam"], "fullscreen", 0.000, 0.9963, 4294967295, false, 5)
-PixelState.PixelMapConfig("chatbox_bottom2", ["flash", "steam"], "fullscreen", 0.125, 0.9963, 4294967295, false, 5)
-PixelState.PixelMapConfig("chatbox_bottom3", ["flash", "steam"], "fullscreen", 0.250, 0.9963, 4294967295, false, 5)
-PixelState.PixelMapConfig("chatbox_bottom4", ["flash", "steam"], "fullscreen", 0.375, 0.9963, 4294967295, false, 5)
+PixelState.PixelMapConfig("chatbox_bottom1", ["flash", "steam"], "fullscreen", 0.000, 0.9963, 4294967295)
+PixelState.PixelMapConfig("chatbox_bottom2", ["flash", "steam"], "fullscreen", 0.125, 0.9963, 4294967295)
+PixelState.PixelMapConfig("chatbox_bottom3", ["flash", "steam"], "fullscreen", 0.250, 0.9963, 4294967295)
+PixelState.PixelMapConfig("chatbox_bottom4", ["flash", "steam"], "fullscreen", 0.375, 0.9963, 4294967295)
 
 ;;  chat box l/r sides
-PixelState.PixelMapConfig("chatbox_side1", ["flash", "steam"], "fullscreen", 0.0000, 0.9731, 4294967295, false, 5)
-PixelState.PixelMapConfig("chatbox_side2", ["flash", "steam"], "fullscreen", 0.7474, 0.9731, 4294967295, false, 5)
+PixelState.PixelMapConfig("chatbox_side1", ["flash", "steam"], "fullscreen", 0.0000, 0.9731, 4294967295)
+PixelState.PixelMapConfig("chatbox_side2", ["flash", "steam"], "fullscreen", 0.7474, 0.9731, 4294967295)
 
 ;;  chat box often obstructed pixels
-PixelState.PixelMapConfig("chatbox_top6", ["flash", "steam"], "fullscreen", 0.700, 0.9667, 4294967295, false, 5)
+PixelState.PixelMapConfig("chatbox_top6", ["flash", "steam"], "fullscreen", 0.700, 0.9667, 4294967295)
 
 ;;  vertical black border separating the game from right column
 PixelState.PixelMapConfig("controlpoint75_1", ["flash", "steam"], "fullscreen", 0.7495, 0.100, 4278190081, 0, 0)
@@ -115,6 +115,7 @@ PixelGroups.MinimapZoom := {"minimap_top1": true, "minimap_top2": true, "minimap
 PixelGroups.UINexusButton := {"uinexusicon_1": true, "uinexusicon_2": true, "uinexusicon_3": true, "uinexusicon_4": true, "uinexusicon_5": true, "uinexusicon_6": true}
 PixelGroups.UIOptionsButton := {"uioptionsicon_1": true, "uioptionsicon_2": true, "uioptionsicon_3": true, "uioptionsicon_4": true, "uioptionsicon_5": true, "uioptionsicon_6": true, "uioptionsicon_7": true}
 PixelGroups.ChatBox := {"chatbox_top1": true, "chatbox_top2": true, "chatbox_top3": true, "chatbox_top4": true, "chatbox_bottom1": true, "chatbox_bottom2": true, "chatbox_bottom3": true, "chatbox_bottom4": true, "chatbox_side1": true}
+PixelGroups.ChatBoxUnobstructed := {"chatbox_top1": true, "chatbox_top2": true, "chatbox_bottom1": true, "chatbox_bottom2": true, "chatbox_side1": true}
 ;; omg so many pixels -- everything above is mapped to fullscreen windows
 
 PixelGroups.OptionsScreen := {"options_white1": true, "options_white2": true, "options_white3": true, "options_white4": true, "options_gray1": true, "options_gray2": true, "options_gray3": true}

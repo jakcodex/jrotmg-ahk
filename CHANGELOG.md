@@ -1,8 +1,11 @@
-## 0.0.16-rc - PixelState
+## 0.0.16-alpha - PixelState
++ Added configuration key "ScreenshotWaitPixelCheck" which controls if wait timer should check for chatbox pixels
++ Added configuration key "ScreenshotChatboxGrace" which sets the grace time for the chatbox invalidating screenshots
 + Added configuration key "WatermarkTextColor" which controls the color of the watermark text
 + Added configuration key "Debug" which toggles Debug logging
 + Hotkey 'LCtrl+Numpad7': Activate PixelState Screen Calibration
 + Screenshots now have a watermark placed in the upper right corner of the minimap
++ Screenshot typing detection now optionally uses PixelState to check for an open chat box
 + PixelState: Get pixel data by absolute, relative, and named configurations
 + PixelMap stores named pixels and has a handy config builder
 + PixelGroups store groups of named pixels

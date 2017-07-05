@@ -18,8 +18,8 @@ ScreenshotTimelapseTimer() {
                 FileCreateDir, %TimelapseFolder%
 
             }
-            Send, ^!{PrintScreen}
 
+            PixelState.tools.TakeScreenshot("automatic_timelapse")
 
         }
 

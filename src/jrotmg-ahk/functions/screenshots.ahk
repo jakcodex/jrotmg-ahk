@@ -1,5 +1,5 @@
 ;;  trigger a screenshot
-TakeScreenshot() {
+TakeScreenshot(mode=false) {
 
     global ScreenshotImageMode
     if ( ScreenshotImageMode == "direct" ) {

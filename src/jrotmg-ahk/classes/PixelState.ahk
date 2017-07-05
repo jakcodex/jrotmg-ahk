@@ -418,6 +418,139 @@ class PixelState {
 
         }
 
+        ;;  calculation the actual positions based on input
+        ScreenShotGeneratePositions(Width, Height, Dimensions, Adjustments) {
+
+            result := {}
+            result["x"] := Round((Width*Dimensions["x"])+Adjustments["x"], 0)
+            result["y"] := Round((Height*Dimensions["y"])+Adjustments["y"], 0)
+            result["w"] := Round((Width*Dimensions["width"])+Adjustments["width"], 0)
+            result["h"] := Round((Height*Dimensions["height"])+Adjustments["height"], 0)
+            Return result
+
+        }
+
+        ;;  take and process a screenshot
+        TakeScreenshot(mode=false, ByRef pBitmap=false, excludeFilters=false) {
+
+            ;;  defaults
+            global pToken, ScreenshotSleepTimeout, ScreenshotFilterAdjustments, ScreenshotRectangles, WatermarkPos, WatermarkTextColor, ScreenshotFolder, TimelapseFolder, DestinationFolder, ScreenshotImageQuality, ScreenshotImageMode, ScreenshotWaitPixelCheck, ScreenshotChatboxGrace, lastEnterKeypress
+
+            if ( ScreenshotImageMode == "direct" ) {
+
+                ;;  window info
+                WinGetPos, X, Y, Width, Height, A
+                WinGetTitle, WindowTitle, A
+
+                ;;  screenshot mode info
+                BitmapProvided := pBitmap
+                ScreenMode := this.GetScreenMode(WindowTitle)
+                GameWindow := this.GetGameWindow(WindowTitle)
+
+                ;;  create the base image in memory
+                if ( pBitmap == false )
+                    pBitmap := PixelState.GetBitmap()
+
+                ;;  pixelstate - if it was triggered automatically by typing check if the chatbox is present
+                if ( mode == "automatic_typing" && ScreenshotWaitPixelCheck == true && (A_Now-lastEnterKeypress > ScreenshotChatboxGrace) )
+                    if ( PixelState.GetPixelGroupState("ChatBoxUnobstructed", pBitmap) == true )
+                        return PixelState.DestroyBitmap(pBitmap)
+
+                ;;  pixelstate - timelapse should only take screenshots in realms
+                ;;  pixels not yet mapped
+                ;;if mode == "automatic_timelapse"
+                ;;    if PixelState.GetPixelGroupState("TimelapseControl", pBitmap) == true
+                ;;        return false
+
+                Width := Gdip_GetImageWidth(pBitmap), Height := Gdip_GetImageHeight(pBitmap)
+                G := Gdip_GraphicsFromImage(pBitmap)
+                Gdip_DrawImage(G, pBitmap, 0, 0, Round(Width), Round(Height), 0, 0, Width, Height)
+
+                ;;  sleep for specified time before beginning image processing and disk activity
+                Sleep ScreenshotSleepTimeout*1000
+
+                ;;;;  prepare screenshot filters
+
+                ;;  maybe the user knows better and provided their own
+                if ( !Adjustments && ScreenshotFilterAdjustments ) {
+                    Adjustments := ScreenshotFilterAdjustments
+                }
+
+                ;;  the default action is to do no adjustments
+                if ( !Adjustments ) {
+                    Adjustments := {"x": 0, "y": 0, "width": 0, "height": 0}
+                }
+
+                ;;  create the filter brush
+                filterBrush := {"default": Gdip_BrushCreateSolid(0xff000000)}
+
+                ;;  process all active filters
+                for index, element in ScreenshotRectangles {
+
+                    ;;  check if there is a custom color provided
+                    if ( element["color"] && !filterBrush[element["color"]] ) {
+
+                        element["color"] := "0xff" . element["color"]
+                        filterBrush[element["color"]] := Gdip_BrushCreateSolid(element["color"])
+
+                    }
+
+                    ;;  set our default color
+                    if ( !element["color"] ) {
+                        element["color"] := "default"
+                    }
+
+                    ;;  only process filters if they're configured for this game window
+                    if ( element[GameWindow] ) {
+
+                        Dimensions := element[GameWindow][ScreenMode]
+
+                        ;;  only run positions thru the adjustment system if they're percentage-based
+                        ;;  absolutes can be passed through as-is where x,y > 1,1
+                        if ( Dimensions["x"] > 1 && Dimensions["y"] > 1 ) {
+
+                            pos := {"x": Dimensions["x"], "y": Dimensions["y"], "w": Dimensions["width"], "h": Dimensions["height"]}
+
+                        } else {
+
+                            pos := this.ScreenShotGeneratePositions(Width, Height, Dimensions, Adjustments)
+
+                        }
+
+                        Gdip_FillRectangle(G, filterBrush[element["color"]], pos["x"], pos["y"], pos["w"], pos["h"])
+
+                    }
+
+                }
+
+                ;;;;  draw watermark
+                WatermarkObject := WatermarkPos[GameWindow][ScreenMode]
+                Gdip_TextToGraphics(G, "JROTMG-AHK/Screenshot", "X" . Round(WatermarkObject["x"]*Width) . " Y" . Round(WatermarkObject["y"]*Height) . " C" . WatermarkTextColor)
+
+                ;;;;  clean up brushes
+                for index, element in filterBrush {
+                    Gdip_DeleteBrush(element)
+                }
+
+                ;;;;  save file to disk
+                DestinationFolder := ( TimelapseFolder == false ) ? ScreenshotFolder : TimelapseFolder
+                Gdip_SaveBitmapToFile(pBitmap, DestinationFolder "\" A_YYYY "-" A_MM "-" A_DD "-" A_Hour "-" A_Min "-" A_Sec ".jpg", ScreenshotImageQuality)
+
+                ;;  cleanup
+                Gdip_DeleteGraphics(G)
+                if BitmapProvided == false
+                    Gdip_DisposeImage(pBitmap)
+
+            } else if ( ScreenshotImageMode == "steam" ) {
+
+                Send, {F12}
+
+            }
+
+            return true
+
+        }
+
     }
 
 }
