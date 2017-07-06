@@ -4,9 +4,63 @@
 
 class PixelState {
 
-    static Debug := true
+    static Debug := false
     static LogFolder := "logs\PixelState"
     static LogFile := "pixelstate-main.log"
+    static GameStates := ["InRealm", "InNexus", "InChar", "InBlackLoading", "InVault", "InMain", "InOptions"]
+
+    ;;  run a task to check if jobs need to be ran
+    BackgroundTasksMain() {
+
+        global PixelTrack
+
+        ;;  destroy the old screenshot
+        if ( PixelTrack.SharedBitmap != false )
+            this.DestroyBitmap(PixelTrack.SharedBitmap)
+
+        ;;  take a new screenshot
+        PixelTrack.SharedBitmap := this.GetBitmap()
+        PixelTrack.SharedBitmapTime := A_Now
+
+        ;;;;  process actions
+
+        ;;  get current game location
+        PixelTrack.CurrentLocation := this.GetGameState(PixelTrack.SharedBitmap)
+
+        return true
+
+    }
+
+    ;;  determine the current state of the game (which screen the user is on)
+    GetGameState(ByRef pBitmap=false) {
+
+        BitmapProvided := pBitmap
+
+        if ( pBitmap == false )
+            pBitmap := this.GetBitmap()
+
+        ;;  loop thru each state
+        for index, StateName in this.GameStates {
+
+            ;;  check the group state
+            if ( this.GetPixelGroupState(StateName, pBitmap) == true ) {
+
+                if ( BitmapProvided == false )
+                    this.DestroyBitmap(pBitmap)
+
+                return StateName
+
+            }
+
+        }
+
+        if ( BitmapProvided == false )
+            this.DestroyBitmap(pBitmap)
+
+        ;;  no states were valid
+        return "Unknown"
+
+    }
 
     ;;  return a bitmap of the active window
     GetBitmap() {
@@ -19,10 +73,35 @@ class PixelState {
     ;;  complete image debug processing and dispose the screenshot
     DestroyBitmap(ByRef pBitmap) {
 
-        if ( this.Debug == true )
+        global PixelTrack
+        if ( this.Debug == true && PixelTrack.debug[pBitmap] ) {
+
+            ;;  add the pixels
+            for index, PixelData in PixelTrack.debug[pBitmap] {
+
+                Gdip_SetPixel(pBitmap, PixelData.x, PixelData.y, PixelData.argb)
+
+            }
+
             this.SaveImage(pBitmap)
+            PixelTrack.debug[pBitmap] := ""
+
+        }
 
         Gdip_DisposeImage(pBitmap)
+
+    }
+
+    ;;  change the specified pixel to the new color
+    SetPixel(ByRef pBitmap, a, r, g, b, x, y) {
+
+        global PixelTrack
+        argb := Gdip_ToARGB(a, r, g, b)
+
+        if ( !PixelTrack.debug[pBitmap] )
+            PixelTrack.debug[pBitmap] := []
+
+        PixelTrack.debug[pBitmap].push({"x": x, "y": y, "argb": argb})
 
     }
 
@@ -40,7 +119,7 @@ class PixelState {
 
         ;;  debugging
         if ( this.Debug == true )
-            this.SetPixel(pBitmap, 255, 0, 0, 0, x, y)
+            this.SetPixel(pBitmap, 255, 255, 255, 255, x, y)
 
         ;;  potential cleanup
         if ( BitmapProvided == false ) {
@@ -82,10 +161,10 @@ class PixelState {
 
         global PixelMap, WindowTitle
 
-        if ( PixelMap[PixelName] ) {
+        ScreenMode := this.tools.GetScreenMode(WindowTitle)
+        GameWindow := this.tools.GetGameWindow(WindowTitle)
+        if ( PixelMap[PixelName][GameWindow][ScreenMode] ) {
 
-            ScreenMode := this.tools.GetScreenMode(WindowTitle)
-            GameWindow := this.tools.GetGameWindow(WindowTitle)
             PixelData := PixelMap[PixelName][GameWindow][ScreenMode]
 
             ;;  relative positions are a float
@@ -109,8 +188,10 @@ class PixelState {
     ;;  determine if a pixel is "on" or not
     GetPixelState(PixelName, ByRef pBitmap=false, screenshot=false) {
 
-        global PixelMap
-        if ( PixelMap[PixelName] ) {
+        global PixelMap, WindowTitle
+        ScreenMode := this.tools.GetScreenMode(WindowTitle)
+        GameWindow := this.tools.GetGameWindow(WindowTitle)
+        if ( PixelMap[PixelName][GameWindow][ScreenMode] ) {
 
             MapData := PixelMap[PixelName]
             PixelData := this.GetPixelByName(PixelName, pBitmap)
@@ -165,9 +246,8 @@ class PixelState {
         BitmapProvided := pBitmap
 
         ;;  we should support multiple groups being specified, so let's convert it if it's a string
-        if ( PixelGroupNames.MinIndex() == "" ) {
+        if ( PixelGroupNames.MinIndex() == "" )
             PixelGroupNames := [PixelGroupNames]
-        }
 
         ;;  loop thru our groups list
         for index, PixelGroup in PixelGroupNames {
@@ -175,9 +255,8 @@ class PixelState {
             ;;  if the named group doesn't exist then abandon all hope
             if ( PixelGroups[PixelGroup] ) {
 
-                if ( pBitmap == false ) {
+                if ( pBitmap == false )
                     pBitmap := this.GetBitmap()
-                }
 
                 ;;  loop thru the group's members and check their values
                 for PixelName, ExpectedValue in PixelGroups[PixelGroup] {
@@ -186,24 +265,34 @@ class PixelState {
                     if ( PixelGroups[PixelName] ) {
 
                         ;;  same comments as in the else
-                        if ( this.GetPixelGroupState(PixelName, pBitmap) != ExpectedValue ) {
+                        result := this.GetPixelGroupState(PixelName, pBitmap)
+                        if ( result != ExpectedValue ) {
 
-                            if BitmapProvided == false
+                            if ( BitmapProvided == false )
                                 this.DestroyBitmap(pBitmap, screenshot)
 
-                            return false
+                            ;;  blank responses are sent in the event a named pixel doesn't exist
+                            if ( result == "" )
+                                return ""
+                            else
+                                return false
                         }
 
                     } else {
 
                         ;;  instant failure if any value doesn't match
                         ;;  in the near future let's support a failure option instead of just returning false every time
-                        if ( this.GetPixelState(PixelName, pBitmap) != ExpectedValue ) {
+                        result := this.GetPixelState(PixelName, pBitmap)
+                        if ( result != ExpectedValue ) {
 
-                            if BitmapProvided == false
+                            if ( BitmapProvided == false )
                                 this.DestroyBitmap(pBitmap, screenshot)
 
-                            return false
+                            ;;  blank responses are sent in the event a named pixel doesn't exist
+                            if ( result == "" )
+                                return ""
+                            else
+                                return false
                         }
 
                     }
@@ -212,7 +301,7 @@ class PixelState {
 
             } else {
 
-                if BitmapProvided == false
+                if ( BitmapProvided == false )
                     this.DestroyBitmap(pBitmap, screenshot)
 
                 return ""
@@ -221,7 +310,7 @@ class PixelState {
 
         }
 
-        if BitmapProvided == false
+        if ( BitmapProvided == false )
             this.DestroyBitmap(pBitmap, screenshot)
 
         ;;  it must have passed
@@ -234,14 +323,6 @@ class PixelState {
 
         Gdip_FromARGB(argb, A, R, G, B)
         return {"A": A, "R": R, "G": G, "B": B}
-
-    }
-
-    ;;  change the specified pixel to the new color
-    SetPixel(ByRef pBitmap, a, r, g, b, x, y) {
-
-        argb := Gdip_ToARGB(a, r, g, b)
-        Gdip_SetPixel(pBitmap, x, y, argb)
 
     }
 

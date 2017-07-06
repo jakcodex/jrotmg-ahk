@@ -1,5 +1,13 @@
 ;;  PixelState labels
 
+<^Numpad4::
+    if ( Debug == true && CheckRun() == true ) {
+
+        MsgBox % "Detected State: " . PixelTrack.CurrentLocation
+
+    }
+    Return
+
 ;;  prompt user for x,y and return pixel data
 <^Numpad5::
     if ( Debug == true && CheckRun() == true ) {
@@ -65,4 +73,10 @@
 ScreenCalibrationRequest:
     if ( CheckRun() == true )
         PixelState.tools.GetScreenPosDataByClick()
+    Return
+
+PixelStateBackgroundTasks:
+    if ( CheckRun() == true )
+        if ( PixelStateTasksFrequency > 0 )
+            PixelState.BackgroundTasksMain()
     Return

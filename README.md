@@ -277,6 +277,10 @@ ScreenshotCharacterFilterPositioning := {"windowed": {"width": 80, "height": 80}
 ;;  to disable the watermark, set opacity to 00
 WatermarkTextColor = BBFFFFFF
 
+;;;;  how frequently to run PixelState background jobs
+;;  accepts integers: 0-100 (0 disables)
+PixelStateTasksFrequency = 1
+
 ;;;;  enable or disable the nexus panic button (closes the game if triggered)
 ;;  accepts boolean: true, false
 NexusPanicEnabled := false
