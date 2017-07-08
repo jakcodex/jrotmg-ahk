@@ -1,5 +1,13 @@
 ;;  PixelState labels
 
+<^Numpad3::
+    if ( Debug == true && CheckRun() == true ) {
+
+        MsgBox % "HP State: " . PixelState.check.PlayerHP()
+
+    }
+    Return
+
 <^Numpad4::
     if ( Debug == true && CheckRun() == true ) {
 
@@ -78,5 +86,5 @@ ScreenCalibrationRequest:
 PixelStateBackgroundTasks:
     if ( CheckRun() == true )
         if ( PixelStateTasksFrequency > 0 )
-            PixelState.BackgroundTasksMain()
+            PixelState.BackgroundTasksMain({"Debug": false})
     Return

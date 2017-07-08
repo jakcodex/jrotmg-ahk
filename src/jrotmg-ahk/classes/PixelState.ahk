@@ -4,19 +4,24 @@
 
 class PixelState {
 
-    static Debug := false
+    static Debug := true
     static LogFolder := "logs\PixelState"
     static LogFile := "pixelstate-main.log"
     static GameStates := ["InRealm", "InNexus", "InChar", "InBlackLoading", "InVault", "InMain", "InOptions"]
 
     ;;  run a task to check if jobs need to be ran
-    BackgroundTasksMain() {
+    BackgroundTasksMain(options=false) {
 
         global PixelTrack
 
+        Debug := this.Debug
+        for key, value in options {
+            %key% := value
+        }
+
         ;;  destroy the old screenshot
         if ( PixelTrack.SharedBitmap != false )
-            this.DestroyBitmap(PixelTrack.SharedBitmap)
+            this.DestroyBitmap(PixelTrack.SharedBitmap, Debug)
 
         ;;  take a new screenshot
         PixelTrack.SharedBitmap := this.GetBitmap()
@@ -71,10 +76,13 @@ class PixelState {
     }
 
     ;;  complete image debug processing and dispose the screenshot
-    DestroyBitmap(ByRef pBitmap) {
+    DestroyBitmap(ByRef pBitmap, Debug="") {
 
         global PixelTrack
-        if ( this.Debug == true && PixelTrack.debug[pBitmap] ) {
+        if ( Debug == "" )
+            Debug := this.Debug
+
+        if ( Debug == true && PixelTrack.debug[pBitmap] ) {
 
             ;;  add the pixels
             for index, PixelData in PixelTrack.debug[pBitmap] {
@@ -241,7 +249,7 @@ class PixelState {
     ;;  return the overall state of a group of pixels
     GetPixelGroupState(PixelGroupNames, ByRef pBitmap=false, screenshot=false) {
 
-        global PixelGroups
+        global PixelGroups, PixelMap, JSON
 
         BitmapProvided := pBitmap
 
@@ -252,7 +260,7 @@ class PixelState {
         ;;  loop thru our groups list
         for index, PixelGroup in PixelGroupNames {
 
-            ;;  if the named group doesn't exist then abandon all hope
+            ;;  if the named group doesn't exist then maybe it was a custom list
             if ( PixelGroups[PixelGroup] ) {
 
                 if ( pBitmap == false )
@@ -299,12 +307,43 @@ class PixelState {
 
                 }
 
+            ;;  {"pixelname": value, ...} maybe?
             } else {
 
-                if ( BitmapProvided == false )
-                    this.DestroyBitmap(pBitmap, screenshot)
+                LoopCount := 0
+                for PixelName, ExpectedValue in PixelGroup {
 
-                return ""
+                    ;;  the named pixel must exist
+                    LoopCount++
+                    if ( PixelMap[PixelName] ) {
+
+                        result := this.GetPixelState(PixelName, pBitmap)
+                        if ( result != ExpectedValue ) {
+
+                            if ( BitmapProvided == false )
+                                this.DestroyBitmap(pBitmap, screenshot)
+
+                            ;;  blank responses are sent in the event a named pixel doesn't exist
+                            if ( result == "" )
+                                return ""
+                            else
+                                return false
+                        }
+
+                    } else {
+
+                        if ( BitmapProvided == false )
+                            this.DestroyBitmap(pBitmap, screenshot)
+
+                        return ""
+
+                    }
+
+                }
+
+                ;;  did not understand the request
+                if ( LoopCount == 0 )
+                    return ""
 
             }
 
@@ -629,6 +668,80 @@ class PixelState {
             }
 
             return true
+
+        }
+
+    }
+
+    class check {
+
+        PlayerHP() {
+
+            global JSON, PixelTrack
+            pBitmap := PixelTrack.SharedBitmap
+            Pixels := ["hp_0p", "hp_10p", "hp_20p", "hp_30p", "hp_40p", "hp_50p","hp_60p", "hp_70p","hp_80p", "hp_90p","hp_100p"]
+            HPIndex := false
+            LowIndex := false
+            ControlPixels := PixelState.GetPixelGroupState({"controlpoint75_4": true, "controlpoint75_5": true, "controlpoint75_6": true}, pBitmap)
+            ObstructionCheck := false
+
+            ;;  first pass - gather pixel data and check if we need to look for obstruction
+            for index, PixelName in Pixels {
+
+                PixelData := PixelState.GetPixelState(PixelName, pBitmap)
+
+                ;;  track the lowest pixel to fail
+                if ( PixelData == false && LowIndex == false )
+                    LowIndex := index
+
+                ;;  no obstruction then no concerns
+                if ( PixelData == true && ControlPixels == true )
+                    HPIndex := index
+
+                ;;  pixeldata and control pixels missing indicates an obstruction
+                if ( PixelData == false && ControlPixels == false )
+                    ObstructionCheck := true
+
+                ;;  previous obstructions might mean higher pixels show up
+                if ( PixelData == true && (ObstructionCheck == true || ControlPixels == false) ) {
+
+                    ;;  lower pixels were found but a higher one was
+                    ;;  obstruction is resolved
+                    if ( index > HPIndex ) {
+
+                        ;;  reset LowIndex is this is higher
+                        if ( index >= LowIndex )
+                            LowIndex := false
+
+                        HPIndex := index
+                        ObstructionCheck := false
+
+                    }
+
+                }
+
+            }
+
+            PixelTrack.DestroyBitmap(pBitmap)
+
+            ;;  the actual default value is the maxindex of the pixels object
+            if ( LowIndex == false )
+                LowIndex := Pixels.MaxIndex()
+
+            ;;  no pixels were detected
+            if ( HPIndex == false )
+                ObstructionCheck := true
+
+            ;;  no obstruction, full hp bar, or all further hp pixels are off
+            if ( ObstructionCheck == false || HPIndex == Pixels.MaxIndex() || (HPIndex != false && HPIndex <= LowIndex) ) {
+
+                return Round((HPIndex/Pixels.MaxIndex())*100)
+
+            } else {
+
+                return ""
+
+            }
 
         }
 

@@ -10,11 +10,19 @@ PixelMap.settings.RGBTolerance := 10
 ;;  PixelName
 
 ;;  hp bar positions
-PixelState.PixelMapConfig("hp_100p", ["flash", "steam"], "fullscreen", 0.983, 0.426, 4292883508)
-PixelState.PixelMapConfig("hp_75p", ["flash", "steam"], "fullscreen", 0.929, 0.426, 4292883508)
-PixelState.PixelMapConfig("hp_50p", ["flash", "steam"], "fullscreen", 0.873, 0.426, 4292883508)
-PixelState.PixelMapConfig("hp_25p", ["flash", "steam"], "fullscreen", 0.819, 0.426, 4292883508)
-PixelState.PixelMapConfig("hp_0p", ["flash", "steam"], "fullscreen", 0.766, 0.426, 4292883508)
+PixelState.PixelMapConfig("hp_100p", ["flash", "steam"], "fullscreen", 0.9835, 0.4250, 4292883508)
+PixelState.PixelMapConfig("hp_90p", ["flash", "steam"], "fullscreen", 0.9618, 0.4250, 4292883508)
+PixelState.PixelMapConfig("hp_80p", ["flash", "steam"], "fullscreen", 0.9400, 0.4250, 4292883508)
+PixelState.PixelMapConfig("hp_75p", ["flash", "steam"], "fullscreen", 0.9291, 0.4250, 4292883508)
+PixelState.PixelMapConfig("hp_70p", ["flash", "steam"], "fullscreen", 0.9183, 0.4250, 4292883508)
+PixelState.PixelMapConfig("hp_60p", ["flash", "steam"], "fullscreen", 0.8965, 0.4250, 4292883508)
+PixelState.PixelMapConfig("hp_50p", ["flash", "steam"], "fullscreen", 0.8748, 0.4250, 4292883508)
+PixelState.PixelMapConfig("hp_40p", ["flash", "steam"], "fullscreen", 0.8530, 0.4250, 4292883508)
+PixelState.PixelMapConfig("hp_30p", ["flash", "steam"], "fullscreen", 0.8313, 0.4250, 4292883508)
+PixelState.PixelMapConfig("hp_25p", ["flash", "steam"], "fullscreen", 0.8204, 0.4250, 4292883508)
+PixelState.PixelMapConfig("hp_20p", ["flash", "steam"], "fullscreen", 0.8095, 0.4250, 4292883508)
+PixelState.PixelMapConfig("hp_10p", ["flash", "steam"], "fullscreen", 0.7878, 0.4250, 4292883508)
+PixelState.PixelMapConfig("hp_0p", ["flash", "steam"], "fullscreen", 0.7660, 0.4250, 4292883508)
 
 ;;
 ;;  control points
@@ -40,13 +48,16 @@ PixelState.PixelMapConfig("chatbox_side2", ["flash", "steam"], "fullscreen", 0.7
 PixelState.PixelMapConfig("chatbox_top6", ["flash", "steam"], "fullscreen", 0.700, 0.9667, 4294967295)
 
 ;;  vertical black border separating the game from right column
-PixelState.PixelMapConfig("controlpoint75_1", ["flash", "steam"], "fullscreen", 0.7495, 0.100, 4278190081, 0, 0)
-PixelState.PixelMapConfig("controlpoint75_2", ["flash", "steam"], "fullscreen", 0.7495, 0.250, 4278190081, 0, 0)
-PixelState.PixelMapConfig("controlpoint75_3", ["flash", "steam"], "fullscreen", 0.7495, 0.400, 4278190081, 0, 0)
-PixelState.PixelMapConfig("controlpoint75_4", ["flash", "steam"], "fullscreen", 0.7495, 0.550, 4278190081, 0, 0)
-PixelState.PixelMapConfig("controlpoint75_5", ["flash", "steam"], "fullscreen", 0.7495, 0.700, 4278190081, 0, 0)
-PixelState.PixelMapConfig("controlpoint75_6", ["flash", "steam"], "fullscreen", 0.7495, 0.850, 4278190081, 0, 0)
-PixelState.PixelMapConfig("controlpoint75_7", ["flash", "steam"], "fullscreen", 0.7495, 0.950, 4278190081, 0, 0)
+PixelState.PixelMapConfig("controlpoint75_1", ["flash", "steam"], "fullscreen", 0.7495, 0.050, 4278190081, 15)
+PixelState.PixelMapConfig("controlpoint75_2", ["flash", "steam"], "fullscreen", 0.7495, 0.200, 4278190081, 15)
+PixelState.PixelMapConfig("controlpoint75_3", ["flash", "steam"], "fullscreen", 0.7495, 0.300, 4278190081, 15)
+PixelState.PixelMapConfig("controlpoint75_4", ["flash", "steam"], "fullscreen", 0.7495, 0.400, 4278190081, 15)
+PixelState.PixelMapConfig("controlpoint75_5", ["flash", "steam"], "fullscreen", 0.7495, 0.500, 4278190081, 15)
+PixelState.PixelMapConfig("controlpoint75_6", ["flash", "steam"], "fullscreen", 0.7495, 0.600, 4278190081, 15)
+PixelState.PixelMapConfig("controlpoint75_7", ["flash", "steam"], "fullscreen", 0.7495, 0.700, 4278190081, 15)
+PixelState.PixelMapConfig("controlpoint75_8", ["flash", "steam"], "fullscreen", 0.7495, 0.800, 4278190081, 15)
+PixelState.PixelMapConfig("controlpoint75_9", ["flash", "steam"], "fullscreen", 0.7495, 0.900, 4278190081, 15)
+PixelState.PixelMapConfig("controlpoint75_10", ["flash", "steam"], "fullscreen", 0.7495, 0.950, 4278190081, 15)
 
 ;;
 ;;  ui sprites
@@ -151,14 +162,14 @@ PixelGroups := {}
 
 ;;  hp bar states
 PixelGroups.HPBarRightExposed := {"hp_100p": true} ;; could be useful for identifying when the hp bar is obstructed
-PixelGroups.HPBarFull := {"hp_100p": true, "hp_75p": true, "hp_50p": true, "hp_25p": true, "hp_0p": true}
+PixelGroups.HPBarFull := {"hp_100p": true, "hp_90p": true, "hp_80p": true, "hp_70p": true, "hp_60p": true, "hp_50p": true, "hp_40p": true, "hp_30p": true, "hp_20p": true, "hp_10p": true, "hp_0p": true}
 PixelGroups.HPBar75 := {"hp_100p": false, "hp_75p": true, "hp_50p": true, "hp_25p": true, "hp_0p": true}
 PixelGroups.HPBar50 := {"hp_100p": false, "hp_75p": false, "hp_50p": true, "hp_25p": true, "hp_0p": true}
 PixelGroups.HPBar25 := {"hp_100p": false, "hp_75p": false, "hp_50p": false, "hp_25p": true, "hp_0p": true}
 PixelGroups.HPBar0 := {"hp_100p": false, "hp_75p": false, "hp_50p": false, "hp_25p": false, "hp_0p": true}
 
 ;;  in-game control states
-PixelGroups.controlpoint75_full := {"controlpoint75_1": true, "controlpoint75_2": true, "controlpoint75_3": true, "controlpoint75_4": true, "controlpoint75_5": true, "controlpoint75_6": true, "controlpoint75_7": true}
+PixelGroups.controlpoint75 := {"controlpoint75_1": true, "controlpoint75_2": true, "controlpoint75_3": true, "controlpoint75_4": true, "controlpoint75_5": true, "controlpoint75_6": true, "controlpoint75_7": true, "controlpoint75_8": true, "controlpoint75_9": true, "controlpoint75_10": true}
 
 ;;  various realm ui states
 PixelGroups.AccountGold := {"account_gold1": true, "account_gold2": true}
