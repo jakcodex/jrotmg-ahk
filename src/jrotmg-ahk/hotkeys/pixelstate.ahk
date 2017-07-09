@@ -1,4 +1,6 @@
-;;  PixelState labels
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  PixelState tools
+;;;;;;;;;;;;;;;;;;;;;;;;;
 
 <^Numpad3::
     if ( Debug == true && CheckRun() == true ) {
@@ -70,6 +72,10 @@
     }
     Return
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  pixelstate labels
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ScreenCalibrationRequest:
     if ( CheckRun() == true )
         PixelState.tools.GetScreenPosDataByClick()
@@ -84,7 +90,7 @@ PixelStateBackgroundTasks:
 PixelStateLowHPBeep:
     if ( CheckRun() == true ) {
 
-        SoundPlay, src/jrotmg-ahk/media/OOT_LowHealth.wav
+        SoundPlay, % LowHPBeepAudio
 
     }
     Return

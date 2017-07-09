@@ -5,6 +5,7 @@
 + Added configuration key "PixelStateTasksFrequency" which controls how often PixelState background jobs run in seconds
 + Added configuration key "TimelapseSharedBitmap" which controls whether or not Timelapse uses the shared bitmap
 + Added configuration key "LowHPBeep" which specifies the HP percentag at which to begin playing the low HP beep
++ Added configuration key "LowHPBeepAudio" which specifies the audio file to play during low hp
 + Added configuration key "Debug" which toggles Debug logging
 + Hotkey 'LCtrl+Numpad7': Activate PixelState Screen Calibration
 + PixelState: Get pixel data by absolute, relative, and named configurations
