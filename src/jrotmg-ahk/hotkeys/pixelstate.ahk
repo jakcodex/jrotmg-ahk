@@ -3,15 +3,7 @@
 <^Numpad3::
     if ( Debug == true && CheckRun() == true ) {
 
-        MsgBox % "HP State: " . PixelState.check.PlayerHP()
-
-    }
-    Return
-
-<^Numpad4::
-    if ( Debug == true && CheckRun() == true ) {
-
-        MsgBox % "Detected State: " . PixelTrack.CurrentLocation
+        MsgBox % "HP State: " . PixelState.CurrentHP . "`nCurrent Location: " . PixelTrack.CurrentLocation
 
     }
     Return
@@ -87,4 +79,12 @@ PixelStateBackgroundTasks:
     if ( CheckRun() == true )
         if ( PixelStateTasksFrequency > 0 )
             PixelState.BackgroundTasksMain({"Debug": false})
+    Return
+
+PixelStateLowHPBeep:
+    if ( CheckRun() == true ) {
+
+        SoundPlay, src/jrotmg-ahk/media/OOT_LowHealth.wav
+
+    }
     Return

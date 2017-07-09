@@ -201,4 +201,4 @@ PixelGroups.GreenScreen := {"HomeVolume": true, "LoadingBar": true, "AccountFame
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  PixelTrack Object
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
-PixelTrack := {"debug": {}, "CurrentLocation": "Init"}
+PixelTrack := {"debug": {}, "CurrentLocation": "Init", "LowHPBeep": false, "Jobs": {}}

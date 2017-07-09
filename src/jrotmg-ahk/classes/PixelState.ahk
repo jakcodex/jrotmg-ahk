@@ -12,7 +12,7 @@ class PixelState {
     ;;  run a task to check if jobs need to be ran
     BackgroundTasksMain(options=false) {
 
-        global PixelTrack
+        global PixelTrack, LowHPBeep
 
         Debug := this.Debug
         for key, value in options {
@@ -32,6 +32,34 @@ class PixelState {
         ;;  get current game location
         PixelTrack.CurrentLocation := this.GetGameState(PixelTrack.SharedBitmap)
 
+        ;;  get current hp
+        PixelTrack.CurrentHP := this.check.PlayerHP(PixelTrack.SharedBitmap)
+
+        ;;  process low hp beep
+        if ( LowHPBeep > 0 && RegExMatch(PixelTrack.CurrentHP, "^[0-9]*$") ) {
+
+            if ( PixelTrack.CurrentHP <= LowHPBeep ) {
+
+                if ( PixelTrack.LowHPBeep == false ) {
+
+                    PixelTrack.LowHPBeep := true
+                    SetTimer, PixelStateLowHPBeep, 1000
+
+                }
+
+            } else {
+
+                if ( PixelTrack.LowHPBeep == true ) {
+
+                    PixelTrack.LowHPBeep := false
+                    SetTimer, PixelStateLowHPBeep, off
+
+                }
+
+            }
+
+        }
+
         return true
 
     }
@@ -39,7 +67,7 @@ class PixelState {
     ;;  determine the current state of the game (which screen the user is on)
     GetGameState(ByRef pBitmap=false) {
 
-        BitmapProvided := pBitmap
+        BitmapProvided := ( pBitmap == false ) ? false : true
 
         if ( pBitmap == false )
             pBitmap := this.GetBitmap()
@@ -117,7 +145,7 @@ class PixelState {
     GetPixel(x, y, ByRef pBitmap=false, screenshot=false) {
 
         ;;  grab the pixel
-        BitmapProvided := pBitmap
+        BitmapProvided := ( pBitmap == false ) ? false : true
         if ( pBitmap == false )
             pBitmap := this.GetBitmap()
 
@@ -251,7 +279,7 @@ class PixelState {
 
         global PixelGroups, PixelMap, JSON
 
-        BitmapProvided := pBitmap
+        BitmapProvided := ( pBitmap == false ) ? false : true
 
         ;;  we should support multiple groups being specified, so let's convert it if it's a string
         if ( PixelGroupNames.MinIndex() == "" )
@@ -554,7 +582,7 @@ class PixelState {
         TakeScreenshot(mode=false, ByRef pBitmap=false, excludeFilters=false) {
 
             ;;  defaults
-            global pToken, ScreenshotSleepTimeout, ScreenshotFilterAdjustments, ScreenshotRectangles, WatermarkPos, WatermarkTextColor, ScreenshotFolder, TimelapseFolder, DestinationFolder, ScreenshotImageQuality, ScreenshotImageMode, ScreenshotWaitPixelCheck, ScreenshotChatboxGrace, lastEnterKeypress
+            global pToken, ScreenshotSleepTimeout, ScreenshotFilterAdjustments, ScreenshotRectangles, WatermarkPos, WatermarkTextColor, ScreenshotFolder, TimelapseFolder, DestinationFolder, ScreenshotImageQuality, ScreenshotImageMode, ScreenshotWaitPixelCheck, ScreenshotChatboxGrace, lastEnterKeypress, TimelapseSharedBitmap
 
             if ( ScreenshotImageMode == "direct" ) {
 
@@ -563,9 +591,17 @@ class PixelState {
                 WinGetTitle, WindowTitle, A
 
                 ;;  screenshot mode info
-                BitmapProvided := pBitmap
+                BitmapProvided := ( pBitmap == false ) ? false : true
                 ScreenMode := this.GetScreenMode(WindowTitle)
                 GameWindow := this.GetGameWindow(WindowTitle)
+
+                ;;  timelapse can optionally use the most recent shared bitmap
+                if ( mode == "automatic_timelapse" && TimelapseSharedBitmap == true && BitmapProvided == false ) {
+
+                    pBitmap := PixelTrack.SharedBitmap
+                    BitmapProvided := true
+
+                }
 
                 ;;  create the base image in memory
                 if ( pBitmap == false )

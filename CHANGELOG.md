@@ -3,6 +3,8 @@
 + Added configuration key "ScreenshotChatboxGrace" which sets the grace time for the chatbox invalidating screenshots
 + Added configuration key "WatermarkTextColor" which controls the color of the watermark text
 + Added configuration key "PixelStateTasksFrequency" which controls how often PixelState background jobs run in seconds
++ Added configuration key "TimelapseSharedBitmap" which controls whether or not Timelapse uses the shared bitmap
++ Added configuration key "LowHPBeep" which specifies the HP percentag at which to begin playing the low HP beep
 + Added configuration key "Debug" which toggles Debug logging
 + Hotkey 'LCtrl+Numpad7': Activate PixelState Screen Calibration
 + PixelState: Get pixel data by absolute, relative, and named configurations
@@ -10,6 +12,7 @@
 + Screenshot typing detection now optionally uses PixelState to check for an open chat box
 + Screenshots now have a watermark placed in the upper right corner of the minimap
 + Screen calibration system identifies pixel and positional data for mouse clicks when activated
++ Timelapse now uses the SharedBitmap by default rather than taking its own screenshot
 + Logging system added for debugging 
 + Plenty of housekeeping
 
