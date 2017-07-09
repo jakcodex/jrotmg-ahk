@@ -38,7 +38,7 @@ class PixelState {
             PixelTrack.CurrentHP := this.check.PlayerHP(PixelTrack.SharedBitmap)
 
             ;;  process low hp beep
-            if ( (LowHPBeep > 0 && RegExMatch(PixelTrack.CurrentHP, "^[0-9]*$") && PixelTrack.CurrentLocation == "InNexus") || PixelTrack.CurrentHP == "" ) {
+            if ( (LowHPBeep > 0 && RegExMatch(PixelTrack.CurrentHP, "^[0-9]*$") && PixelTrack.CurrentLocation == "InRealm") || PixelTrack.CurrentHP == "" ) {
 
                 ;;  turn on the beep if hp is low and not unknown
                 if ( PixelTrack.CurrentHP <= LowHPBeep && PixelTrack.CurrentHP != "") {

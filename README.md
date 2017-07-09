@@ -280,6 +280,10 @@ ScreenshotCharacterFilterPositioning := {"windowed": {"width": 80, "height": 80}
 ;;  to disable the watermark, set opacity to 00
 WatermarkTextColor = BBFFFFFF
 
+;;;;  control whether or not timelapse uses the shared bitmap
+;;  accepts boolean: true, false
+TimelapseSharedBitmap := true
+
 ;;;;  how frequently to run PixelState background jobs
 ;;  accepts integers: 0-100 (0 disables)
 PixelStateTasksFrequency = 1
@@ -302,6 +306,10 @@ StoragePath = %APPDATA%\jrotmg-ahk
 
 ;;;;  debugging mode enabled or not
 Debug := true
+
+;;;;  play low hp beep at this hp value (out of 100)
+;;  accepts integers, 0-100 (0 disables)
+LowHPBeep := 20
 ```
 
 [pixelstate-config]: src/jrotmg-ahk/etc/pixelstate-config.ahk "PixelState Configuration"
