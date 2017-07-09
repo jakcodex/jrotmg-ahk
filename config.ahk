@@ -126,4 +126,4 @@ Debug := true
 
 ;;;;  play low hp beep at this hp value (out of 100)
 ;;  accepts integers, 0-100 (0 disables)
-LowHPBeep := 20
+LowHPBeep := 40

@@ -7,7 +7,7 @@ CheckRun() {
 
 	global GameProcessName, ROTMGWindowName, WindowTitle
 	WinGetTitle, CurrentWindowTitle, A
-	FoundPos := RegExMatch(CurrentWindowTitle, "(Realm of the Mad God|Adobe Flash Player)")
+	FoundPos := RegExMatch(CurrentWindowTitle, "^(Realm of the Mad God|Adobe Flash Player \d*?)$")
 	if ( FoundPos > 0 ) {
 
         WindowTitle := CurrentWindowTitle

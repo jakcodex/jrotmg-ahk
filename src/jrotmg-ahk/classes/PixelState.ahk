@@ -14,45 +14,50 @@ class PixelState {
 
         global PixelTrack, LowHPBeep
 
-        Debug := this.Debug
-        for key, value in options {
-            %key% := value
-        }
+        if ( CheckRun() == true ) {
 
-        ;;  destroy the old screenshot
-        if ( PixelTrack.SharedBitmap != false )
-            this.DestroyBitmap(PixelTrack.SharedBitmap, Debug)
+            Debug := this.Debug
+            for key, value in options {
+                %key% := value
+            }
 
-        ;;  take a new screenshot
-        PixelTrack.SharedBitmap := this.GetBitmap()
-        PixelTrack.SharedBitmapTime := A_Now
+            ;;  destroy the old screenshot
+            if ( PixelTrack.SharedBitmap != false )
+                this.DestroyBitmap(PixelTrack.SharedBitmap, Debug)
 
-        ;;;;  process actions
+            ;;  take a new screenshot
+            PixelTrack.SharedBitmap := this.GetBitmap()
+            PixelTrack.SharedBitmapTime := A_Now
 
-        ;;  get current game location
-        PixelTrack.CurrentLocation := this.GetGameState(PixelTrack.SharedBitmap)
+            ;;;;  process actions
 
-        ;;  get current hp
-        PixelTrack.CurrentHP := this.check.PlayerHP(PixelTrack.SharedBitmap)
+            ;;  get current game location
+            PixelTrack.CurrentLocation := this.GetGameState(PixelTrack.SharedBitmap)
 
-        ;;  process low hp beep
-        if ( LowHPBeep > 0 && RegExMatch(PixelTrack.CurrentHP, "^[0-9]*$") ) {
+            ;;  get current hp
+            PixelTrack.CurrentHP := this.check.PlayerHP(PixelTrack.SharedBitmap)
 
-            if ( PixelTrack.CurrentHP <= LowHPBeep ) {
+            ;;  process low hp beep
+            if ( (LowHPBeep > 0 && RegExMatch(PixelTrack.CurrentHP, "^[0-9]*$") && PixelTrack.CurrentLocation == "InNexus") || PixelTrack.CurrentHP == "" ) {
 
-                if ( PixelTrack.LowHPBeep == false ) {
+                ;;  turn on the beep if hp is low and not unknown
+                if ( PixelTrack.CurrentHP <= LowHPBeep && PixelTrack.CurrentHP != "") {
 
-                    PixelTrack.LowHPBeep := true
-                    SetTimer, PixelStateLowHPBeep, 1000
+                    if ( PixelTrack.LowHPBeep == false ) {
 
-                }
+                        PixelTrack.LowHPBeep := true
+                        SetTimer, PixelStateLowHPBeep, 1000
 
-            } else {
+                    }
 
-                if ( PixelTrack.LowHPBeep == true ) {
+                } else {
 
-                    PixelTrack.LowHPBeep := false
-                    SetTimer, PixelStateLowHPBeep, off
+                    if ( PixelTrack.LowHPBeep == true ) {
+
+                        PixelTrack.LowHPBeep := false
+                        SetTimer, PixelStateLowHPBeep, off
+
+                    }
 
                 }
 

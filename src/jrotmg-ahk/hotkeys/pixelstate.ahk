@@ -3,7 +3,7 @@
 <^Numpad3::
     if ( Debug == true && CheckRun() == true ) {
 
-        MsgBox % "HP State: " . PixelState.CurrentHP . "`nCurrent Location: " . PixelTrack.CurrentLocation
+        MsgBox % "HP State: " . PixelTrack.CurrentHP . "`nCurrent Location: " . PixelTrack.CurrentLocation
 
     }
     Return

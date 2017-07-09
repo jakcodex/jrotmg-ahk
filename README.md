@@ -161,8 +161,11 @@ configuration. This can be located in the file [src/jrotmg-ahk/etc/pixelstate-co
 While it shouldn't be necessary, in the event you need to adjust the pixel positions then use Screen Calibration and 
 update the appropriate values. Eventually this will be automated a bit more (re: much easier).
 
+### Low HP Beep
+Plays an audible alert when your HP is low. Currently enabled by default.
+
 #####  Planned Upcoming Features
-1. Low HP Beep
+1. Choice of Low HP beep audio
 2. 0% HP "Finish Him!"
 3. Detect drowning and play Sonic the Hedgehog drowning song near death
 
