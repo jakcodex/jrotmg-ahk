@@ -11,9 +11,12 @@
 + PixelState: Get pixel data by absolute, relative, and named configurations
 + Screenshot functions integrated into PixelState
 + Screenshot typing detection now optionally uses PixelState to check for an open chat box
++ Screenshot Rectangles vastly simplified 
 + Screenshots now have a watermark placed in the upper right corner of the minimap
++ Screenshots in windowed mode now contain no process window borders
 + Screen calibration system identifies pixel and positional data for mouse clicks when activated
 + Timelapse now uses the SharedBitmap by default rather than taking its own screenshot
++ Low HP Beep works and can play custom files
 + Logging system added for debugging 
 + Plenty of housekeeping
 

@@ -7,7 +7,7 @@ class PixelState {
     static Debug := true
     static LogFolder := "logs\PixelState"
     static LogFile := "pixelstate-main.log"
-    static GameStates := ["InRealm", "InNexus", "InChar", "InBlackLoading", "InVault", "InMain", "InOptions"]
+    static GameStates := ["InRealm", "InNexus", "InChar", "InBlackLoading", "InVault", "InMain", "InGreen", "InOptions"]
 
     ;;  run a task to check if jobs need to be ran
     BackgroundTasksMain(options=false) {
@@ -104,7 +104,17 @@ class PixelState {
     GetBitmap() {
 
         WinGetPos, X, Y, Width, Height, A
-        return Gdip_BitmapFromScreen(X "|" Y "|" Width "|" Height)
+        GameWindow := this.tools.GetGameWindow()
+        ScreenMode := this.tools.GetScreenMode()
+
+        if ( ScreenMode == false || ScreenMode == "fullscreen" )
+            return Gdip_BitmapFromScreen(X "|" Y "|" Width "|" Height)
+
+        if ( ScreenMode == "windowed" && GameWindow == "steam" )
+            return Gdip_BitmapFromScreen(Round(X+8) . "|" . Round(Y+30) . "|800|600")
+
+        if ( ScreenMode == "windowed" && GameWindow == "flash" )
+            return Gdip_BitmapFromScreen(Round(X+8) . "|" . Round(Y+51) . "|800|600")
 
     }
 
@@ -200,13 +210,11 @@ class PixelState {
     ;;  determine x,y coordinates via a named entry in the PixelMap and forward to GetPixelByPos
     GetPixelByName(PixelName, ByRef pBitmap=false, screenshot=false) {
 
-        global PixelMap, WindowTitle
+        global PixelMap
 
-        ScreenMode := this.tools.GetScreenMode(WindowTitle)
-        GameWindow := this.tools.GetGameWindow(WindowTitle)
-        if ( PixelMap[PixelName][GameWindow][ScreenMode] ) {
+        if ( PixelMap[PixelName] ) {
 
-            PixelData := PixelMap[PixelName][GameWindow][ScreenMode]
+            PixelData := PixelMap[PixelName].pos
 
             ;;  relative positions are a float
             if ( RegExMatch(PixelData["x"], "^0\.[0-9]{1,4}$") )
@@ -229,10 +237,8 @@ class PixelState {
     ;;  determine if a pixel is "on" or not
     GetPixelState(PixelName, ByRef pBitmap=false, screenshot=false) {
 
-        global PixelMap, WindowTitle
-        ScreenMode := this.tools.GetScreenMode(WindowTitle)
-        GameWindow := this.tools.GetGameWindow(WindowTitle)
-        if ( PixelMap[PixelName][GameWindow][ScreenMode] ) {
+        global PixelMap
+        if ( PixelMap[PixelName] ) {
 
             MapData := PixelMap[PixelName]
             PixelData := this.GetPixelByName(PixelName, pBitmap)
@@ -430,7 +436,7 @@ class PixelState {
     }
 
     ;;  add data to the pixel map
-    PixelMapConfig(PixelName, GameWindowList, ScreenModeList, x, y, argb=false, RGBTolerance=false, ARGBTolerance=false) {
+    PixelMapConfig(PixelName, x, y, argb=false, RGBTolerance=false, ARGBTolerance=false) {
 
         global PixelMap
 
@@ -453,15 +459,6 @@ class PixelState {
         if RGBTolerance != false
             if RGBTolerance is not number
                 return false
-
-        if GameWindowList == "settings"
-            return false
-
-        if GameWindowList.MinIndex() = ""
-            GameWindowList := [GameWindowList]
-
-        if ScreenModeList.MinIndex() = ""
-            ScreenModeList := [ScreenModeList]
 
         ;;  build the default object
         if !PixelMap[PixelName]
@@ -489,19 +486,7 @@ class PixelState {
             PixelMap[PixelName].settings.RGBTolerance := RGBTolerance
 
         ;;  set the positional data
-        for index, GameWindow in GameWindowList {
-
-            if !PixelMap[PixelName][GameWindow]
-                PixelMap[PixelName][GameWindow] := {}
-
-            ;;  lazy man here, but index isn't used so whatever
-            for index, ScreenMode in ScreenModeList {
-
-                PixelMap[PixelName][GameWindow][ScreenMode] := {"x": x, "y": y}
-
-            }
-
-        }
+        PixelMap[PixelName].pos := {"x": x, "y": y}
 
     }
 
@@ -532,15 +517,17 @@ class PixelState {
     class tools {
 
         ;;  get the current window state of the game
-        GetScreenMode(WindowTitle) {
+        GetScreenMode() {
 
+            global WindowTitle
             Return ( isWindowFullScreen(WinExist(WindowTitle)) == 1 ) ? "fullscreen" : "windowed"
 
         }
 
         ;;  determine if this is flash or steam
-        GetGameWindow(WindowTitle) {
-
+        GetGameWindow() {
+            
+            global WindowTitle
             Return ( RegExMatch(WindowTitle, "^Adobe Flash Player") ) ? "flash" : "steam"
 
         }
@@ -597,8 +584,8 @@ class PixelState {
 
                 ;;  screenshot mode info
                 BitmapProvided := ( pBitmap == false ) ? false : true
-                ScreenMode := this.GetScreenMode(WindowTitle)
-                GameWindow := this.GetGameWindow(WindowTitle)
+                ScreenMode := this.GetScreenMode()
+                GameWindow := this.GetGameWindow()
 
                 ;;  timelapse can optionally use the most recent shared bitmap
                 if ( mode == "automatic_timelapse" && TimelapseSharedBitmap == true && BitmapProvided == false ) {
@@ -646,46 +633,39 @@ class PixelState {
                 filterBrush := {"default": Gdip_BrushCreateSolid(0xff000000)}
 
                 ;;  process all active filters
-                for index, element in ScreenshotRectangles {
+                for index, Dimensions in ScreenshotRectangles {
 
                     ;;  check if there is a custom color provided
-                    if ( element["color"] && !filterBrush[element["color"]] ) {
+                    if ( Dimensions["color"] && !filterBrush[Dimensions["color"]] ) {
 
-                        element["color"] := "0xff" . element["color"]
-                        filterBrush[element["color"]] := Gdip_BrushCreateSolid(element["color"])
+                        Dimensions["color"] := "0xff" . Dimensions["color"]
+                        filterBrush[Dimensions["color"]] := Gdip_BrushCreateSolid(Dimensions["color"])
 
                     }
 
                     ;;  set our default color
-                    if ( !element["color"] ) {
-                        element["color"] := "default"
+                    if ( !Dimensions["color"] ) {
+                        Dimensions["color"] := "default"
                     }
 
-                    ;;  only process filters if they're configured for this game window
-                    if ( element[GameWindow] ) {
+                    ;;  only run positions thru the adjustment system if they're percentage-based
+                    ;;  absolutes can be passed through as-is where x,y > 1,1
+                    if ( Dimensions["x"] > 1 && Dimensions["y"] > 1 ) {
 
-                        Dimensions := element[GameWindow][ScreenMode]
+                        pos := {"x": Dimensions["x"], "y": Dimensions["y"], "w": Dimensions["width"], "h": Dimensions["height"]}
 
-                        ;;  only run positions thru the adjustment system if they're percentage-based
-                        ;;  absolutes can be passed through as-is where x,y > 1,1
-                        if ( Dimensions["x"] > 1 && Dimensions["y"] > 1 ) {
+                    } else {
 
-                            pos := {"x": Dimensions["x"], "y": Dimensions["y"], "w": Dimensions["width"], "h": Dimensions["height"]}
-
-                        } else {
-
-                            pos := this.ScreenShotGeneratePositions(Width, Height, Dimensions, Adjustments)
-
-                        }
-
-                        Gdip_FillRectangle(G, filterBrush[element["color"]], pos["x"], pos["y"], pos["w"], pos["h"])
+                        pos := this.ScreenShotGeneratePositions(Width, Height, Dimensions, Adjustments)
 
                     }
+
+                    Gdip_FillRectangle(G, filterBrush[Dimensions["color"]], pos["x"], pos["y"], pos["w"], pos["h"])
 
                 }
 
                 ;;;;  draw watermark
-                WatermarkObject := WatermarkPos[GameWindow][ScreenMode]
+                WatermarkObject := ( ScreenMode == "fullscreen" ) ? WatermarkPos : {"x": Round(WatermarkPos.x-0.11,4), "y": WatermarkPos.y}
                 Gdip_TextToGraphics(G, "JROTMG-AHK/Screenshot", "X" . Round(WatermarkObject["x"]*Width) . " Y" . Round(WatermarkObject["y"]*Height) . " C" . WatermarkTextColor)
 
                 ;;;;  clean up brushes

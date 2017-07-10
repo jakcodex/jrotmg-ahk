@@ -6,6 +6,5 @@
 1. Config should be relocated to the app storage folder
 2. Program source should be copied to the app storage folder
    a. The idea here being to make updating easier
-4. Low HP detection (low HP screenshots on an interval + zelda 3hp beep)
-5. Screenshot filter regions fully customizable with easy region setup
-6. Separate the debug tools in PixelState to their own pBitmap (maybe record changes and SetPixels at DestroyBitmap)
+3. Screenshot filter regions fully customizable with easy region setup
+4. Move Timelapse to its own class

@@ -38,8 +38,8 @@
         pBitmap := PixelState.GetBitmap()
         InputBox, StateName, Pixel or Group Name
         StateData := ( PixelGroups[StateName] ) ? PixelState.GetPixelGroupState(StateName, pBitmap) : PixelState.GetPixelState(StateName, pBitmap)
-        MsgBox % JSON.Dump(StateData)
         PixelState.DestroyBitmap(pBitmap)
+        MsgBox % JSON.Dump(StateData)
 
     }
     Return
