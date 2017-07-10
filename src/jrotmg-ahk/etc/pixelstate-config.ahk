@@ -10,17 +10,25 @@ PixelMap.settings.RGBTolerance := 10
 
 ;;  hp bar positions
 PixelState.PixelMapConfig("hp_100p", 0.9835, 0.4250, [4292883508, 4292817715, 4292555314])
+PixelState.PixelMapConfig("hp_95p", 0.9726, 0.4250, [4292883508, 4292817715, 4292555314])
 PixelState.PixelMapConfig("hp_90p", 0.9618, 0.4250, [4292883508, 4292817715, 4292555314])
+PixelState.PixelMapConfig("hp_85p", 0.9508, 0.4250, [4292883508, 4292817715, 4292555314])
 PixelState.PixelMapConfig("hp_80p", 0.9400, 0.4250, [4292883508, 4292817715, 4292555314])
 PixelState.PixelMapConfig("hp_75p", 0.9291, 0.4250, [4292883508, 4292817715, 4292555314])
-PixelState.PixelMapConfig("hp_70p", 0.9183, 0.4250, [4292883508, 4292817715, 4292555314])
+PixelState.PixelMapConfig("hp_70p", 0.9181, 0.4250, [4292883508, 4292817715, 4292555314])
+PixelState.PixelMapConfig("hp_65p", 0.9072, 0.4250, [4292883508, 4292817715, 4292555314])
 PixelState.PixelMapConfig("hp_60p", 0.8965, 0.4250, [4292883508, 4292817715, 4292555314])
+PixelState.PixelMapConfig("hp_55p", 0.8854, 0.4250, [4292883508, 4292817715, 4292555314])
 PixelState.PixelMapConfig("hp_50p", 0.8748, 0.4250, [4292883508, 4292817715, 4292555314])
-PixelState.PixelMapConfig("hp_40p", 0.8530, 0.4250, [4292883508, 4292817715, 4292555314])
-PixelState.PixelMapConfig("hp_30p", 0.8313, 0.4250, [4292883508, 4292817715, 4292555314])
+PixelState.PixelMapConfig("hp_45p", 0.8636, 0.4250, [4292883508, 4292817715, 4292555314])
+PixelState.PixelMapConfig("hp_40p", 0.8527, 0.4250, [4292883508, 4292817715, 4292555314])
+PixelState.PixelMapConfig("hp_35p", 0.8418, 0.4250, [4292883508, 4292817715, 4292555314])
+PixelState.PixelMapConfig("hp_30p", 0.8309, 0.4250, [4292883508, 4292817715, 4292555314])
 PixelState.PixelMapConfig("hp_25p", 0.8204, 0.4250, [4292883508, 4292817715, 4292555314])
-PixelState.PixelMapConfig("hp_20p", 0.8095, 0.4250, [4292883508, 4292817715, 4292555314])
-PixelState.PixelMapConfig("hp_10p", 0.7878, 0.4250, [4292883508, 4292817715, 4292555314])
+PixelState.PixelMapConfig("hp_20p", 0.8091, 0.4250, [4292883508, 4292817715, 4292555314])
+PixelState.PixelMapConfig("hp_15p", 0.7982, 0.4250, [4292883508, 4292817715, 4292555314])
+PixelState.PixelMapConfig("hp_10p", 0.7873, 0.4250, [4292883508, 4292817715, 4292555314])
+PixelState.PixelMapConfig("hp_5p", 0.7764, 0.4250, [4292883508, 4292817715, 4292555314])
 PixelState.PixelMapConfig("hp_0p", 0.7660, 0.4250, [4292883508, 4292817715, 4292555314])
 
 ;;
@@ -168,7 +176,7 @@ PixelGroups := {}
 
 ;;  hp bar states
 PixelGroups.HPBarRightExposed := {"hp_100p": true} ;; could be useful for identifying when the hp bar is obstructed
-PixelGroups.HPBarFull := {"hp_100p": true, "hp_90p": true, "hp_80p": true, "hp_70p": true, "hp_60p": true, "hp_50p": true, "hp_40p": true, "hp_30p": true, "hp_20p": true, "hp_10p": true, "hp_0p": true}
+PixelGroups.HPBarFull := {"hp_100p": true, "hp_95p": true, "hp_90p": true, "hp_85p": true, "hp_80p": true, "hp_75p": true, "hp_70p": true, "hp_65p": true, "hp_60p": true, "hp_55p": true, "hp_50p": true, "hp_45p": true, "hp_40p": true, "hp_35p": true, "hp_30p": true, "hp_25p": true, "hp_20p": true, "hp_15p": true, "hp_10p": true, "hp_5p": true, "hp_0p": true}
 PixelGroups.HPBar75 := {"hp_100p": false, "hp_75p": true, "hp_50p": true, "hp_25p": true, "hp_0p": true}
 PixelGroups.HPBar50 := {"hp_100p": false, "hp_75p": false, "hp_50p": true, "hp_25p": true, "hp_0p": true}
 PixelGroups.HPBar25 := {"hp_100p": false, "hp_75p": false, "hp_50p": false, "hp_25p": true, "hp_0p": true}

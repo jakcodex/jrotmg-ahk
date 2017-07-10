@@ -126,8 +126,8 @@ Debug := true
 
 ;;;;  play low hp beep at this hp value (out of 100)
 ;;  accepts integers, 0-100 (0 disables)
-LowHPBeep := 25
+LowHPBeep := 30
 
 ;;;;  file to play when low hp is detected
 ;;  accepts strings like /src/jrotmg-ahk/media/somebeep.wav or C:\Users\Me\My Music\Somebeep.wav
-LowHPBeepAudio = src/jrotmg-ahk/media/Zelda_LowHealth.wav
+LowHPBeepAudio = src/jrotmg-ahk/media/Zelda1_LowHealth.wav
