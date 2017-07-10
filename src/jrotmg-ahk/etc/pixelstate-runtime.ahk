@@ -174,15 +174,10 @@ PixelState.PixelMapConfig("mainscreen_6", 0.1446, 0.2884, [4288285960, 428822556
 
 PixelGroups := {}
 
-;;  hp bar states
-PixelGroups.HPBarRightExposed := {"hp_100p": true} ;; could be useful for identifying when the hp bar is obstructed
+;;  hp full bar check (debugging)
 PixelGroups.HPBarFull := {"hp_100p": true, "hp_95p": true, "hp_90p": true, "hp_85p": true, "hp_80p": true, "hp_75p": true, "hp_70p": true, "hp_65p": true, "hp_60p": true, "hp_55p": true, "hp_50p": true, "hp_45p": true, "hp_40p": true, "hp_35p": true, "hp_30p": true, "hp_25p": true, "hp_20p": true, "hp_15p": true, "hp_10p": true, "hp_5p": true, "hp_0p": true}
-PixelGroups.HPBar75 := {"hp_100p": false, "hp_75p": true, "hp_50p": true, "hp_25p": true, "hp_0p": true}
-PixelGroups.HPBar50 := {"hp_100p": false, "hp_75p": false, "hp_50p": true, "hp_25p": true, "hp_0p": true}
-PixelGroups.HPBar25 := {"hp_100p": false, "hp_75p": false, "hp_50p": false, "hp_25p": true, "hp_0p": true}
-PixelGroups.HPBar0 := {"hp_100p": false, "hp_75p": false, "hp_50p": false, "hp_25p": false, "hp_0p": true}
 
-;;  in-game control states
+;;  in-game control state
 PixelGroups.controlpoint75 := {"controlpoint75_1": true, "controlpoint75_2": true, "controlpoint75_3": true, "controlpoint75_4": true, "controlpoint75_5": true, "controlpoint75_6": true, "controlpoint75_7": true, "controlpoint75_8": true, "controlpoint75_9": true, "controlpoint75_10": true}
 
 ;;  various realm ui states
@@ -208,13 +203,12 @@ PixelGroups.InChar := {"HomeVolume": true, "CharScreenControl": true, "LoadingBa
 PixelGroups.InMain := {"HomeVolume": true, "MainScreenControl": true, "LoadingBar": true}
 PixelGroups.InGreen := {"HomeVolume": true, "MainScreenControl": false, "CharScreenControl": false, "LoadingBar": true}
 
-;; omg so many pixels -- everything above is mapped to fullscreen windows
-
-
-;;  composite groups (a group of groups)
-PixelGroups.GreenScreen := {"HomeVolume": true, "LoadingBar": true, "AccountFame": false, "AccountGold": false}
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  PixelTrack Object
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 PixelTrack := {"debug": {}, "CurrentLocation": "Init", "LowHPBeep": false, "Jobs": {}}
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;;  BackgroundTasks
+;;;;;;;;;;;;;;;;;;;;;;;
+SetTimer, PixelStateBackgroundTasks, % Round(PixelStateTasksFrequency*1000)

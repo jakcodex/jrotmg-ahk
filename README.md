@@ -2,7 +2,7 @@
 
 ## Usage
 
-Version [0.0.16-alpha](CHANGELOG.md)
+Version [0.0.16-rc](CHANGELOG.md)
 
 Requires AutoHotKey from https://autohotkey.com/download/
 
@@ -156,16 +156,22 @@ values haven't been tested yet.
 PixelState's primary job is to provide pixel data which can be used to validate the game's state. 
 
 Pixels are named in the PixelMap configuration while groups and their expected states are stored in the PixelGroups 
-configuration. This can be located in the file [src/jrotmg-ahk/etc/pixelstate-config.ahk][pixelstate-config]. 
-
-While it shouldn't be necessary, in the event you need to adjust the pixel positions then use Screen Calibration and 
-update the appropriate values. Eventually this will be automated a bit more (re: much easier).
+configuration. This can be located in the file [src/jrotmg-ahk/etc/pixelstate-runtime.ahk][pixelstate-runtime]. 
 
 #### Low HP Beep
-Plays an audible alert when your HP is low. Currently enabled by default.
+Plays an audible alert when your HP is low. Currently enabled by default. There are two sounds currently included by
+default. You can change it to them or any other audio file of your choice via the "LowHPBeepAudio" configuration key.
+
+##### Included Sounds
+- [src/jrotmg-ahk/media/Zelda1_LowHealth.wav][lowheatlhwav-zelda1]
+- [src/jrotmg-ahk/media/Pokemon1_LowHealth.wav][lowheatlhwav-pokemon1]
+
+#### Screen Calibration Utility
+Displays the position and color data of the pixel you clicked on. Useful for mapping pixels. Leaving this enabled for
+now as it is kind of fun.
 
 #####  Planned Upcoming Features
-1. Choice of Low HP beep audio
+1. Extended choice of sounds
 2. 0% HP "Finish Him!"
 3. Detect drowning and play Sonic the Hedgehog drowning song near death
 
@@ -176,6 +182,8 @@ Master branch releases may be considered generally stable but may contain unknow
 
 Version and test branches may be marked alpha or release candidate. Alpha commits will contain untested and potentially
 incomplete code. RC commits will contain code considered to be as stable as master branch but not yet ready for merger.
+
+Your input on this software is appreciated. Feel free to file [bug reports][bug-reports] if you encounter any.
 
 ## Configuration
 All settings, timeouts, and values are configurable from the config.ahk file. Example default configuration:
@@ -309,10 +317,17 @@ Debug := true
 
 ;;;;  play low hp beep at this hp value (out of 100)
 ;;  accepts integers, 0-100 (0 disables)
-LowHPBeep := 20
+LowHPBeep := 30
+
+;;;;  file to play when low hp is detected
+;;  accepts strings like /src/jrotmg-ahk/media/somebeep.wav or C:\Users\Me\My Music\Somebeep.wav
+LowHPBeepAudio = src/jrotmg-ahk/media/Zelda1_LowHealth.wav
 ```
 
-[pixelstate-config]: src/jrotmg-ahk/etc/pixelstate-config.ahk "PixelState Configuration"
+[bug-reports]: https://github.com/jakcodex/jrotmg-ahk/issues "Bug Tracker"
+[pixelstate-runtime]: src/jrotmg-ahk/etc/pixelstate-runtime.ahk "PixelState Configuration and Runtime"
 [src-rectangles]: src/jrotmg-ahk/etc/rectangles.ahk "Rectangles Positioning File"
 [extra-panic-button-mouse]: extra/panic-button-mouse-tools.ahk "Mouse Panic Button Setup Helper"
 [realmeye-forums-panic-button]: https://www.realmeye.com/forum/t/the-oh-shiet-button-for-freezes-and-when-you-click-off-the-page/4673 "The Oh Shiet Button for Freezes and When You Click Off The Page"
+[lowheatlhwav-zelda1]: src/jrotmg-ahk/media/Zelda1_LowHealth.wav "Zelda1 Low Health Beep Audio"
+[lowheatlhwav-pokemon1]: src/jrotmg-ahk/media/Pokemon1_LowHealth.wav "Pokemon1 Low Health Beep Audio"

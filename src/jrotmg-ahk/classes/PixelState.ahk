@@ -4,7 +4,7 @@
 
 class PixelState {
 
-    static Debug := true
+    static Debug := false
     static LogFolder := "logs\PixelState"
     static LogFile := "pixelstate-main.log"
     static GameStates := ["InRealm", "InNexus", "InChar", "InBlackLoading", "InVault", "InMain", "InGreen", "InOptions"]
@@ -211,7 +211,6 @@ class PixelState {
     GetPixelByName(PixelName, ByRef pBitmap=false, screenshot=false) {
 
         global PixelMap
-
         if ( PixelMap[PixelName] ) {
 
             PixelData := PixelMap[PixelName].pos
@@ -288,7 +287,7 @@ class PixelState {
     ;;  return the overall state of a group of pixels
     GetPixelGroupState(PixelGroupNames, ByRef pBitmap=false, screenshot=false) {
 
-        global PixelGroups, PixelMap, JSON
+        global PixelGroups, PixelMap
 
         BitmapProvided := ( pBitmap == false ) ? false : true
 

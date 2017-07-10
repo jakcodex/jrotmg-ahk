@@ -1,10 +1,10 @@
 ;;;;
 ;;;;Nexus Screenshot Blackout Rectangle Positioning
 ;;  In order to blackout certain parts of the screenshot we need to position rectangles over the desired locations on
-;;  the screenshot. The positions vary between windows and fullscreen mode. Furthermore, manually resizing the window
-;;  will misplace rectangle positions as well.
+;;  the screenshot. This works up until a windowed user manually resizes their window and messes up the aspect ratio
+;;  which will misplace rectangle positions.
 ;;
-;;  This file outlines default rectangle positions for each filter for windows and fullscreen modes.
+;;  This file outlines the default rectangle positions.
 ;;
 ;;  Positions are described using their distance from x0,y0 (upper left corner of the screen) in percentages.
 ;;;;
