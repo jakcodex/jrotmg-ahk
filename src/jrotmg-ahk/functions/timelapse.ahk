@@ -10,9 +10,16 @@ ScreenshotTimelapseTimer() {
     if ( ScreenshotRecordingObject["enabled"] == true && ScreenshotImageMode == "direct" ) {
 
         ;;  only run if the window matches startup parameters
-        if ( GetGameWindow() == ScreenshotRecordingObject["profiles"][ScreenshotRecordingObject["name"]]["GameWindow"] ) {
+        if ( CheckRun() == true AND PixelState.tools.GetGameWindow() == ScreenshotRecordingObject["profiles"][ScreenshotRecordingObject["name"]]["GameWindow"] ) {
 
-            TimelapseFolder := ScreenshotFolder . "\timelapse-" . ScreenshotRecordingObject["name"]
+            TimelapseFolder := ScreenshotFolder . "\timelapse"
+            if ( !FileExist(TimelapseFolder) ) {
+
+                FileCreateDir, %TimelapseFolder%
+
+            }
+
+            TimelapseFolder := TimelapseFolder . "\" . ScreenshotRecordingObject["name"]
             if ( !FileExist(TimelapseFolder) ) {
 
                 FileCreateDir, %TimelapseFolder%

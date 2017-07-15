@@ -19,22 +19,6 @@ if ( !FileExist(ScreenshotFolder) ) {
 
 }
 
-;;;;  check year folder
-ScreenshotFolder := ScreenshotFolder . "\" . A_YYYY
-if ( !FileExist(ScreenshotFolder) ) {
-
-	FileCreateDir, %ScreenshotFolder%
-
-}
-
-;;;;  check month folder
-ScreenshotFolder := ScreenshotFolder . "\" . A_MM
-if ( !FileExist(ScreenshotFolder) ) {
-
-	FileCreateDir, %ScreenshotFolder%
-
-}
-
 ;;;;  check config folder
 if ( !FileExist(ConfigFolder) ) {
 

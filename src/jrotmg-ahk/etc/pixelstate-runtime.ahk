@@ -206,7 +206,7 @@ PixelGroups.InGreen := {"HomeVolume": true, "MainScreenControl": false, "CharScr
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  PixelTrack Object
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
-PixelTrack := {"debug": {}, "CurrentLocation": "Init", "LowHPBeep": false, "Jobs": {}}
+PixelTrack := {"debug": {}, "CurrentLocation": "Init", "LowHPBeep": false, "Jobs": {}, "SharedBitmap": {}}
 
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;;  BackgroundTasks

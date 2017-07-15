@@ -21,21 +21,22 @@ class PixelState {
                 %key% := value
             }
 
+            Time := A_Now
+
             ;;  destroy the old screenshot
             if ( PixelTrack.SharedBitmap != false )
-                this.DestroyBitmap(PixelTrack.SharedBitmap, Debug)
+                this.DestroyBitmap(true, 5)
 
             ;;  take a new screenshot
-            PixelTrack.SharedBitmap := this.GetBitmap()
-            PixelTrack.SharedBitmapTime := A_Now
+            PixelTrack.SharedBitmap[Time] := this.GetBitmap()
 
             ;;;;  process actions
 
             ;;  get current game location
-            PixelTrack.CurrentLocation := this.GetGameState(PixelTrack.SharedBitmap)
+            PixelTrack.CurrentLocation := this.GetGameState(PixelTrack.SharedBitmap[Time])
 
             ;;  get current hp
-            PixelTrack.CurrentHP := this.check.PlayerHP(PixelTrack.SharedBitmap)
+            PixelTrack.CurrentHP := this.check.PlayerHP(PixelTrack.SharedBitmap[Time])
 
             ;;  process low hp beep
             if ( (LowHPBeep > 0 && RegExMatch(PixelTrack.CurrentHP, "^[0-9]*$") && PixelTrack.CurrentLocation == "InRealm") || PixelTrack.CurrentHP == "" ) {
@@ -101,11 +102,18 @@ class PixelState {
     }
 
     ;;  return a bitmap of the active window
-    GetBitmap() {
+    GetBitmap(shared=false, age=0) {
 
+        global PixelTrack
         WinGetPos, X, Y, Width, Height, A
         GameWindow := this.tools.GetGameWindow()
         ScreenMode := this.tools.GetScreenMode()
+
+        ;;  shared bitmap requested; return if available
+        Time := Round(A_Now-age)
+        if ( shared == true )
+            if ( PixelTrack.SharedBitmap[Time] )
+                return PixelTrack.SharedBitmap[Time]
 
         if ( ScreenMode == false || ScreenMode == "fullscreen" )
             return Gdip_BitmapFromScreen(X "|" Y "|" Width "|" Height)
@@ -119,7 +127,7 @@ class PixelState {
     }
 
     ;;  complete image debug processing and dispose the screenshot
-    DestroyBitmap(ByRef pBitmap, Debug="") {
+    DestroyBitmap(ByRef pBitmap, age=false, Debug="") {
 
         global PixelTrack
         if ( Debug == "" )
@@ -140,6 +148,18 @@ class PixelState {
         }
 
         Gdip_DisposeImage(pBitmap)
+        pBitmap := ""
+
+        ;;  clean up the shared bitmap
+        if ( RegExMatch($age, "^[0-9]*?$") ) {
+
+            Time := Round(A_Time-age)
+            if ( PixelTrack.SharedBitmap[Time] )
+                PixelTrack.SharedBitmap[Time] := ""
+
+        }
+
+        return true
 
     }
 
@@ -157,7 +177,7 @@ class PixelState {
     }
 
     ;;  get the pixel argb value at the specified x,y coordinates
-    GetPixel(x, y, ByRef pBitmap=false, screenshot=false) {
+    GetPixel(x, y, ByRef pBitmap=false) {
 
         ;;  grab the pixel
         BitmapProvided := ( pBitmap == false ) ? false : true
@@ -175,9 +195,6 @@ class PixelState {
         ;;  potential cleanup
         if ( BitmapProvided == false ) {
 
-            if ( screenshot == true )
-                this.SaveImage(pBitmap)
-
             this.DestroyBitmap(pBitmap)
             pBitmap := false
 
@@ -188,7 +205,7 @@ class PixelState {
     }
 
     ;;  determine x,y coordinates via relative positioning and forward to GetPixel
-    GetPixelByPos(xPercent, yPercent, ByRef pBitmap=false, screenshot=false) {
+    GetPixelByPos(xPercent, yPercent, ByRef pBitmap=false) {
 
         if ( pBitmap != false ) {
 
@@ -203,12 +220,12 @@ class PixelState {
 
         xPixel := Round(Width*xPercent)
         yPixel := Round(Height*yPercent)
-        Return this.GetPixel(xPixel, yPixel, pBitmap, screenshot)
+        Return this.GetPixel(xPixel, yPixel, pBitmap)
 
     }
 
     ;;  determine x,y coordinates via a named entry in the PixelMap and forward to GetPixelByPos
-    GetPixelByName(PixelName, ByRef pBitmap=false, screenshot=false) {
+    GetPixelByName(PixelName, ByRef pBitmap=false) {
 
         global PixelMap
         if ( PixelMap[PixelName] ) {
@@ -218,11 +235,11 @@ class PixelState {
             ;;  relative positions are a float
             if ( RegExMatch(PixelData["x"], "^0\.[0-9]{1,4}$") )
                 if ( RegExMatch(PixelData["y"], "^0\.[0-9]{1,4}$") )
-                    return this.GetPixelByPos(PixelData["x"], PixelData["y"], pBitmap, screenshot)
+                    return this.GetPixelByPos(PixelData["x"], PixelData["y"], pBitmap)
             ;;  absolute positions are an integer
             else if ( RegExMatch(PixelData["x"], "^[0-9]*$") )
                  if ( RegExMatch(PixelData["y"], "^[0-9]*$") )
-                     return this.GetPixel(PixelData["x"], PixelData["y"], pBitmap, screenshot)
+                     return this.GetPixel(PixelData["x"], PixelData["y"], pBitmap)
 
             ;;  getting this far means there was an error
             return ""
@@ -234,7 +251,7 @@ class PixelState {
     }
 
     ;;  determine if a pixel is "on" or not
-    GetPixelState(PixelName, ByRef pBitmap=false, screenshot=false) {
+    GetPixelState(PixelName, ByRef pBitmap=false) {
 
         global PixelMap
         if ( PixelMap[PixelName] ) {
@@ -285,7 +302,7 @@ class PixelState {
     }
 
     ;;  return the overall state of a group of pixels
-    GetPixelGroupState(PixelGroupNames, ByRef pBitmap=false, screenshot=false) {
+    GetPixelGroupState(PixelGroupNames, ByRef pBitmap=false) {
 
         global PixelGroups, PixelMap
 
@@ -315,7 +332,7 @@ class PixelState {
                         if ( result != ExpectedValue ) {
 
                             if ( BitmapProvided == false )
-                                this.DestroyBitmap(pBitmap, screenshot)
+                                this.DestroyBitmap(pBitmap)
 
                             ;;  blank responses are sent in the event a named pixel doesn't exist
                             if ( result == "" )
@@ -332,7 +349,7 @@ class PixelState {
                         if ( result != ExpectedValue ) {
 
                             if ( BitmapProvided == false )
-                                this.DestroyBitmap(pBitmap, screenshot)
+                                this.DestroyBitmap(pBitmap)
 
                             ;;  blank responses are sent in the event a named pixel doesn't exist
                             if ( result == "" )
@@ -359,7 +376,7 @@ class PixelState {
                         if ( result != ExpectedValue ) {
 
                             if ( BitmapProvided == false )
-                                this.DestroyBitmap(pBitmap, screenshot)
+                                this.DestroyBitmap(pBitmap)
 
                             ;;  blank responses are sent in the event a named pixel doesn't exist
                             if ( result == "" )
@@ -371,7 +388,7 @@ class PixelState {
                     } else {
 
                         if ( BitmapProvided == false )
-                            this.DestroyBitmap(pBitmap, screenshot)
+                            this.DestroyBitmap(pBitmap)
 
                         return ""
 
@@ -388,7 +405,7 @@ class PixelState {
         }
 
         if ( BitmapProvided == false )
-            this.DestroyBitmap(pBitmap, screenshot)
+            this.DestroyBitmap(pBitmap)
 
         ;;  it must have passed
         return true
@@ -489,6 +506,15 @@ class PixelState {
 
     }
 
+    GracefulExit(ByRef pBitmap, BitmapProvided) {
+
+        if ( BitmapProvided == false )
+            this.DestroyBitmap(pBitmap)
+
+        return false
+
+    }
+
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;;;  pixelstate hotkeys
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -573,8 +599,11 @@ class PixelState {
         TakeScreenshot(mode=false, ByRef pBitmap=false, excludeFilters=false) {
 
             ;;  defaults
-            global pToken, ScreenshotSleepTimeout, ScreenshotFilterAdjustments, ScreenshotRectangles, WatermarkPos, WatermarkTextColor, ScreenshotFolder, TimelapseFolder, DestinationFolder, ScreenshotImageQuality, ScreenshotImageMode, ScreenshotWaitPixelCheck, ScreenshotChatboxGrace, lastEnterKeypress, TimelapseSharedBitmap
+            global pToken, ScreenshotSleepTimeout, ScreenshotFilterAdjustments, ScreenshotRectangles, WatermarkPos, WatermarkTextColor, ScreenshotFolder, TimelapseFolder, DestinationFolder
+            global ScreenshotImageQuality, ScreenshotImageMode, ScreenshotWaitPixelCheck, ScreenshotChatboxGrace, lastEnterKeypress, TimelapseSharedBitmap, ScreenshotNexusDisallowedLocations
+            global PixelTrack, TimelapseDisallowedLocations, ScreenshotNexusDisallowedLocations, JSON
 
+            ;;  process screenshot filters and storage
             if ( ScreenshotImageMode == "direct" ) {
 
                 ;;  window info
@@ -586,22 +615,28 @@ class PixelState {
                 ScreenMode := this.GetScreenMode()
                 GameWindow := this.GetGameWindow()
 
+                ;;;;  checks for various modes
+
+                ;;  timelapse shouldn't run in certain locations
+                if ( mode == "automatic_timelapse" AND TimelapseDisallowedLocations != false AND InArray(PixelTrack.CurrentLocation, TimelapseDisallowedLocations) == true )
+                    return false
+
                 ;;  timelapse can optionally use the most recent shared bitmap
-                if ( mode == "automatic_timelapse" && TimelapseSharedBitmap == true && BitmapProvided == false ) {
-
-                    pBitmap := PixelTrack.SharedBitmap
-                    BitmapProvided := true
-
-                }
+                if ( mode == "automatic_timelapse" AND TimelapseSharedBitmap == true AND BitmapProvided == false )
+                    pBitmap := PixelState.GetBitmap(true)
 
                 ;;  create the base image in memory
                 if ( pBitmap == false )
                     pBitmap := PixelState.GetBitmap()
 
                 ;;  pixelstate - if it was triggered automatically by typing check if the chatbox is present
-                if ( mode == "automatic_typing" && ScreenshotWaitPixelCheck == true && (A_Now-lastEnterKeypress > ScreenshotChatboxGrace) )
+                if ( mode == "automatic_typing" AND ScreenshotWaitPixelCheck == true AND (A_Now-lastEnterKeypress > ScreenshotChatboxGrace) )
                     if ( PixelState.GetPixelGroupState("ChatBoxUnobstructed", pBitmap) == true )
-                        return PixelState.DestroyBitmap(pBitmap)
+                        return PixelState.GracefulExit(pBitmap, BitmapProvided)
+
+                if ( mode == "automatic_typing" AND ScreenshotNexusDisallowedLocations != false )
+                    if ( InArray(PixelTrack.CurrentLocation, ScreenshotNexusDisallowedLocations) == true )
+                        return PixelState.GracefulExit(pBitmap, BitmapProvided)
 
                 ;;  pixelstate - timelapse should only take screenshots in realms
                 ;;  pixels not yet mapped
@@ -614,7 +649,8 @@ class PixelState {
                 Gdip_DrawImage(G, pBitmap, 0, 0, Round(Width), Round(Height), 0, 0, Width, Height)
 
                 ;;  sleep for specified time before beginning image processing and disk activity
-                Sleep ScreenshotSleepTimeout*1000
+                if ( mode != "automatic_typing" )
+                    Sleep ScreenshotSleepTimeout*1000
 
                 ;;;;  prepare screenshot filters
 
@@ -672,18 +708,63 @@ class PixelState {
                     Gdip_DeleteBrush(element)
                 }
 
+                ;;;;  determine destination folder
+                Type := ""
+
+                if ( mode == "automatic_timelapse" )
+                    Type := "timelapse-"
+
+                if ( mode == "automatic_typing" ) {
+
+                    Type := "nexus-"
+                    NexusFolder := ScreenshotFolder . "\nexus"
+
+                }
+
+                if ( TimelapseFolder != false && mode == "automatic_timelapse" )
+                    DestinationFolder := TimelapseFolder
+
+                if ( mode == "automatic_typing" )
+                    DestinationFolder := NexusFolder
+
+                if ( !DestinationFolder )
+                    DestinationFolder := ScreenshotFolder
+
+                ;;;;  check destination folder
+                if ( !FileExist(DestinationFolder) ) {
+
+                    FileCreateDir, %DestinationFolder%
+
+                }
+
+                ;;;;  check year folder
+                DestinationFolder := DestinationFolder . "\" . A_YYYY
+                if ( !FileExist(DestinationFolder) ) {
+
+                    FileCreateDir, %DestinationFolder%
+
+                }
+
+                ;;;;  check month folder
+                DestinationFolder := DestinationFolder . "\" . A_MM
+                if ( !FileExist(DestinationFolder) ) {
+
+                    FileCreateDir, %DestinationFolder%
+
+                }
+
                 ;;;;  save file to disk
-                DestinationFolder := ( TimelapseFolder == false ) ? ScreenshotFolder : TimelapseFolder
-                Gdip_SaveBitmapToFile(pBitmap, DestinationFolder "\" A_YYYY "-" A_MM "-" A_DD "-" A_Hour "-" A_Min "-" A_Sec ".jpg", ScreenshotImageQuality)
+                Gdip_SaveBitmapToFile(pBitmap, DestinationFolder "\" Type . A_YYYY "-" A_MM "-" A_DD "-" A_Hour "-" A_Min "-" A_Sec ".jpg", ScreenshotImageQuality)
 
                 ;;  cleanup
                 Gdip_DeleteGraphics(G)
-                if BitmapProvided == false
+                if ( BitmapProvided == false )
                     Gdip_DisposeImage(pBitmap)
 
+            ;;  steam is really hard to process
             } else if ( ScreenshotImageMode == "steam" ) {
 
-                Send, {F12}
+                SendInput, {F12}
 
             }
 
@@ -695,17 +776,18 @@ class PixelState {
 
     class check {
 
+        ;;  determine player hp and account for obstructions when possible
         PlayerHP() {
 
-            global JSON, PixelTrack
-            pBitmap := PixelTrack.SharedBitmap
+            global JSON
+            pBitmap := PixelState.GetBitmap(true)
             Pixels := ["hp_0p", "hp_10p", "hp_20p", "hp_30p", "hp_40p", "hp_50p","hp_60p", "hp_70p","hp_80p", "hp_90p","hp_100p"]
             HPIndex := false
             LowIndex := false
             ControlPixels := PixelState.GetPixelGroupState({"controlpoint75_4": true, "controlpoint75_5": true, "controlpoint75_6": true}, pBitmap)
             ObstructionCheck := false
 
-            ;;  first pass - gather pixel data and check if we need to look for obstruction
+            ;;  gather pixel data and check if we need to look for obstruction
             for index, PixelName in Pixels {
 
                 PixelData := PixelState.GetPixelState(PixelName, pBitmap)
@@ -753,15 +835,12 @@ class PixelState {
                 ObstructionCheck := true
 
             ;;  no obstruction, full hp bar, or all further hp pixels are off
-            if ( ObstructionCheck == false || HPIndex == Pixels.MaxIndex() || (HPIndex != false && HPIndex <= LowIndex) ) {
-
+            if ( ObstructionCheck == false || HPIndex == Pixels.MaxIndex() || (HPIndex != false && HPIndex <= LowIndex) )
                 return Round((HPIndex/Pixels.MaxIndex())*100)
 
-            } else {
-
-                return ""
-
-            }
+            ;;  at this point there is an unresolved obstruction
+            ;;  report occurrences of this
+            return ""
 
         }
 

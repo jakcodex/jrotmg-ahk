@@ -1,9 +1,11 @@
 ## 0.0.16-rc - PixelState
 + Added configuration key "ScreenshotWaitPixelCheck" which controls if wait timer should check for chatbox pixels
 + Added configuration key "ScreenshotChatboxGrace" which sets the grace time for the chatbox invalidating screenshots
++ Added configuration key "ScreenshotNexusDisallowedLocations" which lists locations not to take Nexus screenshots
 + Added configuration key "WatermarkTextColor" which controls the color of the watermark text
 + Added configuration key "PixelStateTasksFrequency" which controls how often PixelState background jobs run in seconds
 + Added configuration key "TimelapseSharedBitmap" which controls whether or not Timelapse uses the shared bitmap
++ Added configuration key "TimelapseDisallowedLocations" which lists locations not to take Timelapse screenshots
 + Added configuration key "LowHPBeep" which specifies the HP percentag at which to begin playing the low HP beep
 + Added configuration key "LowHPBeepAudio" which specifies the audio file to play during low hp
 + Added configuration key "Debug" which toggles Debug logging

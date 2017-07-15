@@ -13,7 +13,7 @@ ScreenshotSleepTimeout = 1
 
 ;;;;  time in seconds after opening chat that nexus screenshots will not be taken
 ;;  accepts integers: 0, 1, 2, 3, 4, etc
-ScreenshotTypeTimeout = 10
+ScreenshotTypeTimeout = 5
 
 ;;;;  which method should the screenshot be taken with
 ;;  accepts string: direct, steam
@@ -38,6 +38,10 @@ ScreenshotWaitPixelCheck := true
 ;;;;  how many seconds after a chatbox opens for it to invalidate screenshots
 ;;  accepts integers: 0-10
 ScreenshotChatboxGrace = 2
+
+;;;;  which locations disable the automatic nexus hotkey screenshot
+;;  accepts an array: ["Value1", "Value2", ...]
+ScreenshotNexusDisallowedLocations := ["InMain", "InChar", "InNexus", "InVault", "Unknown"]
 
 ;;;;  enable or disable the filter to hide gold
 ScreenshotHideGoldAndFame := true
@@ -101,6 +105,10 @@ WatermarkTextColor = BBFFFFFF
 ;;  accepts boolean: true, false
 TimelapseSharedBitmap := true
 
+;;;;  set which locations timelapse photos won't occur
+;;  accepts an array: ["Value1", "Value2", ...] (default is to set it equal to the ScreenshotNexusDisallowedLocations key)
+TimelapseDisallowedLocations := ScreenshotNexusDisallowedLocations
+
 ;;;;  how frequently to run PixelState background jobs
 ;;  accepts integers: 0-100 (0 disables)
 PixelStateTasksFrequency = 1
@@ -126,7 +134,7 @@ Debug := true
 
 ;;;;  play low hp beep at this hp value (out of 100)
 ;;  accepts integers, 0-100 (0 disables)
-LowHPBeep := 30
+LowHPBeep := 45
 
 ;;;;  file to play when low hp is detected
 ;;  accepts strings like /src/jrotmg-ahk/media/somebeep.wav or C:\Users\Me\My Music\Somebeep.wav
