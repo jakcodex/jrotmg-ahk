@@ -23,9 +23,8 @@ class PixelState {
 
             Time := A_Now
 
-            ;;  destroy the old screenshot
-            if ( PixelTrack.SharedBitmap != false )
-                this.DestroyBitmap(true, 5)
+            ;;  cleanup old screenshots
+            this.DestroyBitmap(true, 5)
 
             ;;  take a new screenshot
             PixelTrack.SharedBitmap[Time] := this.GetBitmap()
@@ -70,37 +69,6 @@ class PixelState {
 
     }
 
-    ;;  determine the current state of the game (which screen the user is on)
-    GetGameState(ByRef pBitmap=false) {
-
-        BitmapProvided := ( pBitmap == false ) ? false : true
-
-        if ( pBitmap == false )
-            pBitmap := this.GetBitmap()
-
-        ;;  loop thru each state
-        for index, StateName in this.GameStates {
-
-            ;;  check the group state
-            if ( this.GetPixelGroupState(StateName, pBitmap) == true ) {
-
-                if ( BitmapProvided == false )
-                    this.DestroyBitmap(pBitmap)
-
-                return StateName
-
-            }
-
-        }
-
-        if ( BitmapProvided == false )
-            this.DestroyBitmap(pBitmap)
-
-        ;;  no states were valid
-        return "Unknown"
-
-    }
-
     ;;  return a bitmap of the active window
     GetBitmap(shared=false, age=0) {
 
@@ -133,6 +101,7 @@ class PixelState {
         if ( Debug == "" )
             Debug := this.Debug
 
+        ;;  processing debug pixel storage
         if ( Debug == true && PixelTrack.debug[pBitmap] ) {
 
             ;;  add the pixels
@@ -143,19 +112,37 @@ class PixelState {
             }
 
             this.SaveImage(pBitmap)
-            PixelTrack.debug[pBitmap] := ""
+            PixelTrack.debug.RemoveAt(pBitmap)
 
         }
 
-        Gdip_DisposeImage(pBitmap)
-        pBitmap := ""
+        ;;  dispose of the bitmap if provided
+        if ( pBitmap != true ) {
 
-        ;;  clean up the shared bitmap
-        if ( RegExMatch($age, "^[0-9]*?$") ) {
+            Gdip_DisposeImage(pBitmap)
+            pBitmap := ""
+            VarSetCapacity(pBitmap, 0)
 
-            Time := Round(A_Time-age)
-            if ( PixelTrack.SharedBitmap[Time] )
-                PixelTrack.SharedBitmap[Time] := ""
+        } else {
+
+            ;;  clean up the shared bitmap
+            if ( RegExMatch($age, "^([0-9]*?)$") ) {
+
+                MaxAge := Round(A_Now-age)
+                for BitmapAge, BitmapData in PixelTrack.SharedBitmap {
+
+                    if ( BitmapAge < MaxAge ) {
+
+                        PixelTrack.debug.RemoveAt(BitmapData)
+                        Gdip_DisposeImage(PixelTrack.SharedBitmap[BitmapAge])
+                        Gdip_DisposeImage(BitmapData)
+                        PixelTrack.SharedBitmap.RemoveAt(BitmapAge)
+
+                    }
+
+                }
+
+            }
 
         }
 
@@ -409,6 +396,37 @@ class PixelState {
 
         ;;  it must have passed
         return true
+
+    }
+
+    ;;  determine the current state of the game (which screen the user is on)
+    GetGameState(ByRef pBitmap=false) {
+
+        BitmapProvided := ( pBitmap == false ) ? false : true
+
+        if ( pBitmap == false )
+            pBitmap := this.GetBitmap()
+
+        ;;  loop thru each state
+        for index, StateName in this.GameStates {
+
+            ;;  check the group state
+            if ( this.GetPixelGroupState(StateName, pBitmap) == true ) {
+
+                if ( BitmapProvided == false )
+                    this.DestroyBitmap(pBitmap)
+
+                return StateName
+
+            }
+
+        }
+
+        if ( BitmapProvided == false )
+            this.DestroyBitmap(pBitmap)
+
+        ;;  no states were valid
+        return "Unknown"
 
     }
 

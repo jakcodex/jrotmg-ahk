@@ -1,6 +1,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  PixelState tools
 ;;;;;;;;;;;;;;;;;;;;;;;;;
+<^Numpad2::
+    if ( Debug == true && CheckRun() == true ) {
+
+        PTSize := JSON.dump(PixelTrack)
+        MsgBox % "PixelTrack Size: " . PTSize
+
+    }
+    Return
 
 <^Numpad3::
     if ( Debug == true && CheckRun() == true ) {
