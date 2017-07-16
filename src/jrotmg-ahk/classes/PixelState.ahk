@@ -799,7 +799,7 @@ class PixelState {
 
             global JSON
             pBitmap := PixelState.GetBitmap(true)
-            Pixels := ["hp_0p", "hp_10p", "hp_20p", "hp_30p", "hp_40p", "hp_50p","hp_60p", "hp_70p","hp_80p", "hp_90p","hp_100p"]
+            Pixels := ["hp_0p", "hp_5p", "hp_10p", "hp_15p", "hp_20p", "hp_25p", "hp_30p", "hp_35p", "hp_40p", "hp_45p", "hp_50p", "hp_55p", "hp_60p", "hp_65p", "hp_70p", "hp_75p", "hp_80p", "hp_85p", "hp_90p", "hp_95p", "hp_100p"]
             HPIndex := false
             LowIndex := false
             ControlPixels := PixelState.GetPixelGroupState({"controlpoint75_4": true, "controlpoint75_5": true, "controlpoint75_6": true}, pBitmap)
@@ -852,9 +852,9 @@ class PixelState {
             if ( HPIndex == false )
                 ObstructionCheck := true
 
-            ;;  no obstruction, full hp bar, or all further hp pixels are off
+            ;;  no obstruction, full hp bar, or all further hp pixels are off (and convert HP to 10 increments)
             if ( ObstructionCheck == false || HPIndex == Pixels.MaxIndex() || (HPIndex != false && HPIndex <= LowIndex) )
-                return Round((HPIndex/Pixels.MaxIndex())*100)
+                return Round(((HPIndex-1)/(Pixels.MaxIndex()-1))*100)  ;; -1, -1 because 6/11 is not an even 50% but 5/10 is
 
             ;;  at this point there is an unresolved obstruction
             ;;  report occurrences of this
