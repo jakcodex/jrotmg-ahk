@@ -23,8 +23,8 @@ class PixelState {
 
             Time := A_Now
 
-            ;;  cleanup old screenshots
-            this.DestroyBitmap(true, 5)
+            ;;  cleanup old shared bitmaps
+            this.DestroyBitmap(true)
 
             ;;  take a new screenshot
             PixelTrack.SharedBitmap[Time] := this.GetBitmap()
@@ -38,7 +38,7 @@ class PixelState {
             PixelTrack.CurrentHP := this.check.PlayerHP(PixelTrack.SharedBitmap[Time])
 
             ;;  process low hp beep
-            if ( (LowHPBeep > 0 && RegExMatch(PixelTrack.CurrentHP, "^[0-9]*$") && PixelTrack.CurrentLocation == "InRealm") || PixelTrack.CurrentHP == "" ) {
+            if ( PixelTrack.CurrentHP == "" OR (LowHPBeep > 0 && PixelTrack.CurrentLocation == "InRealm" AND RegExMatch(PixelTrack.CurrentHP, "^[0-9]*$")) ) {
 
                 ;;  turn on the beep if hp is low and not unknown
                 if ( PixelTrack.CurrentHP <= LowHPBeep && PixelTrack.CurrentHP != "") {
@@ -97,7 +97,7 @@ class PixelState {
     ;;  complete image debug processing and dispose the screenshot
     DestroyBitmap(ByRef pBitmap, age=false, Debug="") {
 
-        global PixelTrack
+        global PixelTrack, PixelStateSharedBitmapKeep
         if ( Debug == "" )
             Debug := this.Debug
 
@@ -127,6 +127,13 @@ class PixelState {
 
             ;;  clean up the shared bitmap
             if ( RegExMatch($age, "^([0-9]*?)$") ) {
+
+                ;;  set the age if none provided
+                if ( age == false || age < 1 ) {
+
+                    age := ( PixelStateSharedBitmapKeep > 0 ) ? PixelStateSharedBitmapKeep : 5
+
+                }
 
                 MaxAge := Round(A_Now-age)
                 for BitmapAge, BitmapData in PixelTrack.SharedBitmap {
@@ -636,11 +643,11 @@ class PixelState {
                 ;;;;  checks for various modes
 
                 ;;  timelapse shouldn't run in certain locations
-                if ( mode == "automatic_timelapse" AND TimelapseDisallowedLocations != false AND InArray(PixelTrack.CurrentLocation, TimelapseDisallowedLocations) == true )
+                if ( mode == "automatic_timelapse" && TimelapseDisallowedLocations != false AND InArray(PixelTrack.CurrentLocation, TimelapseDisallowedLocations) == true )
                     return false
 
                 ;;  timelapse can optionally use the most recent shared bitmap
-                if ( mode == "automatic_timelapse" AND TimelapseSharedBitmap == true AND BitmapProvided == false )
+                if ( mode == "automatic_timelapse" && TimelapseSharedBitmap == true && BitmapProvided == false )
                     pBitmap := PixelState.GetBitmap(true)
 
                 ;;  create the base image in memory
@@ -648,11 +655,11 @@ class PixelState {
                     pBitmap := PixelState.GetBitmap()
 
                 ;;  pixelstate - if it was triggered automatically by typing check if the chatbox is present
-                if ( mode == "automatic_typing" AND ScreenshotWaitPixelCheck == true AND (A_Now-lastEnterKeypress > ScreenshotChatboxGrace) )
+                if ( mode == "automatic_typing" && ScreenshotWaitPixelCheck == true AND (A_Now-lastEnterKeypress > ScreenshotChatboxGrace) )
                     if ( PixelState.GetPixelGroupState("ChatBoxUnobstructed", pBitmap) == true )
                         return PixelState.GracefulExit(pBitmap, BitmapProvided)
 
-                if ( mode == "automatic_typing" AND ScreenshotNexusDisallowedLocations != false )
+                if ( mode == "automatic_typing" && ScreenshotNexusDisallowedLocations != false )
                     if ( InArray(PixelTrack.CurrentLocation, ScreenshotNexusDisallowedLocations) == true )
                         return PixelState.GracefulExit(pBitmap, BitmapProvided)
 
@@ -806,17 +813,17 @@ class PixelState {
             ObstructionCheck := false
 
             ;;  gather pixel data and check if we need to look for obstruction
-            for index, PixelName in Pixels {
+            for PixelIndex, PixelName in Pixels {
 
                 PixelData := PixelState.GetPixelState(PixelName, pBitmap)
 
                 ;;  track the lowest pixel to fail
                 if ( PixelData == false && LowIndex == false )
-                    LowIndex := index
+                    LowIndex := PixelIndex
 
                 ;;  no obstruction then no concerns
                 if ( PixelData == true && ControlPixels == true )
-                    HPIndex := index
+                    HPIndex := PixelIndex
 
                 ;;  pixeldata and control pixels missing indicates an obstruction
                 if ( PixelData == false && ControlPixels == false )
@@ -827,13 +834,13 @@ class PixelState {
 
                     ;;  lower pixels were found but a higher one was
                     ;;  obstruction is resolved
-                    if ( index > HPIndex ) {
+                    if ( PixelIndex > HPIndex ) {
 
                         ;;  reset LowIndex is this is higher
-                        if ( index >= LowIndex )
+                        if ( PixelIndex >= LowIndex )
                             LowIndex := false
 
-                        HPIndex := index
+                        HPIndex := PixelIndex
                         ObstructionCheck := false
 
                     }
@@ -852,9 +859,9 @@ class PixelState {
             if ( HPIndex == false )
                 ObstructionCheck := true
 
-            ;;  no obstruction, full hp bar, or all further hp pixels are off (and convert HP to 10 increments)
+            ;;  no obstruction, full hp bar, or all further hp pixels are off (and convert HP to 20 increments)
             if ( ObstructionCheck == false || HPIndex == Pixels.MaxIndex() || (HPIndex != false && HPIndex <= LowIndex) )
-                return Round(((HPIndex-1)/(Pixels.MaxIndex()-1))*100)  ;; -1, -1 because 6/11 is not an even 50% but 5/10 is
+                return Round(((HPIndex-1)/(Pixels.MaxIndex()-1))*100)  ;; -1, -1 because 11/21 is not an even 50% but 10/20 is
 
             ;;  at this point there is an unresolved obstruction
             ;;  report occurrences of this

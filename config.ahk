@@ -113,6 +113,10 @@ TimelapseDisallowedLocations := ScreenshotNexusDisallowedLocations
 ;;  accepts integers: 0-100 (0 disables)
 PixelStateTasksFrequency = 1
 
+;;;;  how many shared bitmaps to keep in memory
+;;  accepts integers: 1-100 (default is 5)
+PixelStateSharedBitmapKeep = 5
+
 ;;;;  enable or disable the nexus panic button (closes the game if triggered)
 ;;  accepts boolean: true, false
 NexusPanicEnabled := false

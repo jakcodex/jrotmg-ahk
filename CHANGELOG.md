@@ -3,6 +3,7 @@
 + Added configuration key "ScreenshotChatboxGrace" which sets the grace time for the chatbox invalidating screenshots
 + Added configuration key "ScreenshotNexusDisallowedLocations" which lists locations not to take Nexus screenshots
 + Added configuration key "WatermarkTextColor" which controls the color of the watermark text
++ Added configuration key "PixelStateSharedBitmapKeep" which controls how many shared bitmaps to hold in memory
 + Added configuration key "PixelStateTasksFrequency" which controls how often PixelState background jobs run in seconds
 + Added configuration key "TimelapseSharedBitmap" which controls whether or not Timelapse uses the shared bitmap
 + Added configuration key "TimelapseDisallowedLocations" which lists locations not to take Timelapse screenshots
