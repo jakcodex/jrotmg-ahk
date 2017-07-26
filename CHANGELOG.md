@@ -1,4 +1,4 @@
-## 0.0.16-rc - PixelState
+## 0.0.16 - PixelState
 + Added configuration key "ScreenshotWaitPixelCheck" which controls if wait timer should check for chatbox pixels
 + Added configuration key "ScreenshotChatboxGrace" which sets the grace time for the chatbox invalidating screenshots
 + Added configuration key "ScreenshotNexusDisallowedLocations" which lists locations not to take Nexus screenshots

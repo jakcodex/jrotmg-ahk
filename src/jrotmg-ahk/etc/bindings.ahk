@@ -1,4 +1,3 @@
 ;;;;  certain bindings don't work after gdi is loaded
 Hotkey, $%UserHotkeys_Nexus%, NexusScreenshot
-Hotkey, %UserHotkeys_Printscreen%, SaveScreen
-Hotkey, ^!PrintScreen, SaveScreen
+Hotkey, %UserHotkeys_Printscreen%, ManualScreenshot

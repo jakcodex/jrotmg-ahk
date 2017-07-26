@@ -2,7 +2,7 @@
 
 ## Usage
 
-Version [0.0.16-rc](CHANGELOG.md)
+Version [0.0.16](CHANGELOG.md)
 
 Requires AutoHotKey from https://autohotkey.com/download/
 
@@ -204,7 +204,7 @@ ScreenshotSleepTimeout = 1
 
 ;;;;  time in seconds after opening chat that nexus screenshots will not be taken
 ;;  accepts integers: 0, 1, 2, 3, 4, etc
-ScreenshotTypeTimeout = 10
+ScreenshotTypeTimeout = 5
 
 ;;;;  which method should the screenshot be taken with
 ;;  accepts string: direct, steam
@@ -227,8 +227,14 @@ ScreenshotWaitTimer := true
 ScreenshotWaitPixelCheck := true
 
 ;;;;  how many seconds after a chatbox opens for it to invalidate screenshots
+;;  this is the inverse of ScreenshotTypeTimeout and it utilizes PixelState instead of typing for detection
+;;  it's purpose is to try and capture attempted nexus screenshots when you open the chatbox by mistake
 ;;  accepts integers: 0-10
 ScreenshotChatboxGrace = 2
+
+;;;;  which locations disable the automatic nexus hotkey screenshot
+;;  accepts an array: ["Value1", "Value2", ...]
+ScreenshotNexusDisallowedLocations := ["InMain", "InChar", "InNexus", "InVault", "Unknown"]
 
 ;;;;  enable or disable the filter to hide gold
 ScreenshotHideGoldAndFame := true
@@ -282,9 +288,9 @@ ScreenshotFilterAdjustments := {"x": 0, "y": 0, "width": 0, "height": 0}
 ScreenshotCharacterFilterPositioning := {"windowed": {"width": 80, "height": 80}, "fullscreen": {"width": 130, "height": 130}}
 
 ;;;;  control the opacity and color of the watermark
-;;  accepts a string with the following format: XXYYYYYY
+;;  accepts a hexidecimal string with the following format: XXYYYYYY
 ;;  XX is the opacity (00 is 0%; FF is 100%)
-;;  YYYYYY is the hexidecimal color code you desire
+;;  YYYYYY is the color code you desire
 ;;  to disable the watermark, set opacity to 00
 WatermarkTextColor = BBFFFFFF
 
@@ -292,9 +298,19 @@ WatermarkTextColor = BBFFFFFF
 ;;  accepts boolean: true, false
 TimelapseSharedBitmap := true
 
+;;;;  set which locations timelapse photos won't occur
+;;  accepts an array: ["Value1", "Value2", ...] (default is to set it equal to the ScreenshotNexusDisallowedLocations key)
+TimelapseDisallowedLocations := ScreenshotNexusDisallowedLocations
+
 ;;;;  how frequently to run PixelState background jobs
+;;  recommended value is 1; setting higher delays state detection
+;;  consider setting TimelapseSharedBitmap := false if you change this value
 ;;  accepts integers: 0-100 (0 disables)
 PixelStateTasksFrequency = 1
+
+;;;;  how many shared bitmaps to keep in memory (each bitmap is generally 8-40MB depending on play mode)
+;;  accepts integers: 1-100 (default is 7)
+PixelStateSharedBitmapKeep = 7
 
 ;;;;  enable or disable the nexus panic button (closes the game if triggered)
 ;;  accepts boolean: true, false
@@ -309,15 +325,16 @@ NexusPanicCount = 5
 NexusKeyResetTime = 1
 
 ;;;;  path to store program data
-;;;;  defaults to "C:\Users\<YourUsername>\AppData\Roaming\jrotmg-ahk"
+;;  defaults to "C:\Users\<YourUsername>\AppData\Roaming\jrotmg-ahk"
 StoragePath = %APPDATA%\jrotmg-ahk
 
 ;;;;  debugging mode enabled or not
-Debug := true
+;;  accepts boolean: true, false
+Debug := false
 
 ;;;;  play low hp beep at this hp value (out of 100)
 ;;  accepts integers, 0-100 (0 disables)
-LowHPBeep := 30
+LowHPBeep := 40
 
 ;;;;  file to play when low hp is detected
 ;;  accepts strings like /src/jrotmg-ahk/media/somebeep.wav or C:\Users\Me\My Music\Somebeep.wav

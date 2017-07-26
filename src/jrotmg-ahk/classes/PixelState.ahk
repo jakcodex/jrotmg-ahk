@@ -4,7 +4,6 @@
 
 class PixelState {
 
-    static Debug := false
     static LogFolder := "logs\PixelState"
     static LogFile := "pixelstate-main.log"
     static GameStates := ["InRealm", "InNexus", "InChar", "InBlackLoading", "InVault", "InMain", "InGreen", "InOptions"]
@@ -16,12 +15,13 @@ class PixelState {
 
         if ( CheckRun() == true ) {
 
-            Debug := this.Debug
+            ;;  we use the time to identify this iterations id
+            Time := A_Now
+
+            ;;  import any supplied options
             for key, value in options {
                 %key% := value
             }
-
-            Time := A_Now
 
             ;;  cleanup old shared bitmaps
             this.DestroyBitmap(true)
@@ -83,23 +83,26 @@ class PixelState {
             if ( PixelTrack.SharedBitmap[Time] )
                 return PixelTrack.SharedBitmap[Time]
 
+        ;;  fullscreen means we take an image of the whole screen
         if ( ScreenMode == false || ScreenMode == "fullscreen" )
             return Gdip_BitmapFromScreen(X "|" Y "|" Width "|" Height)
 
+        ;;  steam windowed mode has an outer 16x38 border
         if ( ScreenMode == "windowed" && GameWindow == "steam" )
-            return Gdip_BitmapFromScreen(Round(X+8) . "|" . Round(Y+30) . "|800|600")
+            return Gdip_BitmapFromScreen(Round(X+8) . "|" . Round(Y+30) . "|" . Round(Width-16) . "|" . Round(Height-38))
 
+        ;;  flash windowed mode has an outer 16x59 border
         if ( ScreenMode == "windowed" && GameWindow == "flash" )
-            return Gdip_BitmapFromScreen(Round(X+8) . "|" . Round(Y+51) . "|800|600")
+            return Gdip_BitmapFromScreen(Round(X+8) . "|" . Round(Y+51) . "|" . Round(Width-16) . "|" . Round(Height-59))
+
+        ;;  would be easy to add a custom setting here in case there are special cases out there
 
     }
 
     ;;  complete image debug processing and dispose the screenshot
-    DestroyBitmap(ByRef pBitmap, age=false, Debug="") {
+    DestroyBitmap(ByRef pBitmap, age=false) {
 
-        global PixelTrack, PixelStateSharedBitmapKeep
-        if ( Debug == "" )
-            Debug := this.Debug
+        global PixelTrack, PixelStateSharedBitmapKeep, Debug
 
         ;;  processing debug pixel storage
         if ( Debug == true && PixelTrack.debug[pBitmap] ) {
@@ -173,6 +176,8 @@ class PixelState {
     ;;  get the pixel argb value at the specified x,y coordinates
     GetPixel(x, y, ByRef pBitmap=false) {
 
+        global Debug
+
         ;;  grab the pixel
         BitmapProvided := ( pBitmap == false ) ? false : true
         if ( pBitmap == false )
@@ -183,7 +188,7 @@ class PixelState {
         Gdip_FromARGB(argb, A, R, G, B)
 
         ;;  debugging
-        if ( this.Debug == true )
+        if ( Debug == true )
             this.SetPixel(pBitmap, 255, 255, 255, 255, x, y)
 
         ;;  potential cleanup
@@ -663,18 +668,12 @@ class PixelState {
                     if ( InArray(PixelTrack.CurrentLocation, ScreenshotNexusDisallowedLocations) == true )
                         return PixelState.GracefulExit(pBitmap, BitmapProvided)
 
-                ;;  pixelstate - timelapse should only take screenshots in realms
-                ;;  pixels not yet mapped
-                ;;if mode == "automatic_timelapse"
-                ;;    if PixelState.GetPixelGroupState("TimelapseControl", pBitmap) == true
-                ;;        return false
-
                 Width := Gdip_GetImageWidth(pBitmap), Height := Gdip_GetImageHeight(pBitmap)
                 G := Gdip_GraphicsFromImage(pBitmap)
                 Gdip_DrawImage(G, pBitmap, 0, 0, Round(Width), Round(Height), 0, 0, Width, Height)
 
                 ;;  sleep for specified time before beginning image processing and disk activity
-                if ( mode != "automatic_typing" )
+                if ( mode == "automatic_typing" )
                     Sleep ScreenshotSleepTimeout*1000
 
                 ;;;;  prepare screenshot filters
@@ -736,21 +735,27 @@ class PixelState {
                 ;;;;  determine destination folder
                 Type := ""
 
-                if ( mode == "automatic_timelapse" )
+                if ( mode == "manual" ) {
+
+                    Type := "screenshot-"
+                    DestinationFolder := ScreenshotFolder . "\manual"
+
+                }
+
+                if ( mode == "automatic_timelapse" ) {
+
                     Type := "timelapse-"
+                    if ( TimelapseFolder != false )
+                        DestinationFolder := TimelapseFolder
+
+                }
 
                 if ( mode == "automatic_typing" ) {
 
                     Type := "nexus-"
-                    NexusFolder := ScreenshotFolder . "\nexus"
+                    DestinationFolder := ScreenshotFolder . "\nexus"
 
                 }
-
-                if ( TimelapseFolder != false && mode == "automatic_timelapse" )
-                    DestinationFolder := TimelapseFolder
-
-                if ( mode == "automatic_typing" )
-                    DestinationFolder := NexusFolder
 
                 if ( !DestinationFolder )
                     DestinationFolder := ScreenshotFolder

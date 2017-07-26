@@ -6,7 +6,8 @@
 $^!v::
 	if ( CheckRun() == true ) {
 
-		Listvars
+		ListVars
+		Pause
 
 	} else {
 

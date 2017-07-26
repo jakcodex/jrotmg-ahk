@@ -5,8 +5,13 @@ PixelMap := {"settings": {}}
 PixelMap.settings.ARGBTolerance := 135000
 PixelMap.settings.RGBTolerance := 10
 
-;;  PixelState has a configuration tool which can be used to rapidly configure named pixels
+;;  The PixelState configuration tool can be used to rapidly configure named pixels
 ;;  PixelState.PixelMapConfig(PixelName, x, y[, argb=false, RGBTolerance=false, ARGBTolerance=false])
+;;;;  PixelName must be unique
+;;;;  x,y can be Absolute or Relative positions (this config utilizes relative positions by default)
+;;;;  argb can be false, an integer, or an array of integers (argb values)
+;;;;  RGBTolerance allows pixel RGB values to be approximately +/- this value
+;;;;  ARGBTolerance allows ARGB value to be +/- this value (150000 is a small number here)
 
 ;;  hp bar positions
 PixelState.PixelMapConfig("hp_100p", 0.9835, 0.4250, [4292883508, 4292817715, 4292555314])

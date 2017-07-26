@@ -35,6 +35,10 @@
 ;;	}
 ;;	Return
 
+ManualScreenshot:
+    PixelState.tools.TakeScreenshot("manual")
+    Return
+
 SaveScreen:
     PixelState.tools.TakeScreenshot()
 	Return

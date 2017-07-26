@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  PixelState tools
 ;;;;;;;;;;;;;;;;;;;;;;;;;
-<^Numpad2::
+~<^Numpad2::
     if ( Debug == true && CheckRun() == true ) {
 
         PTSize := JSON.dump(PixelTrack)
@@ -11,7 +11,7 @@
     Return
 
 <^Numpad3::
-    if ( Debug == true && CheckRun() == true ) {
+    if ( CheckRun() == true ) {
 
         MsgBox % "HP State: " . PixelTrack.CurrentHP . "`nCurrent Location: " . PixelTrack.CurrentLocation
 
@@ -19,7 +19,7 @@
     Return
 
 ;;  prompt user for x,y and return pixel data
-<^Numpad5::
+~<^Numpad5::
     if ( Debug == true && CheckRun() == true ) {
 
         pBitmap := PixelState.GetBitmap()
@@ -40,7 +40,7 @@
     Return
 
 ;;  prompt user for PixelName or PixelGroup and return pixel state data
-<^Numpad6::
+~<^Numpad6::
     if ( Debug == true && CheckRun() == true ) {
 
         pBitmap := PixelState.GetBitmap()
@@ -58,7 +58,7 @@
         PixelState.hotkeys.ScreenCalibrationRequest()
     Return
 
-<^Numpad8::
+~<^Numpad8::
     if ( Debug == true && CheckRun() == true ) {
 
         InputBox, r, R Value
@@ -70,7 +70,7 @@
     Return
 
 ;;  report the hp_*p pixel states
-<^Numpad9::
+~<^Numpad9::
     if ( Debug == true && CheckRun() == true ) {
 
         pBitmap := PixelState.GetBitmap()
@@ -92,7 +92,7 @@ ScreenCalibrationRequest:
 PixelStateBackgroundTasks:
     if ( CheckRun() == true )
         if ( PixelStateTasksFrequency > 0 )
-            PixelState.BackgroundTasksMain({"Debug": false})
+            PixelState.BackgroundTasksMain()
     Return
 
 PixelStateLowHPBeep:

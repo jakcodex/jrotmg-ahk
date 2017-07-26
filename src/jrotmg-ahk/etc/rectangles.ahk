@@ -15,7 +15,7 @@ ScreenshotRectangles := {}
 ;;  ScreenshotRectangles["goldandfame"] := {"color": "ff0000", ...}
 
 if ( ScreenshotHideGoldAndFame == true )
-    ScreenshotRectangles["goldandfame"] := {"x": 0.525, "y": 0.018, "width": 0.205, "height": 0.030}
+    ScreenshotRectangles["goldandfame"] := {"x": 0.525, "y": 0.015, "width": 0.205, "height": 0.035}
 
 if ( ScreenshotHideGuild == true )
     ScreenshotRectangles["guild"] := {"x": 0.070, "y": 0.014, "width": 0.300, "height": 0.030}
