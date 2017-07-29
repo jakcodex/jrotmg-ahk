@@ -631,7 +631,7 @@ class PixelState {
             ;;  defaults
             global pToken, ScreenshotSleepTimeout, ScreenshotFilterAdjustments, ScreenshotRectangles, WatermarkPos, WatermarkTextColor, ScreenshotFolder, TimelapseFolder, DestinationFolder
             global ScreenshotImageQuality, ScreenshotImageMode, ScreenshotWaitPixelCheck, ScreenshotChatboxGrace, lastEnterKeypress, TimelapseSharedBitmap, ScreenshotNexusDisallowedLocations
-            global PixelTrack, TimelapseDisallowedLocations, ScreenshotNexusDisallowedLocations, JSON
+            global PixelTrack, TimelapseDisallowedLocations, ScreenshotNexusDisallowedLocations, JSON, ScreenshotFilterDefaultColor
 
             ;;  process screenshot filters and storage
             if ( ScreenshotImageMode == "direct" ) {
@@ -689,7 +689,8 @@ class PixelState {
                 }
 
                 ;;  create the filter brush
-                filterBrush := {"default": Gdip_BrushCreateSolid(0xff000000)}
+                ScreenshotFilterDefaultColor := "0xff" . ScreenshotFilterDefaultColor
+                filterBrush := {"default": Gdip_BrushCreateSolid(ScreenshotFilterDefaultColor)}
 
                 ;;  process all active filters
                 for index, Dimensions in ScreenshotRectangles {

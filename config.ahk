@@ -88,6 +88,11 @@ ScreenshotHideCharacter := false
 ;;;;  enable or disable the filter to display your custom blackout filter
 ScreenshotHideCustom := false
 
+;;;;  default color for all screenshot filters
+;;  accepts a hexidecimal string with the following format: YYYYYY
+;;  YYYYYY is the color code you desire
+ScreenshotFilterDefaultColor = 0c0c0c
+
 ;;;;  manually adjust positioning if it's slightly off
 ;;  accepts object like: {"x": 0, "y": 0, "width": 0, "height": 0}
 ScreenshotFilterAdjustments := {"x": 0, "y": 0, "width": 0, "height": 0}

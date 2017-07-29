@@ -1,3 +1,7 @@
+## 0.0.17-alpha
++ Added configuration key "ScreenshotFilterDefaultColor" which controls the default filter color
++ Screenshot filter color changed to match the game's color for black (13,13,13)
+
 ## 0.0.16 - PixelState
 + Added configuration key "ScreenshotWaitPixelCheck" which controls if wait timer should check for chatbox pixels
 + Added configuration key "ScreenshotChatboxGrace" which sets the grace time for the chatbox invalidating screenshots

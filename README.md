@@ -2,7 +2,7 @@
 
 ## Usage
 
-Version [0.0.16](CHANGELOG.md)
+Version [0.0.17-alpha](CHANGELOG.md)
 
 Requires AutoHotKey from https://autohotkey.com/download/
 
