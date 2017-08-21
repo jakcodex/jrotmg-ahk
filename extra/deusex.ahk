@@ -27,6 +27,8 @@ $Numpad2::
     if ( WindowTitle == "Deus Ex" ) {
 
         SendInput t{Backspace}{Backspace}{Backspace}{Backspace}allammo{Enter}
+        SendInput t{Backspace}{Backspace}{Backspace}{Backspace}allenergy{Enter}
+        SendInput t{Backspace}{Backspace}{Backspace}{Backspace}allcredits{Enter}
 
     }
     Return
@@ -99,7 +101,7 @@ WinGetTitle, WindowTitle, A
     Return
 
 ;;  send custom input if provided
-$Numpad7::
+$Numpad8::
     WinGetTitle, WindowTitle, A
     if ( WindowTitle == "Deus Ex" ) {
 

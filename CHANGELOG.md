@@ -1,6 +1,7 @@
-## 0.0.17-alpha
+## 0.0.17
 + Added configuration key "ScreenshotFilterDefaultColor" which controls the default filter color
-+ Screenshot filter color changed to match the game's color for black (13,13,13)
++ Screenshot filter color changed to match the game's color for black (12,12,12)
++ Nevermind the LowHPBeep; neat idea, but it isn't a passive feature
 
 ## 0.0.16 - PixelState
 + Added configuration key "ScreenshotWaitPixelCheck" which controls if wait timer should check for chatbox pixels

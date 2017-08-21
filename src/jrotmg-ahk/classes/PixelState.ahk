@@ -11,7 +11,7 @@ class PixelState {
     ;;  run a task to check if jobs need to be ran
     BackgroundTasksMain(options=false) {
 
-        global PixelTrack, LowHPBeep
+        global PixelTrack
 
         if ( CheckRun() == true ) {
 
@@ -36,32 +36,6 @@ class PixelState {
 
             ;;  get current hp
             PixelTrack.CurrentHP := this.check.PlayerHP(PixelTrack.SharedBitmap[Time])
-
-            ;;  process low hp beep
-            if ( PixelTrack.CurrentHP == "" OR (LowHPBeep > 0 && PixelTrack.CurrentLocation == "InRealm" AND RegExMatch(PixelTrack.CurrentHP, "^[0-9]*$")) ) {
-
-                ;;  turn on the beep if hp is low and not unknown
-                if ( PixelTrack.CurrentHP <= LowHPBeep && PixelTrack.CurrentHP != "") {
-
-                    if ( PixelTrack.LowHPBeep == false ) {
-
-                        PixelTrack.LowHPBeep := true
-                        SetTimer, PixelStateLowHPBeep, 1000
-
-                    }
-
-                } else {
-
-                    if ( PixelTrack.LowHPBeep == true ) {
-
-                        PixelTrack.LowHPBeep := false
-                        SetTimer, PixelStateLowHPBeep, off
-
-                    }
-
-                }
-
-            }
 
         }
 
@@ -631,7 +605,7 @@ class PixelState {
             ;;  defaults
             global pToken, ScreenshotSleepTimeout, ScreenshotFilterAdjustments, ScreenshotRectangles, WatermarkPos, WatermarkTextColor, ScreenshotFolder, TimelapseFolder, DestinationFolder
             global ScreenshotImageQuality, ScreenshotImageMode, ScreenshotWaitPixelCheck, ScreenshotChatboxGrace, lastEnterKeypress, TimelapseSharedBitmap, ScreenshotNexusDisallowedLocations
-            global PixelTrack, TimelapseDisallowedLocations, ScreenshotNexusDisallowedLocations, JSON, ScreenshotFilterDefaultColor
+            global PixelTrack, TimelapseDisallowedLocations, ScreenshotNexusDisallowedLocations, ScreenshotFilterDefaultColor
 
             ;;  process screenshot filters and storage
             if ( ScreenshotImageMode == "direct" ) {
@@ -689,8 +663,8 @@ class PixelState {
                 }
 
                 ;;  create the filter brush
-                ScreenshotFilterDefaultColor := "0xff" . ScreenshotFilterDefaultColor
-                filterBrush := {"default": Gdip_BrushCreateSolid(ScreenshotFilterDefaultColor)}
+                FilterColor := "0xff" . ScreenshotFilterDefaultColor
+                filterBrush := {"default": Gdip_BrushCreateSolid(FilterColor)}
 
                 ;;  process all active filters
                 for index, Dimensions in ScreenshotRectangles {
@@ -791,6 +765,22 @@ class PixelState {
                 Gdip_DeleteGraphics(G)
                 if ( BitmapProvided == false )
                     Gdip_DisposeImage(pBitmap)
+
+                VarSetCapacity(X, 0)
+                VarSetCapacity(Y, 0)
+                VarSetCapacity(Width, 0)
+                VarSetCapacity(Height, 0)
+                VarSetCapacity(BitmapProvided, 0)
+                VarSetCapacity(ScreenMode, 0)
+                VarSetCapacity(GameWindow, 0)
+                VarSetCapacity(G, 0)
+                VarSetCapacity(Adjustments, 0)
+                VarSetCapacity(FilterColor, 0)
+                VarSetCapacity(filterBrush, 0)
+                VarSetCapacity(Dimensions, 0)
+                VarSetCapacity(WatermarkObject, 0)
+                VarSetCapacity(Type, 0)
+                VarSetCapacity(DestinationFolder, 0)
 
             ;;  steam is really hard to process
             } else if ( ScreenshotImageMode == "steam" ) {

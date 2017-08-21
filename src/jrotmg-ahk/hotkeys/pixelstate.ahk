@@ -94,11 +94,3 @@ PixelStateBackgroundTasks:
         if ( PixelStateTasksFrequency > 0 )
             PixelState.BackgroundTasksMain()
     Return
-
-PixelStateLowHPBeep:
-    if ( CheckRun() == true ) {
-
-        SoundPlay, % LowHPBeepAudio
-
-    }
-    Return

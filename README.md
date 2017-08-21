@@ -2,7 +2,7 @@
 
 ## Usage
 
-Version [0.0.17-alpha](CHANGELOG.md)
+Version [0.0.17](CHANGELOG.md)
 
 Requires AutoHotKey from https://autohotkey.com/download/
 
@@ -158,13 +158,9 @@ PixelState's primary job is to provide pixel data which can be used to validate 
 Pixels are named in the PixelMap configuration while groups and their expected states are stored in the PixelGroups 
 configuration. This can be located in the file [src/jrotmg-ahk/etc/pixelstate-runtime.ahk][pixelstate-runtime]. 
 
-#### Low HP Beep
-Plays an audible alert when your HP is low. Currently enabled by default. There are two sounds currently included by
-default. You can change it to them or any other audio file of your choice via the "LowHPBeepAudio" configuration key.
-
-##### Included Sounds
-- [src/jrotmg-ahk/media/Zelda1_LowHealth.wav][lowheatlhwav-zelda1]
-- [src/jrotmg-ahk/media/Pokemon1_LowHealth.wav][lowheatlhwav-pokemon1]
+#### Low HP Detection
+PixelState keeps track of your in-game HP. It will never help you if your HP is low. What it will do is allow for low-hp
+based screenshotting in an upcoming version. Stay tuned!
 
 #### Screen Calibration Utility
 Displays the position and color data of the pixel you clicked on. Useful for mapping pixels. Leaving this enabled for
@@ -279,6 +275,11 @@ ScreenshotHideCharacter := false
 ;;;;  enable or disable the filter to display your custom blackout filter
 ScreenshotHideCustom := false
 
+;;;;  default color for all screenshot filters
+;;  accepts a hexidecimal string with the following format: YYYYYY
+;;  YYYYYY is the color code you desire
+ScreenshotFilterDefaultColor = 0c0c0c
+
 ;;;;  manually adjust positioning if it's slightly off
 ;;  accepts object like: {"x": 0, "y": 0, "width": 0, "height": 0}
 ScreenshotFilterAdjustments := {"x": 0, "y": 0, "width": 0, "height": 0}
@@ -331,14 +332,6 @@ StoragePath = %APPDATA%\jrotmg-ahk
 ;;;;  debugging mode enabled or not
 ;;  accepts boolean: true, false
 Debug := false
-
-;;;;  play low hp beep at this hp value (out of 100)
-;;  accepts integers, 0-100 (0 disables)
-LowHPBeep := 40
-
-;;;;  file to play when low hp is detected
-;;  accepts strings like /src/jrotmg-ahk/media/somebeep.wav or C:\Users\Me\My Music\Somebeep.wav
-LowHPBeepAudio = src/jrotmg-ahk/media/Zelda1_LowHealth.wav
 ```
 
 [bug-reports]: https://github.com/jakcodex/jrotmg-ahk/issues "Bug Tracker"
@@ -346,5 +339,3 @@ LowHPBeepAudio = src/jrotmg-ahk/media/Zelda1_LowHealth.wav
 [src-rectangles]: src/jrotmg-ahk/etc/rectangles.ahk "Rectangles Positioning File"
 [extra-panic-button-mouse]: extra/panic-button-mouse-tools.ahk "Mouse Panic Button Setup Helper"
 [realmeye-forums-panic-button]: https://www.realmeye.com/forum/t/the-oh-shiet-button-for-freezes-and-when-you-click-off-the-page/4673 "The Oh Shiet Button for Freezes and When You Click Off The Page"
-[lowheatlhwav-zelda1]: src/jrotmg-ahk/media/Zelda1_LowHealth.wav "Zelda1 Low Health Beep Audio"
-[lowheatlhwav-pokemon1]: src/jrotmg-ahk/media/Pokemon1_LowHealth.wav "Pokemon1 Low Health Beep Audio"
